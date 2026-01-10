@@ -7,7 +7,8 @@
         :root {
             --glow: #64ffda;
             --bg: #010a08;
-            --box-fill: rgba(100, 255, 218, 0.05);
+            --box-fill: rgba(100, 255, 218, 0.08);
+            --beam-color: rgba(100, 255, 218, 0.15);
         }
 
         * { box-sizing: border-box; cursor: crosshair; }
@@ -24,66 +25,90 @@
             display: flex;
             align-items: center;
             background: rgba(100, 255, 218, 0.03);
-            border: 1px solid rgba(100, 255, 218, 0.2);
-            padding: 10px 20px;
-            margin-bottom: 20px;
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            padding: 12px 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
         }
         #filter-input {
             background: transparent; border: none; outline: none;
             color: #fff; font-family: 'Impact', sans-serif;
-            font-size: 20px; width: 100%; letter-spacing: 2px;
+            font-size: 24px; width: 100%; letter-spacing: 2px;
         }
 
+        /* THE GRID */
         .grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 15px;
         }
 
+        /* THE BOX - SYMMETRICAL SPLIT */
         .box {
             position: relative;
             background: var(--box-fill);
             border: 2px solid rgba(100, 255, 218, 0.2);
-            height: 140px;
+            height: 160px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.3s;
+            transition: transform 0.2s, opacity 0.3s;
         }
 
-        /* Hides boxes when filtering */
+        .box:hover {
+            border-color: var(--glow);
+            background: rgba(100, 255, 218, 0.15);
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.1);
+        }
+
+        .box-top {
+            flex: 1.2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 2px solid rgba(100, 255, 218, 0.2);
+            font-size: 60px; /* Big Bubbly Font */
+            letter-spacing: -2px;
+        }
+
+        .box-bottom {
+            flex: 0.8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
         .hidden { display: none; }
 
-        .big-val { font-size: 50px; line-height: 0.8; pointer-events: none; }
-        .label-text { font-size: 18px; margin-top: 10px; opacity: 0.8; pointer-events: none; }
-
-        /* HUD POPUP */
+        /* THE POPUP HUD */
         #hud {
             position: fixed;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
-            width: 480px;
+            width: 550px;
             background: rgba(1, 10, 8, 0.98);
-            border: 2px solid var(--glow);
-            padding: 20px;
+            border: 3px solid var(--glow);
+            padding: 30px;
             z-index: 1000;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 15px;
             text-align: center;
             pointer-events: none;
-            transition: transform 0.2s ease-out;
-            backdrop-filter: blur(15px);
+            transition: transform 0.3s cubic-bezier(0.17, 0.84, 0.44, 1);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 100px #000;
         }
 
-        .hud-section { border-bottom: 1px solid rgba(100, 255, 218, 0.15); padding-bottom: 8px; }
+        .hud-section { border-bottom: 1px solid rgba(100, 255, 218, 0.15); padding-bottom: 10px; }
         .hud-section:last-child { border: none; }
-        .hud-title { font-size: 11px; opacity: 0.5; display: block; margin-bottom: 4px; }
-        .hud-body { font-size: 24px; color: #fff; display: block; }
+        .hud-title { font-size: 13px; opacity: 0.5; display: block; margin-bottom: 5px; letter-spacing: 3px; }
+        .hud-body { font-size: 28px; color: #fff; display: block; line-height: 1.1; }
 
-        /* TRACTOR BEAMS */
-        #connector {
+        /* 3D TRACTOR BEAMS (SVG) */
+        #beam-svg {
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
@@ -92,24 +117,24 @@
             opacity: 0;
             transition: opacity 0.2s;
         }
-        .beam { stroke: var(--glow); stroke-width: 1; stroke-dasharray: 4; }
+        .beam-poly { fill: url(#beam-grad); filter: blur(2px); }
     </style>
 </head>
 <body>
 
     <div id="search-container">
-        <input type="text" id="filter-input" placeholder="SEARCH SYSTEM..." onkeyup="filterGrid()">
+        <input type="text" id="filter-input" placeholder="SEARCH SYSTEM AUDIT..." onkeyup="filterGrid()">
     </div>
 
-    <svg id="connector">
+    <svg id="beam-svg">
         <defs>
-            <linearGradient id="fade" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:var(--glow);stop-opacity:1" />
-                <stop offset="100%" style="stop-color:var(--glow);stop-opacity:0.2" />
-            </linearGradient>
+            <radialGradient id="beam-grad" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" style="stop-color:var(--glow); stop-opacity:0.4" />
+                <stop offset="100%" style="stop-color:var(--glow); stop-opacity:0" />
+            </radialGradient>
         </defs>
-        <line id="l1" class="beam" /><line id="l2" class="beam" />
-        <line id="l3" class="beam" /><line id="l4" class="beam" />
+        <polygon id="beam1" class="beam-poly" />
+        <polygon id="beam2" class="beam-poly" />
     </svg>
 
     <div id="hud">
@@ -120,61 +145,44 @@
     </div>
 
     <div class="grid" id="audit-grid">
-        <div class="box" data-search="NHP TEST MONKEYS" 
+        <div class="box" data-search="NHP MONKEY TESTING" 
              data-d="104,801 RESEARCH SUBJECTS" 
              data-i="MONKEY EXPOSURE TRIALS" 
              data-in="MACQUES, RHESES, MARMOSETS" 
              data-s="USDA APHIS 2023 REPORT"
              onmouseenter="showHud(this)" onmouseleave="hideHud()" onclick="this.remove()">
-            <span class="big-val">104K</span>
-            <span class="label-text">NHP TESTING</span>
+            <div class="box-top">104K</div>
+            <div class="box-bottom">NHP TESTING</div>
         </div>
 
-        <div class="box" data-search="EMPTY" onmouseenter="showHud(this)" onmouseleave="hideHud()" onclick="this.remove()">
-            <span class="big-val">---</span><span class="label-text">EMPTY 2</span>
         </div>
-
-        <div class="box" data-search="EMPTY" onmouseenter="showHud(this)" onmouseleave="hideHud()" onclick="this.remove()">
-            <span class="big-val">---</span><span class="label-text">EMPTY 3</span>
-        </div>
-    </div>
 
     <script>
         const hud = document.getElementById('hud');
-        const connector = document.getElementById('connector');
-        const lines = [document.getElementById('l1'), document.getElementById('l2'), document.getElementById('l3'), document.getElementById('l4')];
+        const beamSvg = document.getElementById('beam-svg');
+        const beams = [document.getElementById('beam1'), document.getElementById('beam2')];
 
         function showHud(el) {
             document.getElementById('h-data').innerText = el.getAttribute('data-d') || "PENDING";
-            document.getElementById('h-impact').innerText = el.getAttribute('data-i') || "PENDING";
-            document.getElementById('h-includes').innerText = el.getAttribute('data-in') || "PENDING";
-            document.getElementById('h-source').innerText = el.getAttribute('data-s') || "PENDING";
+            document.getElementById('h-impact').innerText = el.getAttribute('data-i') || "N/A";
+            document.getElementById('h-includes').innerText = el.getAttribute('data-in') || "N/A";
+            document.getElementById('h-source').innerText = el.getAttribute('data-s') || "N/A";
             
             hud.style.transform = "translate(-50%, -50%) scale(1)";
-            connector.style.opacity = "1";
+            beamSvg.style.opacity = "1";
             
             const r = el.getBoundingClientRect();
             const h = hud.getBoundingClientRect();
             
-            // Top Left to Top Left
-            setL(lines[0], r.left, r.top, h.left, h.top);
-            // Top Right to Top Right
-            setL(lines[1], r.right, r.top, h.right, h.top);
-            // Bottom Left to Bottom Left
-            setL(lines[2], r.left, r.bottom, h.left, h.bottom);
-            // Bottom Right to Bottom Right
-            setL(lines[3], r.right, r.bottom, h.right, h.bottom);
-        }
-
-        function setL(l, x1, y1, x2, y2) {
-            l.setAttribute('x1', x1); l.setAttribute('y1', y1);
-            l.setAttribute('x2', x2); l.setAttribute('y2', y2);
-            l.setAttribute('stroke', "url(#fade)");
+            // Draw Polygon Beams (Left side of box to left side of HUD)
+            beams[0].setAttribute('points', `${r.left},${r.top} ${r.left},${r.bottom} ${h.left},${h.bottom} ${h.left},${h.top}`);
+            // Right side of box to right side of HUD
+            beams[1].setAttribute('points', `${r.right},${r.top} ${r.right},${r.bottom} ${h.right},${h.bottom} ${h.right},${h.top}`);
         }
 
         function hideHud() {
             hud.style.transform = "translate(-50%, -50%) scale(0)";
-            connector.style.opacity = "0";
+            beamSvg.style.opacity = "0";
         }
 
         function filterGrid() {
@@ -186,13 +194,13 @@
             }
         }
 
-        // Add placeholders
+        // Fill remaining 49 boxes
         const grid = document.getElementById('audit-grid');
-        for(let i=4; i<=50; i++) {
+        for(let i=2; i<=50; i++) {
             const b = document.createElement('div');
             b.className = 'box';
             b.setAttribute('data-search', 'EMPTY');
-            b.innerHTML = `<span class="big-val">---</span><span class="label-text">EMPTY ${i}</span>`;
+            b.innerHTML = `<div class="box-top">---</div><div class="box-bottom">EMPTY ${i}</div>`;
             b.onmouseenter = function() { showHud(this); };
             b.onmouseleave = hideHud;
             b.onclick = function() { this.remove(); };
