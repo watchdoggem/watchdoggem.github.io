@@ -2,154 +2,375 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SYSTEM AUDIT TERMINAL | 2026</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Federal Allowance & Spending Tracker (FAST)</title>
     <style>
-        :root { --bg: #000; --neon: #00ff41; --gold: #ffcc00; --border: #1a1a1a; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: var(--bg); color: #fff; font-family: 'Arial Black', sans-serif; }
-
-        header { background: #0a0a0a; border-bottom: 4px solid var(--neon); padding: 15px; }
-        h1 { color: var(--neon); font-size: 1.5rem; text-transform: uppercase; letter-spacing: 2px; }
-
-        /* TAB NAVIGATION */
-        nav { display: flex; flex-wrap: wrap; background: #080808; border-bottom: 2px solid var(--border); }
-        .tab-btn { 
-            background: none; border: none; color: #555; padding: 12px 15px; cursor: pointer; 
-            font-family: 'Arial Black'; font-size: 0.65rem; text-transform: uppercase; 
-            border-right: 1px solid var(--border); transition: 0.2s;
+        :root {
+            --bg-color: #0f172a;
+            --sidebar-bg: #1e293b;
+            --text-color: #e2e8f0;
+            --accent-color: #38bdf8; /* Cyan for "Data" feel */
+            --danger-color: #ef4444; /* Red for "Warning/Allowance" */
+            --table-header: #334155;
+            --border-color: #475569;
         }
-        .tab-btn:hover { color: var(--neon); background: #111; }
-        .tab-btn.active { background: var(--neon); color: #000; }
 
-        .main { padding: 20px; }
-        .page { display: none; }
-        .page.active { display: block; }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-        /* DATA BOXES */
-        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 20px; }
-        .stat-box { border: 3px solid var(--neon); padding: 20px; text-align: center; }
-        .stat-box h2 { font-size: 2rem; color: var(--neon); }
+        /* Sidebar Navigation */
+        #sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
 
-        table { width: 100%; border-collapse: collapse; font-family: 'Courier New', monospace; }
-        th { background: var(--neon); color: #000; padding: 10px; text-align: left; font-size: 0.75rem; }
-        td { padding: 10px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
-        .money { color: var(--neon); font-weight: bold; }
-        .warn { color: var(--gold); }
+        .brand {
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-group {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-group-title {
+            padding: 5px 20px;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .nav-item {
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background-color: #334155;
+        }
+
+        .nav-item.active {
+            background-color: #334155;
+            border-left: 3px solid var(--accent-color);
+            color: white;
+        }
+
+        .nav-item.alert {
+            border-left: 3px solid var(--danger-color);
+            color: #fca5a5;
+        }
+
+        /* Main Content */
+        #main {
+            flex-grow: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        header {
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+
+        h1 { margin: 0; font-size: 2rem; }
+        h2 { color: var(--accent-color); margin-top: 0; }
+        h3 { border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-top: 30px;}
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .badge-spend { background-color: #166534; color: #dcfce7; }
+        .badge-allow { background-color: #991b1b; color: #fee2e2; }
+
+        /* Data Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #1e293b;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--table-header);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover { background-color: #334155; }
+
+        /* Content Sections */
+        .tab-content { display: none; animation: fadeIn 0.3s; }
+        .tab-content.active { display: block; }
+
+        .metric-card {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .warning-box {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--danger-color);
+            color: #fca5a5;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>SYSTEM AUDIT // FED-LEDGER.2026</h1>
-</header>
+    <div id="sidebar">
+        <div class="brand">FAST <span style="font-size:0.8rem; color:#94a3b8; display:block;">Federal Allowance & Spending Tracker</span></div>
+        
+        <div class="nav-group">
+            <div class="nav-group-title">Core Data</div>
+            <div class="nav-item active" onclick="showTab(1)">Tab 1: Overview & Mission</div>
+        </div>
 
-<nav id="navBar"></nav>
+        <div class="nav-group">
+            <div class="nav-group-title">Phase 1: Influence</div>
+            <div class="nav-item" onclick="showTab(2)">Tab 2: Lobbying & FARA</div>
+            <div class="nav-item" onclick="showTab(3)">Tab 3: Dark Money 501(c)(4)</div>
+            <div class="nav-item" onclick="showTab(4)">Tab 4: Straw Donors & LLCs</div>
+            <div class="nav-item" onclick="showTab(5)">Tab 5: Asset & Net Worth</div>
+        </div>
 
-<div class="main" id="contentArea"></div>
+        <div class="nav-group">
+            <div class="nav-group-title">Phase 2: The Allowances</div>
+            <div class="nav-item" onclick="showTab(6)">Tab 6: Defense (050)</div>
+            <div class="nav-item" onclick="showTab(7)">Tab 7: Int. Affairs (150)</div>
+            <div class="nav-item" onclick="showTab(8)">Tab 8: Science & Space (250)</div>
+            <div class="nav-item" onclick="showTab(9)">Tab 9: Energy (270)</div>
+            <div class="nav-item" onclick="showTab(10)">Tab 10: Environment (300)</div>
+            <div class="nav-item" onclick="showTab(11)">Tab 11: Agriculture (350)</div>
+            <div class="nav-item" onclick="showTab(12)">Tab 12: Commerce (370)</div>
+            <div class="nav-item" onclick="showTab(13)">Tab 13: Transportation (400)</div>
+            <div class="nav-item" onclick="showTab(14)">Tab 14: Community Dev (450)</div>
+            <div class="nav-item" onclick="showTab(15)">Tab 15: Education (500)</div>
+            <div class="nav-item alert" onclick="showTab(19)">Tab 19: Health (550)</div>
+            <div class="nav-item" onclick="showTab(20)">Tab 20: Medicare (570)</div>
+            <div class="nav-item" onclick="showTab(21)">Tab 21: Income Security (600)</div>
+            <div class="nav-item" onclick="showTab(22)">Tab 22: Social Security (650)</div>
+            <div class="nav-item" onclick="showTab(23)">Tab 23: Veterans (700)</div>
+            <div class="nav-item" onclick="showTab(24)">Tab 24: Justice (750)</div>
+            <div class="nav-item" onclick="showTab(25)">Tab 25: Gen. Gov (800)</div>
+            <div class="nav-item" onclick="showTab(26)">Tab 26: Net Interest (900)</div>
+            <div class="nav-item" onclick="showTab(27)">Tab 27: Undistributed (950)</div>
+            <div class="nav-item" onclick="showTab(28)">Tab 28: Full Dataset</div>
+        </div>
+    </div>
 
-<script>
-    const sectors = [
-        {id: "d50", name: "050 Defense", total: "$1.01T", data: [
-            {r: "F-35 Fighter Program Earmarks", a: "DOD", m: "$12.4B", n: "Non-requested funding added by Congress"},
-            {r: "Navy Ship Decarbonization Grant", a: "DOD", m: "$6.0M", n: "Climate initiative for combat vessels"}
-        ]},
-        {id: "i15", name: "150 International", total: "$9.6B", data: [
-            {r: "Mushroom Farming Grant (Guatemala)", a: "USAID", m: "$731K", n: "Commercial viability study"},
-            {r: "LGBTQ+ Comic Book (Peru)", a: "State", m: "$32K", n: "Cultural sensitivity project"}
-        ]},
-        {id: "s25", name: "250 Science", total: "$4.9B", data: [
-            {r: "NASA SLS Cost Overruns", a: "NASA", m: "$6.0B", n: "Deep space rocket delays"},
-            {r: "National Science Foundation Cut", a: "NSF", m: "-$4.9B", n: "2026 Budget Reduction"}
-        ]},
-        {id: "e27", name: "270 Energy", total: "$45.1B", data: [
-            {r: "Green Energy Loan Guarantees", a: "DOE", m: "$2.1B", n: "Unsecured high-risk climate loans"}
-        ]},
-        {id: "n30", name: "300 Natural Res", total: "$11.7B", data: [
-            {r: "EPA Environmental Justice Grants", a: "EPA", m: "$8.0M", n: "Local energy justice advocacy"}
-        ]},
-        {id: "a35", name: "350 Agriculture", total: "$22.3B", data: [
-            {r: "Market Access Program (MAP)", a: "USDA", m: "$174M", n: "Corporate welfare for trade associations"},
-            {r: "Sugar Industry Subsidies", a: "USDA", m: "$1.2B", n: "Price support program"}
-        ]},
-        {id: "c37", name: "370 Commerce", total: "$17.2B", data: [
-            {r: "SBA Loans for Children (Under 11)", a: "SBA", m: "$312M", n: "Fraudulent business loan disbursement"}
-        ]},
-        {id: "t40", name: "400 Transport", total: "$137B", data: [
-            {r: "High-Speed Rail Grant (CA)", a: "DOT", m: "$3.1B", n: "Unfinished infrastructure project"}
-        ]},
-        {id: "r45", name: "450 Regional Dev", total: "$85B", data: [
-            {r: "CDBG Buffalo Infrastructure", a: "HUD", m: "$500M", n: "Low accountability for results"}
-        ]},
-        {id: "e50", name: "500 Education", total: "$190B", data: [
-            {r: "Feeding Our Future (Fraud)", a: "DeptEd", m: "$250M", n: "MN Daycare food program fraud"}
-        ]},
-        {id: "h55", name: "550 Health", total: "$991B", data: [
-            {r: "TransHealthGUIDE Young Adults", a: "NIH", m: "$5.9M", n: "Gender-diverse health study"}
-        ]},
-        {id: "m57", name: "570 Medicare", total: "$874B", data: [
-            {r: "Improper Payment Estimates", a: "CMS", m: "$54B", n: "Overbillings and coding errors"}
-        ]},
-        {id: "i60", name: "600 Income Sec", total: "$671B", data: [
-            {r: "115-Year-Old Recipient Checks", a: "SSA", m: "$382M", n: "Payments to deceased individuals"}
-        ]},
-        {id: "s65", name: "650 Social Sec", total: "$1.4T", data: [
-            {r: "Administrative Overhead", a: "SSA", m: "$14.2B", n: "Operational costs for system"}
-        ]},
-        {id: "v70", name: "700 Veterans", total: "$458B", data: [
-            {r: "VA EHR Modernization", a: "VA", m: "$1.0B", n: "Failed software rollout delays"}
-        ]},
-        {id: "j75", name: "750 Justice", total: "$33.2B", data: [
-            {r: "Migrant Shelter Program (NYC)", a: "FEMA", m: "$59M", n: "Support for non-citizens"}
-        ]},
-        {id: "g80", name: "800 Gen Gov", total: "$11.5B", data: [
-            {r: "Unused Federal Office Space", a: "GSA", m: "$7.0B", n: "Maintenance on 60% empty buildings"}
-        ]},
-        {id: "n90", name: "900 Net Interest", total: "$1.01T", data: [
-            {r: "Daily Debt Service Cost", a: "Treasury", m: "$2.7B", n: "Interest only, no principal paid"}
-        ]},
-        {id: "a92", name: "920 Allowances", total: "$5.0B", data: [
-            {r: "Federal Paid Leave (DOGE Audit)", a: "OPM", m: "$10B", n: "Cost for employees on leave during cuts"}
-        ]},
-        {id: "o95", name: "950 Offsetting", total: "-$147B", data: [
-            {r: "Royalties and Rents", a: "DOI", m: "$7.0B", n: "Revenue from federal land use"}
-        ]}
-    ];
+    <div id="main">
+        
+        <div id="tab-1" class="tab-content active">
+            <header>
+                <h1>Mission Statement</h1>
+                <p style="color: #94a3b8;">Tracking not just what they spend, but what they <strong style="color:white">ALLOW</strong>.</p>
+            </header>
+            
+            <div class="metric-card">
+                <h3>The Core Thesis</h3>
+                <p>Historically, government oversight focused on the flow of tax dollars (The Budget). However, the true cost of governance is often found in the "Allowances"—regulatory loopholes, mandates, and "GRAS" (Generally Recognized As Safe) exemptions that permit industrial harm under the guise of safety.</p>
+                <p><strong>This tool tracks two distinct economies:</strong></p>
+                <ul>
+                    <li><span style="color:var(--accent-color)">The Budget:</span> Where tax dollars go (Defense, Health, etc.).</li>
+                    <li><span style="color:var(--danger-color)">The Allowances:</span> Permitted regulatory harm (e.g., NHP testing, food additives, industrial farming).</li>
+                </ul>
+            </div>
 
-    function buildSite() {
-        const nav = document.getElementById('navBar');
-        const main = document.getElementById('contentArea');
+            <h3>The 2026 Projections</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Est. Cost / Impact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Political Influence</strong></td>
+                        <td>Lobbying, Dark Money, & Campaign Receipts</td>
+                        <td>$24.0 Billion</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Federal Spending</strong></td>
+                        <td>Defense, Health, Social Security, etc.</td>
+                        <td>$6,800 Billion</td>
+                    </tr>
+                    <tr>
+                        <td style="color:var(--danger-color)"><strong>Allowances</strong></td>
+                        <td>Cost of permitted regulatory harm (Health/Env)</td>
+                        <td><em>Tracking...</em></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-        sectors.forEach((s, i) => {
-            const btn = document.createElement('button');
-            btn.className = `tab-btn ${i === 0 ? 'active' : ''}`;
-            btn.innerText = s.name;
-            btn.onclick = (e) => {
-                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.getElementById(s.id).classList.add('active');
-                e.target.classList.add('active');
-            };
-            nav.appendChild(btn);
+        <div id="tab-19" class="tab-content">
+            <header>
+                <h1>Health (Code 550) & Allowances</h1>
+                <span class="badge badge-spend">Spend: $991B</span>
+                <span class="badge badge-allow">Allow: Unlimited</span>
+            </header>
 
-            const page = document.createElement('div');
-            page.id = s.id;
-            page.className = `page ${i === 0 ? 'active' : ''}`;
-            page.innerHTML = `
-                <div class="stat-grid">
-                    <div class="stat-box"><h2>${s.total}</h2><p>TOTAL OUTLAY (EST)</p></div>
-                    <div class="stat-box"><h2>${s.data.length}</h2><p>AUDIT ITEMS</p></div>
+            <div class="warning-box">
+                <strong>⚠️ AUDIT ALERT:</strong> The transition of NIH into the "Administration for a Healthy America" (AHA) has created a gap where Non-Human Primate (NHP) inventory and funding are being obscured.
+            </div>
+
+            <h3>1. The "Allowed" Harm: Non-Human Primate (NHP) Testing</h3>
+            <p>Tracking the government-mandated usage of monkeys in research. While direct spending is high, the <em>allowance</em> for private pharma to use these inventories is the larger issue.</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Institution / Lab</th>
+                        <th>NHP Inventory</th>
+                        <th>Direct NIH Funding</th>
+                        <th>The Audit Hook / Allowance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Charles River Labs (CRL)</strong></td>
+                        <td>19,363</td>
+                        <td>$160.4M</td>
+                        <td>Only ~10% gov-paid; rest are "allowed" by FDA mandate.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Emory University</strong></td>
+                        <td>3,400</td>
+                        <td>$640.0M</td>
+                        <td>100% Taxpayer. Highest "cost per monkey" in system.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Labcorp / Envigo</strong></td>
+                        <td>8,604</td>
+                        <td>$88.0M</td>
+                        <td>Acts as a "buffer." Allowed to sell to private pharma if NIH funds drop.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tulane University</strong></td>
+                        <td>5,800</td>
+                        <td>$480.0M</td>
+                        <td>$92M specifically for Primate Center maintenance.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Univ. of Washington</strong></td>
+                        <td>1,200</td>
+                        <td>$612.0M</td>
+                        <td>High turnover. Audit the $13.7M base grant.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>2. Regulatory "Hammers" (What is Allowed)</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div class="metric-card">
+                    <h4 style="margin-top:0; color:var(--danger-color)">Food Supply (GRAS Loophole)</h4>
+                    <p><strong>FDA "GRAS" (Generally Recognized As Safe):</strong> Allows companies to self-certify additives like <em>Hexane-extracted oils</em> and <em>Sodium Benzoate</em> without independent safety studies.</p>
+                    <p><strong>Standard of Identity (21 CFR 131):</strong> Allows <em>Polysorbate</em> and <em>Calcium Chloride</em> in dairy while still labeling it "Milk."</p>
                 </div>
-                <table>
-                    <thead><tr><th>ITEM</th><th>AGENCY</th><th>COST</th><th>NOTE</th></tr></thead>
-                    <tbody>${s.data.map(d => `<tr><td class="warn">${d.r}</td><td>${d.a}</td><td class="money">${d.m}</td><td>${d.n}</td></tr>`).join('')}</tbody>
-                </table>
-            `;
-            main.appendChild(page);
-        });
-    }
+                <div class="metric-card">
+                    <h4 style="margin-top:0; color:var(--danger-color)">Public Health Mandates</h4>
+                    <p><strong>Fluoride:</strong> Active addition of compounds to public water supplies (Code 550 spending) vs. simple filtration.</p>
+                    <p><strong>The "Kitchen Killer" (21 CFR 114):</strong> "Acidified Food" regs that impose high "Process Authority" costs, banning small local kitchens while allowing large corporate production.</p>
+                </div>
+            </div>
+        </div>
 
-    buildSite();
-</script>
+        <div id="tab-generic" class="tab-content">
+            <header>
+                <h1 id="gen-title">Budget Function</h1>
+            </header>
+            <div class="metric-card">
+                <p>Data for this budget function is currently being aggregated from USASpending.gov and OMB reports.</p>
+            </div>
+        </div>
 
+        <div id="tab-6" class="tab-content">
+            <header><h1>National Defense (Function 050)</h1></header>
+            <table>
+                <thead><tr><th>Program</th><th>Appropriation</th><th>Notes</th></tr></thead>
+                <tbody>
+                    <tr><td>DOD Military Personnel</td><td>$181B</td><td>Active/Reserve pay</td></tr>
+                    <tr><td>Operations & Maintenance</td><td>$320B</td><td>Base upkeep & deployment</td></tr>
+                    <tr><td>Procurement</td><td>$170B</td><td>Weapons systems</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        function showTab(tabIndex) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Remove active class from nav
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+
+            // Show specific tab
+            const selectedTab = document.getElementById('tab-' + tabIndex);
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+            } else {
+                // If tab doesn't exist in HTML yet, show generic
+                document.getElementById('tab-generic').classList.add('active');
+                document.getElementById('gen-title').innerText = "Tab " + tabIndex + ": Data Pending";
+            }
+
+            // Highlight nav (this is a simple approximation, normally we'd ID the nav items)
+            // For the sake of this paste-able code, we rely on click context or just simple logic
+            event.target.classList.add('active');
+        }
+    </script>
 </body>
 </html>
