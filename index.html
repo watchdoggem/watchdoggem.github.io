@@ -2,135 +2,167 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SYSTEM AUDIT | BLUEPRINT V5</title>
+    <title>System Audit | Data Link</title>
     <style>
         :root {
-            --soft-glow: #64ffda;
-            --translucent-bg: rgba(100, 255, 218, 0.08);
-            --deep-bg: #010a08;
+            --glow: #64ffda;
+            --bg: #010a08;
+            --box-fill: rgba(100, 255, 218, 0.05);
         }
 
         * { box-sizing: border-box; cursor: crosshair; }
         body { 
-            background: var(--deep-bg); 
-            margin: 0; padding: 15px; 
-            font-family: 'Impact', sans-serif; 
-            color: var(--soft-glow);
-            overflow: hidden;
+            background: var(--bg); 
+            margin: 0; padding: 20px; 
+            font-family: 'Impact', 'Arial Black', sans-serif; 
+            color: var(--glow);
+            overflow-x: hidden;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            gap: 10px;
+            grid-template-columns: repeat(5, 1fr); /* 5 Across */
+            gap: 15px;
             width: 100%;
-            height: 100vh;
         }
 
-        /* THE SMALL BOX - MATCHING YOUR SKETCH */
+        /* THE UNIFORM BOX */
         .box {
             position: relative;
-            background: var(--translucent-bg);
+            background: var(--box-fill);
             border: 2px solid rgba(100, 255, 218, 0.2);
-            height: 110px;
+            height: 140px; /* Uniform Height */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: all 0.2s ease-in-out;
-            text-align: center;
+            transition: 0.2s;
         }
 
         .box:hover {
-            border-color: var(--soft-glow);
-            background: rgba(100, 255, 218, 0.2);
-            box-shadow: 0 0 15px rgba(100, 255, 218, 0.3);
+            background: rgba(100, 255, 218, 0.15);
+            border-color: var(--glow);
         }
 
-        /* TEXT INSIDE SMALL BOX */
-        .big-val {
-            font-size: 44px;
-            line-height: 0.9;
-            letter-spacing: -1px;
-            width: 100%;
-        }
+        .big-val { font-size: 50px; line-height: 0.8; letter-spacing: -1px; }
+        .label-text { font-size: 18px; margin-top: 10px; opacity: 0.8; }
 
-        .label-text {
-            font-size: 16px;
-            text-transform: uppercase;
-            width: 100%;
-            margin-top: 5px;
-            opacity: 0.9;
-        }
-
-        /* THE HUD / BLOW-UP BOX - MATCHING YOUR SKETCH */
-        .box::after {
-            content: attr(data-full);
+        /* THE POPUP HUD */
+        #hud {
             position: fixed;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
-            width: 500px;
-            height: 350px;
-            background: rgba(1, 15, 12, 0.9);
-            border: 3px solid var(--soft-glow);
-            color: white;
-            padding: 30px;
+            width: 450px;
+            background: rgba(1, 10, 8, 0.95);
+            border: 3px solid var(--glow);
+            padding: 25px;
             z-index: 1000;
-            opacity: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            text-align: center;
             pointer-events: none;
-            backdrop-filter: blur(15px);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            font-family: 'Courier New', monospace;
-            font-size: 18px;
-            line-height: 1.6;
-            box-shadow: 0 0 100px rgba(0, 0, 0, 0.8), 0 0 30px rgba(100, 255, 218, 0.2);
-            white-space: pre-wrap;
-            border-radius: 4px;
+            transition: transform 0.3s cubic-bezier(0.17, 0.84, 0.44, 1);
+            backdrop-filter: blur(10px);
         }
 
-        .box:hover::after {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-        }
+        .hud-section { border-bottom: 1px solid rgba(100, 255, 218, 0.2); padding-bottom: 5px; }
+        .hud-section:last-child { border: none; }
+        .hud-title { font-size: 12px; opacity: 0.6; display: block; margin-bottom: 4px; }
+        .hud-body { font-size: 22px; color: #fff; display: block; }
 
-        /* CLICK TO REMOVE */
-        .box:active {
-            transform: scale(0.9);
-            opacity: 0;
+        /* THE TRACTOR BEAM SVG */
+        #connector {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 900;
+            stroke: var(--glow);
+            stroke-width: 1;
+            opacity: 0.3;
         }
     </style>
 </head>
 <body>
 
-    <div class="grid" id="audit-grid">
-        <div class="box" onclick="this.remove()" 
-             data-full="[SYSTEM DECRYPTION: NHP AUDIT]&#10;----------------------------&#10;DATA: 104,801 Research Subjects&#10;&#10;IMPACT: Non-human primates in active testing. Includes Rhesus Macaques and Marmosets used in invasive neurological protocols.&#10;&#10;SOURCE: USDA APHIS 2023 REPORT">
+    <svg id="connector"><line id="line1" /><line id="line2" /></svg>
+
+    <div id="hud">
+        <div class="hud-section"><span class="hud-title">DATA</span><span id="h-data" class="hud-body"></span></div>
+        <div class="hud-section"><span class="hud-title">IMPACT</span><span id="h-impact" class="hud-body"></span></div>
+        <div class="hud-section"><span class="hud-title">INCLUDES</span><span id="h-includes" class="hud-body"></span></div>
+        <div class="hud-section"><span class="hud-title">SOURCE</span><span id="h-source" class="hud-body"></span></div>
+    </div>
+
+    <div class="grid">
+        <div class="box" 
+             data-val="104K" data-lab="NHP TESTING"
+             data-d="104,801 RESEARCH SUBJECTS" 
+             data-i="NON-HUMAN PRIMATE EXPOSURE" 
+             data-in="MACQUES, RHESES, MARMOSETS" 
+             data-s="USDA APHIS 2023 REPORT"
+             onmouseenter="showHud(this)" onmouseleave="hideHud()" onclick="this.remove()">
             <span class="big-val">104K</span>
-            <span class="label-text">NHP TEST</span>
+            <span class="label-text">NHP TESTING</span>
         </div>
 
-        <div class="box" onclick="this.remove()" 
-             data-full="[SYSTEM DECRYPTION: REPRO AUDIT]&#10;----------------------------&#10;DATA: 1,031,000 Annual Units&#10;&#10;IMPACT: Total estimated clinical procedures recorded in the U.S. for the 2023 fiscal cycle.&#10;&#10;SOURCE: GUTTMACHER INSTITUTE">
+        <div class="box" 
+             data-val="1.03M" data-lab="ABORT STAT"
+             data-d="1,031,000 ANNUAL PROCEDURES" 
+             data-i="U.S. REPRODUCTIVE TOTALS" 
+             data-in="CLINICAL & NON-CLINICAL" 
+             data-s="GUTTMACHER INSTITUTE"
+             onmouseenter="showHud(this)" onmouseleave="hideHud()" onclick="this.remove()">
             <span class="big-val">1.03M</span>
             <span class="label-text">ABORT STAT</span>
         </div>
 
-        <div class="box" onclick="this.remove()" 
-             data-full="[SYSTEM DECRYPTION: CFR AUDIT]&#10;----------------------------&#10;DATA: 34,000 Kitchen Closures&#10;&#10;IMPACT: Projected small-business failures resulting from industrial-grade CFR 114 compliance costs.&#10;&#10;SOURCE: FED REGULATORY AUDIT">
-            <span class="big-val">34K</span>
-            <span class="label-text">CFR 114</span>
         </div>
-    </div>
 
     <script>
-        const grid = document.getElementById('audit-grid');
-        // Placeholders to fill the rest of the screen
-        for(let i=0; i<87; i++) {
+        const hud = document.getElementById('hud');
+        const line1 = document.getElementById('line1');
+        const line2 = document.getElementById('line2');
+
+        function showHud(el) {
+            // Set Text
+            document.getElementById('h-data').innerText = el.getAttribute('data-d');
+            document.getElementById('h-impact').innerText = el.getAttribute('data-i');
+            document.getElementById('h-includes').innerText = el.getAttribute('data-in');
+            document.getElementById('h-source').innerText = el.getAttribute('data-s');
+            
+            hud.style.transform = "translate(-50%, -50%) scale(1)";
+            
+            // Draw Lines
+            const rect = el.getBoundingClientRect();
+            const hRect = hud.getBoundingClientRect();
+            
+            line1.setAttribute('x1', rect.left); line1.setAttribute('y1', rect.top);
+            line1.setAttribute('x2', hRect.left); line1.setAttribute('y2', hRect.top);
+            
+            line2.setAttribute('x1', rect.right); line2.setAttribute('y1', rect.top);
+            line2.setAttribute('x2', hRect.right); line2.setAttribute('y2', hRect.top);
+        }
+
+        function hideHud() {
+            hud.style.transform = "translate(-50%, -50%) scale(0)";
+            line1.setAttribute('x1', 0); line2.setAttribute('x1', 0);
+        }
+
+        // Generate placeholders
+        const grid = document.querySelector('.grid');
+        for(let i=0; i<38; i++) {
             const b = document.createElement('div');
             b.className = 'box';
-            b.onclick = function() { this.remove(); };
-            b.setAttribute('data-full', `[SYSTEM SEGMENT ${5000 + i}]&#10;----------------------------&#10;STATUS: ENCRYPTED&#10;SECTOR: UNKNOWN&#10;&#10;ACTION: Click to purge data.`);
             b.innerHTML = `<span class="big-val">---</span><span class="label-text">EMPTY ${i+1}</span>`;
+            b.setAttribute('data-d', 'PENDING AUDIT');
+            b.setAttribute('data-i', 'NO DATA RECORDED');
+            b.setAttribute('data-in', 'N/A');
+            b.setAttribute('data-s', 'UNKNOWN');
+            b.onmouseenter = function() { showHud(this); };
+            b.onmouseleave = hideHud;
+            b.onclick = function() { this.remove(); };
             grid.appendChild(b);
         }
     </script>
