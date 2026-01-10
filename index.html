@@ -19,7 +19,6 @@
             overflow-x: hidden;
         }
 
-        /* SEARCH BAR */
         #search-container {
             display: flex;
             background: rgba(100, 255, 218, 0.03);
@@ -33,14 +32,12 @@
             font-size: 28px; width: 100%; letter-spacing: 2px;
         }
 
-        /* THE GRID - 5 ACROSS */
         .grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 15px;
         }
 
-        /* THE BOX - FULL TEXT STACK */
         .box {
             position: relative;
             background: var(--box-fill);
@@ -58,22 +55,21 @@
         }
 
         .box-top {
-            flex: 1;
+            flex: 1.1;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 55px; /* Large, unshortened numbers */
+            font-size: 52px; /* Adjusted for 6-digit precision */
             border-bottom: 2px solid rgba(100, 255, 218, 0.2);
             letter-spacing: -1px;
-            padding: 0 5px;
         }
 
         .box-bottom {
-            flex: 1;
+            flex: 0.9;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 18px; /* Full phrases */
+            font-size: 20px;
             line-height: 1.1;
             padding: 10px;
             text-transform: uppercase;
@@ -81,7 +77,6 @@
 
         .hidden { display: none; }
 
-        /* THE POPUP HUD */
         #hud {
             position: fixed;
             top: 50%; left: 50%;
@@ -106,7 +101,6 @@
         .hud-title { font-size: 14px; opacity: 0.5; display: block; margin-bottom: 5px; letter-spacing: 4px; }
         .hud-body { font-size: 32px; color: #fff; display: block; line-height: 1; }
 
-        /* VOLUMETRIC TRACTOR BEAMS */
         #beam-svg {
             position: fixed;
             top: 0; left: 0;
@@ -115,10 +109,6 @@
             z-index: 900;
             opacity: 0;
             transition: opacity 0.2s;
-        }
-        .beam-shroud {
-            fill: var(--glow);
-            filter: blur(8px);
         }
     </style>
 </head>
@@ -131,7 +121,7 @@
     <svg id="beam-svg">
         <defs>
             <linearGradient id="beamGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" style="stop-color:var(--glow); stop-opacity:0.3" />
+                <stop offset="0%" style="stop-color:var(--glow); stop-opacity:0.4" />
                 <stop offset="100%" style="stop-color:var(--glow); stop-opacity:0" />
             </linearGradient>
         </defs>
@@ -149,22 +139,22 @@
     </div>
 
     <div class="grid" id="audit-grid">
-        <div class="box" data-search="104000 NON HUMAN PRIMATE TESTING MONKEYS" 
-             data-d="104,000 RESEARCH SUBJECTS" 
+        <div class="box" data-search="104801 NON HUMAN PRIMATE TESTING MONKEYS" 
+             data-d="104,801 RESEARCH SUBJECTS" 
              data-i="INVASIVE EXPOSURE TRIALS" 
              data-in="MACQUES, RHESES, MARMOSETS" 
              data-s="USDA APHIS 2023 REPORT"
              onmouseenter="showHud(this)" onmouseleave="hideHud()" onclick="this.remove()">
-            <div class="box-top">104000</div>
+            <div class="box-top">104,801</div>
             <div class="box-bottom">NON-HUMAN PRIMATE TESTING</div>
         </div>
 
         <div class="box" data-search="EMPTY" onmouseenter="showHud(this)" onmouseleave="hideHud()" onclick="this.remove()">
-            <div class="box-top">000000</div><div class="box-bottom">EMPTY DATA SECTOR</div>
+            <div class="box-top">000,000</div><div class="box-bottom">DATA SECTOR PENDING</div>
         </div>
 
         <div class="box" data-search="EMPTY" onmouseenter="showHud(this)" onmouseleave="hideHud()" onclick="this.remove()">
-            <div class="box-top">000000</div><div class="box-bottom">EMPTY DATA SECTOR</div>
+            <div class="box-top">000,000</div><div class="box-bottom">DATA SECTOR PENDING</div>
         </div>
     </div>
 
@@ -190,7 +180,6 @@
             const r = el.getBoundingClientRect();
             const h = hud.getBoundingClientRect();
             
-            // Set 4 volumetric polygons
             polys.top.setAttribute('points', `${r.left},${r.top} ${r.right},${r.top} ${h.right},${h.top} ${h.left},${h.top}`);
             polys.bottom.setAttribute('points', `${r.left},${r.bottom} ${r.right},${r.bottom} ${h.right},${h.bottom} ${h.left},${h.bottom}`);
             polys.left.setAttribute('points', `${r.left},${r.top} ${r.left},${r.bottom} ${h.left},${h.bottom} ${h.left},${h.top}`);
@@ -211,13 +200,12 @@
             }
         }
 
-        // Fill grid with more boxes
         const grid = document.getElementById('audit-grid');
         for(let i=4; i<=50; i++) {
             const b = document.createElement('div');
             b.className = 'box';
             b.setAttribute('data-search', 'EMPTY');
-            b.innerHTML = `<div class="box-top">000000</div><div class="box-bottom">EMPTY SECTOR ${i}</div>`;
+            b.innerHTML = `<div class="box-top">000,000</div><div class="box-bottom">DATA SECTOR ${i}</div>`;
             b.onmouseenter = function() { showHud(this); };
             b.onmouseleave = hideHud;
             b.onclick = function() { this.remove(); };
