@@ -4,105 +4,84 @@
     <meta charset="UTF-8">
     <title>System Audit | Grid</title>
     <style>
-        /* Boomer-proof reset: Removes all borders/margins */
         * { box-sizing: border-box; }
-        body { 
-            background: #000; 
-            margin: 0; 
-            padding: 5px; 
-            font-family: "Arial Black", Gadget, sans-serif;
-            overflow-x: hidden;
-        }
+        body { background: #0a0a0a; margin: 0; padding: 10px; font-family: "Arial Black", sans-serif; }
 
-        /* The Wall of 60 Boxes */
+        /* The Grid */
         .grid {
             display: grid;
-            grid-template-columns: repeat(10, 1fr); /* 10 boxes across */
-            gap: 4px; /* Tiny gap between boxes */
+            grid-template-columns: repeat(10, 1fr);
+            gap: 5px;
         }
 
         /* The Individual Box */
         .box {
-            background: #cc0000; /* Red Alert background */
-            color: #000; /* Black text for that heavy contrast */
+            background: #222; /* Neutral Grey */
+            color: #eee;
             height: 100px;
-            text-decoration: none;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
             border: 1px solid #444;
-            transition: all 0.2s ease-in-out;
+            transition: transform 0.2s;
+            cursor: pointer;
             overflow: hidden;
+            position: relative;
         }
 
-        /* Hover: Grows slightly without breaking the layout */
         .box:hover {
-            transform: scale(1.25);
-            z-index: 100;
-            background: #fff; /* Flashes white on hover */
-            box-shadow: 0 0 20px #fff;
-            border-radius: 2px;
+            transform: scale(1.1);
+            background: #333;
+            z-index: 10;
+            border-color: #666;
         }
 
-        /* Making the text "Blocky" and full */
-        .big-val {
-            font-size: 28px;
-            line-height: 0.9;
-            width: 100%;
-            display: block;
+        /* The "Popup" Logic (When Clicked/Focused) */
+        .box:focus {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(5); /* Pops to center, 5x size */
+            width: 15vw; /* Keeps it proportional */
+            height: 15vh;
+            z-index: 1000;
+            background: #444;
+            border: 1px solid #fff;
+            outline: none;
+            box-shadow: 0 0 100px rgba(0,0,0,0.9);
         }
 
-        .label {
-            font-size: 10px;
-            line-height: 1;
-            width: 100%;
-            display: block;
-            background: #000;
-            color: #cc0000;
-            padding: 2px 0;
-            margin: 2px 0;
-        }
-
-        .source {
-            font-family: Arial, sans-serif;
-            font-size: 7px;
-            font-weight: bold;
-            line-height: 1;
-            padding: 0 2px;
-        }
+        /* Text Styling */
+        .big-val { font-size: 20px; line-height: 1; display: block; width: 100%; }
+        .label { font-size: 8px; background: #000; color: #aaa; width: 100%; margin: 4px 0; padding: 2px 0; }
+        .source { font-family: Arial; font-size: 6px; padding: 0 3px; opacity: 0.6; }
     </style>
 </head>
 <body>
 
-    <div class="grid" id="main-grid">
-        <a href="https://docs.google.com/spreadsheets/d/1FV6lpWM0o5YhYniuzaQqp7lCwg4Q6d22ou0a4HnTxm0/edit" target="_blank" class="box">
+    <div class="grid">
+
+        <div class="box" tabindex="0">
             <span class="big-val">104k</span>
             <span class="label">NHP TESTING</span>
-            <span class="source">disclaimer: data compiled by ai may have some errors source is xyz</span>
-        </a>
-        <a href="#" class="box"><span class="big-val">$1.1T</span><span class="label">DEBT INT</span><span class="source">CODE 900</span></a>
-        <a href="#" class="box"><span class="big-val">$4B</span><span class="label">LOBBYING</span><span class="source">FARA DATA</span></a>
-        <a href="#" class="box"><span class="big-val">GRAS</span><span class="label">TOXINS</span><span class="source">SELF-CERT</span></a>
-        <a href="#" class="box"><span class="big-val">F-</span><span class="label">FLUORIDE</span><span class="source">EPA MANDATE</span></a>
-        <a href="#" class="box"><span class="big-val">21CFR</span><span class="label">FOOD KILL</span><span class="source">FDA 114</span></a>
-        <a href="#" class="box"><span class="big-val">NIH</span><span class="label">PRIMATES</span><span class="source">SUPPLY CHAIN</span></a>
-        <a href="#" class="box"><span class="big-val">SOI</span><span class="label">SPIKED MILK</span><span class="source">BLEACH GAS</span></a>
-        <a href="#" class="box"><span class="big-val">USDA</span><span class="label">MEAT GLUE</span><span class="source">TRANSGLUT</span></a>
-        <a href="#" class="box"><span class="big-val">CHIMP</span><span class="label">BUDGET</span><span class="source">GIMMICKS</span></a>
-
+            <span class="source">source: xyz data</span>
         </div>
 
-    <script>
-        // This is a "boomer-proof" script that fills the rest of the 60 boxes for you 
-        // so you don't have to copy-paste 60 times manually in the code.
-        const grid = document.getElementById('main-grid');
-        const template = grid.innerHTML;
-        for (let i = 0; i < 50; i++) {
-            grid.innerHTML += template;
-        }
-    </script>
+        <div class="box" tabindex="0">
+            <span class="big-val">EMPTY</span>
+            <span class="label">DATA POINT</span>
+            <span class="source">source: n/a</span>
+        </div>
+
+        <div class="box" tabindex="0">
+            <span class="big-val">EMPTY</span>
+            <span class="label">DATA POINT</span>
+            <span class="source">source: n/a</span>
+        </div>
+
+        </div>
 
 </body>
 </html>
