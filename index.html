@@ -16,7 +16,7 @@
 
         /* The Individual Box */
         .box {
-            background: #222; /* Neutral Grey */
+            background: #2a2a2a; /* Neutral Grey */
             color: #eee;
             height: 100px;
             display: flex;
@@ -25,63 +25,37 @@
             align-items: center;
             text-align: center;
             border: 1px solid #444;
-            transition: transform 0.2s;
+            transition: transform 0.2s, background 0.2s;
             cursor: pointer;
             overflow: hidden;
             position: relative;
+            text-decoration: none;
         }
 
         .box:hover {
             transform: scale(1.1);
-            background: #333;
+            background: #3a3a3a;
             z-index: 10;
-            border-color: #666;
+            border-color: #888;
         }
 
-        /* The "Popup" Logic (When Clicked/Focused) */
+        /* The Popup Logic: Click to center */
         .box:focus {
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(5); /* Pops to center, 5x size */
-            width: 15vw; /* Keeps it proportional */
-            height: 15vh;
+            transform: translate(-50%, -50%) scale(4); /* Centers and enlarges 4x */
+            width: 200px; 
+            height: 150px;
             z-index: 1000;
             background: #444;
             border: 1px solid #fff;
             outline: none;
             box-shadow: 0 0 100px rgba(0,0,0,0.9);
+            display: flex;
         }
 
-        /* Text Styling */
-        .big-val { font-size: 20px; line-height: 1; display: block; width: 100%; }
-        .label { font-size: 8px; background: #000; color: #aaa; width: 100%; margin: 4px 0; padding: 2px 0; }
-        .source { font-family: Arial; font-size: 6px; padding: 0 3px; opacity: 0.6; }
-    </style>
-</head>
-<body>
-
-    <div class="grid">
-
-        <div class="box" tabindex="0">
-            <span class="big-val">104k</span>
-            <span class="label">NHP TESTING</span>
-            <span class="source">source: xyz data</span>
-        </div>
-
-        <div class="box" tabindex="0">
-            <span class="big-val">EMPTY</span>
-            <span class="label">DATA POINT</span>
-            <span class="source">source: n/a</span>
-        </div>
-
-        <div class="box" tabindex="0">
-            <span class="big-val">EMPTY</span>
-            <span class="label">DATA POINT</span>
-            <span class="source">source: n/a</span>
-        </div>
-
-        </div>
-
-</body>
-</html>
+        /* Text Scaling */
+        .big-val { font-size: 18px; line-height: 0.9; display: block; width: 100%; padding: 0 2px; }
+        .label { font-size: 8px; background: #000; color: #888; width: 100%; margin: 4px 0; padding: 2px 0; text-transform: uppercase; }
+        .source { font-family: Arial; font-size: 6px; padding: 0 5px;
