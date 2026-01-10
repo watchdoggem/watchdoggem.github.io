@@ -19,7 +19,7 @@
             height: 100px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: space-between; /* Perfect symmetrical vertical split */
             align-items: center;
             text-align: center;
             border: 1px solid #444;
@@ -50,23 +50,24 @@
             box-shadow: 0 0 100px #000;
         }
 
-        /* UPDATED FOR BUBBLY FULLNESS */
+        /* FULL BUBBLY TEXT STYLING */
         .big-val { 
-            font-size: 38px; 
+            font-size: 42px; /* Increased for maximum 'bubbly' feel */
             line-height: 0.75; 
             width: 100%;
-            letter-spacing: -2px; /* Pulls letters together for that thick look */
+            letter-spacing: -2.5px; /* Tighter for that 'inflated' look */
             color: #fff;
             font-stretch: extra-condensed;
+            margin-top: 5px;
         }
         
         .label { 
-            font-size: 10px; 
+            font-size: 11px; 
             background: #000; 
             color: #bbb; 
             width: 100%; 
-            margin: 0; 
-            padding: 3px 0; 
+            margin: auto 0; /* Centers label perfectly between val and source */
+            padding: 4px 0; 
             line-height: 0.85;
             font-weight: bold;
             text-transform: uppercase;
@@ -74,11 +75,12 @@
 
         .source { 
             font-family: Arial, sans-serif; 
-            font-size: 6px; 
+            font-size: 6.5px; 
             line-height: 1;
             padding: 2px 4px; 
             opacity: 0.7; 
             font-weight: bold;
+            margin-bottom: 3px;
         }
     </style>
 </head>
@@ -88,61 +90,61 @@
         <div class="box" tabindex="0">
             <span class="big-val">104,801</span>
             <span class="label">PRIMATES IN TESTING</span>
-            <span class="source">USDA APHIS 2023 Report</span>
+            <span class="source">SOURCE: USDA APHIS 2023 </span>
         </div>
-        <div class="box" tabindex="0"><span class="big-val">1.03M</span><span class="label">ANNUAL ABORTIONS</span><span class="source">Guttmacher 2024</span></div>
-        <div class="box" tabindex="0"><span class="big-val">1.2B</span><span class="label">LBS PESTICIDES USED</span><span class="source">EPA Usage Analysis</span></div>
-        <div class="box" tabindex="0"><span class="big-val">38%</span><span class="label">U.S. FOOD WASTED</span><span class="source">ReFED/USDA 2024</span></div>
-        <div class="box" tabindex="0"><span class="big-val">41.9%</span><span class="label">ADULT OBESITY RATE</span><span class="source">CDC NHANES Data</span></div>
-        <div class="box" tabindex="0"><span class="big-val">107K</span><span class="label">OVERDOSE DEATHS</span><span class="source">CDC Vital Stats 2024</span></div>
-        <div class="box" tabindex="0"><span class="big-val">653K</span><span class="label">HOMELESS COUNT</span><span class="source">HUD PIT 2024</span></div>
-        <div class="box" tabindex="0"><span class="big-val">1 in 6</span><span class="label">CHILD POVERTY</span><span class="source">Children's Defense Fund</span></div>
-        <div class="box" tabindex="0"><span class="big-val">27.6M</span><span class="label">UNINSURED AMERICANS</span><span class="source">Census Bureau 2024</span></div>
-        <div class="box" tabindex="0"><span class="big-val">3.2M</span><span class="label">TESTING ANIMALS</span><span class="source">USDA Total Audit</span></div>
+        <div class="box" tabindex="0"><span class="big-val">1.03M</span><span class="label">ANNUAL ABORTIONS</span><span class="source">SOURCE: Guttmacher 2024</span></div>
+        <div class="box" tabindex="0"><span class="big-val">3.2M</span><span class="label">TESTING ANIMALS</span><span class="source">SOURCE: USDA APHIS Total Audit</span></div>
+        <div class="box" tabindex="0"><span class="big-val">15,803</span><span class="label">PRIMATE PAIN CASES</span><span class="source">SOURCE: USDA APHIS (No Pain Relief)</span></div>
+        <div class="box" tabindex="0"><span class="big-val">2.1M</span><span class="label">NIH ANIMAL SPEND</span><span class="source">SOURCE: NIH Research Portfolio</span></div>
+        <div class="box" tabindex="0"><span class="big-val">34,000</span><span class="label">KITCHENS CLOSED</span><span class="source">SOURCE: CFR 114 Est. Impact</span></div>
+        <div class="box" tabindex="0"><span class="big-val">18%</span><span class="label">ABORTION RATE INCR.</span><span class="source">SOURCE: Guttmacher 2020-2023</span></div>
+        <div class="box" tabindex="0"><span class="big-val">23,400</span><span class="label">USDA LICENSES</span><span class="source">SOURCE: USDA Dealer Audit 2024</span></div>
+        <div class="box" tabindex="0"><span class="big-val">68%</span><span class="label">PRIMATE IMPORTS</span><span class="source">SOURCE: CDC Import Records</span></div>
+        <div class="box" tabindex="0"><span class="big-val">11,200</span><span class="label">FDA REJECTIONS</span><span class="source">SOURCE: FDA Animal Trial Audit</span></div>
 
-        <div class="box" tabindex="0"><span class="big-val">$34T</span><span class="label">NATIONAL DEBT</span><span class="source">U.S. Debt Clock</span></div>
-        <div class="box" tabindex="0"><span class="big-val">$870B</span><span class="label">DEBT INTEREST COST</span><span class="source">CBO 2024 Outlook</span></div>
-        <div class="box" tabindex="0"><span class="big-val">$4.2B</span><span class="label">LOBBYING SPEND</span><span class="source">OpenSecrets 2024</span></div>
-        <div class="box" tabindex="0"><span class="big-val">$70B</span><span class="label">UNCLAIMED ASSETS</span><span class="source">NAUPA Aggregate</span></div>
-        <div class="box" tabindex="0"><span class="big-val">$68B</span><span class="label">CIVIL FORFEITURE</span><span class="source">Inst. for Justice</span></div>
-        <div class="box" tabindex="0"><span class="big-val">$247B</span><span class="label">IMPROPER PAYMENTS</span><span class="source">GAO 2024 Audit</span></div>
-        <div class="box" tabindex="0"><span class="big-val">$1.1T</span><span class="label">ANNUAL TAX GAP</span><span class="source">IRS Commissioner 2024</span></div>
-        <div class="box" tabindex="0"><span class="big-val">$13B</span><span class="label">OVERDRAFT FEES</span><span class="source">CFPB 2024 Data</span></div>
-        <div class="box" tabindex="0"><span class="big-val">$150B</span><span class="label">ANNUAL WAGE THEFT</span><span class="source">EPI Fact Sheet</span></div>
-        <div class="box" tabindex="0"><span class="big-val">$1.7T</span><span class="label">STUDENT DEBT</span><span class="source">Federal Reserve 2024</span></div>
+        <div class="box" tabindex="0"><span class="big-val">$1.1T</span><span class="label">ANNUAL TAX GAP</span><span class="source">SOURCE: IRS Commissioner 2024 [cite: 4]</span></div>
+        <div class="box" tabindex="0"><span class="big-val">$870B</span><span class="label">DEBT INTEREST COST</span><span class="source">SOURCE: CBO 2024 Fiscal Outlook [cite: 5]</span></div>
+        <div class="box" tabindex="0"><span class="big-val">$68.8B</span><span class="label">CIVIL FORFEITURE</span><span class="source">SOURCE: Institute for Justice [cite: 3]</span></div>
+        <div class="box" tabindex="0"><span class="big-val">$70B</span><span class="label">UNCLAIMED ASSETS</span><span class="source">SOURCE: NAUPA Aggregate [cite: 2]</span></div>
+        <div class="box" tabindex="0"><span class="big-val">$247B</span><span class="label">IMPROPER PAYMENTS</span><span class="source">SOURCE: GAO 2024 Audit</span></div>
+        <div class="box" tabindex="0"><span class="big-val">$150B</span><span class="label">ANNUAL WAGE THEFT</span><span class="source">SOURCE: EPI Fact Sheet</span></div>
+        <div class="box" tabindex="0"><span class="big-val">18%</span><span class="label">CORP EFFECTIVE TAX</span><span class="source">SOURCE: GAO Corp Tax Study</span></div>
+        <div class="box" tabindex="0"><span class="big-val">$13.1B</span><span class="label">OVERDRAFT FEES</span><span class="source">SOURCE: CFPB 2024 Data</span></div>
+        <div class="box" tabindex="0"><span class="big-val">$4.2B</span><span class="label">LOBBYING SPEND</span><span class="source">SOURCE: OpenSecrets 2024</span></div>
+        <div class="box" tabindex="0"><span class="big-val">$1.7T</span><span class="label">STUDENT LOAN DEBT</span><span class="source">SOURCE: Federal Reserve 2024</span></div>
 
-        <div class="box" tabindex="0"><span class="big-val">C-</span><span class="label">INFRASTRUCTURE GRADE</span><span class="source">ASCE Report Card</span></div>
-        <div class="box" tabindex="0"><span class="big-val">45K</span><span class="label">HIGH-HAZARD DAMS</span><span class="source">FEMA Dam Safety</span></div>
-        <div class="box" tabindex="0"><span class="big-val">90K MT</span><span class="label">NUCLEAR WASTE</span><span class="source">DOE On-Site Storage</span></div>
-        <div class="box" tabindex="0"><span class="big-val">17.4B</span><span class="label">PCS JUNK MAIL</span><span class="source">USPS Diary Study</span></div>
-        <div class="box" tabindex="0"><span class="big-val">2.7M</span><span class="label">ACTIVE WELLS</span><span class="source">EIA Energy Review</span></div>
-        <div class="box" tabindex="0"><span class="big-val">42K</span><span class="label">TRAFFIC DEATHS</span><span class="source">NHTSA 2024 Estimates</span></div>
-        <div class="box" tabindex="0"><span class="big-val">20B</span><span class="label">LBS DATA CENTER CO2</span><span class="source">DOE Tech Analysis</span></div>
-        <div class="box" tabindex="0"><span class="big-val">1.1M</span><span class="label">MILES SUBSEA CABLE</span><span class="source">Telegeography 2024</span></div>
-        <div class="box" tabindex="0"><span class="big-val">6,000</span><span class="label">ACTIVE SATELLITES</span><span class="source">UCS Database 2024</span></div>
-        <div class="box" tabindex="0"><span class="big-val">90,402</span><span class="label">NEW FED REG PAGES</span><span class="source">Nat. Archives 2023</span></div>
+        <div class="box" tabindex="0"><span class="big-val">$12K</span><span class="label">AVG LICENSE FEE</span><span class="source">SOURCE: SBA Regulatory Audit</span></div>
+        <div class="box" tabindex="0"><span class="big-val">90,402</span><span class="label">NEW FED REG PAGES</span><span class="source">SOURCE: Nat. Archives 2023</span></div>
+        <div class="box" tabindex="0"><span class="big-val">3,800</span><span class="label">WEEKLY PATENTS</span><span class="source">SOURCE: USPTO Dashboard</span></div>
+        <div class="box" tabindex="0"><span class="big-val">143K</span><span class="label">PUBLIC WATER SYS</span><span class="source">SOURCE: EPA SDWIS Reports</span></div>
+        <div class="box" tabindex="0"><span class="big-val">2.7M</span><span class="label">ACTIVE WELLS</span><span class="source">SOURCE: EIA Energy Review</span></div>
+        <div class="box" tabindex="0"><span class="big-val">17.4B</span><span class="label">PCS JUNK MAIL</span><span class="source">SOURCE: USPS Diary Study</span></div>
+        <div class="box" tabindex="0"><span class="big-val">184</span><span class="label">PERMITS REQ.</span><span class="source">SOURCE: CFR Construction Audit</span></div>
+        <div class="box" tabindex="0"><span class="big-val">$5,200</span><span class="label">COMPLIANCE COST</span><span class="source">SOURCE: NAM Per-Employee Est.</span></div>
+        <div class="box" tabindex="0"><span class="big-val">322:1</span><span class="label">CEO/WORKER PAY</span><span class="source">SOURCE: AFL-CIO Paywatch</span></div>
+        <div class="box" tabindex="0"><span class="big-val">12,000</span><span class="label">REG. LOBBYISTS</span><span class="source">SOURCE: OpenSecrets Count</span></div>
 
-        <div class="box" tabindex="0"><span class="big-val">1.9M</span><span class="label">INCARCERATED COUNT</span><span class="source">BJS Statistics 2024</span></div>
-        <div class="box" tabindex="0"><span class="big-val">3,200</span><span class="label">ON DEATH ROW</span><span class="source">DPIC 2024 Report</span></div>
-        <div class="box" tabindex="0"><span class="big-val">12K</span><span class="label">REG. LOBBYISTS</span><span class="source">OpenSecrets Count</span></div>
-        <div class="box" tabindex="0"><span class="big-val">7.3B</span><span class="label">SURVEILLANCE SEARCHES</span><span class="source">GAO Tech Audit</span></div>
-        <div class="box" tabindex="0"><span class="big-val">3,205</span><span class="label">RANSOMWARE CASES</span><span class="source">FBI IC3 Report</span></div>
-        <div class="box" tabindex="0"><span class="big-val">3,800</span><span class="label">WEEKLY PATENTS</span><span class="source">USPTO Dashboard</span></div>
-        <div class="box" tabindex="0"><span class="big-val">1.3M</span><span class="label">MILITARY ACTIVE DUTY</span><span class="source">DoD Personnel Stats</span></div>
-        <div class="box" tabindex="0"><span class="big-val">143K</span><span class="label">PUBLIC WATER SYS</span><span class="source">EPA SDWIS Reports</span></div>
-        <div class="box" tabindex="0"><span class="big-val">322:1</span><span class="label">CEO/WORKER PAY RATIO</span><span class="source">AFL-CIO Paywatch</span></div>
-        <div class="box" tabindex="0"><span class="big-val">18%</span><span class="label">CORP EFFECTIVE TAX</span><span class="source">GAO Corp Tax Study</span></div>
+        <div class="box" tabindex="0"><span class="big-val">1.2B</span><span class="label">LBS PESTICIDES</span><span class="source">SOURCE: EPA Usage Analysis</span></div>
+        <div class="box" tabindex="0"><span class="big-val">38%</span><span class="label">U.S. FOOD WASTED</span><span class="source">SOURCE: ReFED/USDA 2024</span></div>
+        <div class="box" tabindex="0"><span class="big-val">90K MT</span><span class="label">NUCLEAR WASTE</span><span class="source">SOURCE: DOE On-Site Storage</span></div>
+        <div class="box" tabindex="0"><span class="big-val">20B</span><span class="label">LBS DATA CTR CO2</span><span class="source">SOURCE: DOE Tech Analysis</span></div>
+        <div class="box" tabindex="0"><span class="big-val">10B</span><span class="label">GALS FRACK WATER</span><span class="source">SOURCE: USGS Water Science</span></div>
+        <div class="box" tabindex="0"><span class="big-val">400M</span><span class="label">TONS TOXIC WASTE</span><span class="source">SOURCE: UNEP Global Outlook</span></div>
+        <div class="box" tabindex="0"><span class="big-val">9.5B</span><span class="label">TONS COAL MINED</span><span class="source">SOURCE: IEA Coal Report 2024</span></div>
+        <div class="box" tabindex="0"><span class="big-val">8M LBS</span><span class="label">PLASTIC IN OCEAN</span><span class="source">SOURCE: Ocean Conservancy</span></div>
+        <div class="box" tabindex="0"><span class="big-val">320M</span><span class="label">TIRES SCRAPPED</span><span class="source">SOURCE: USTMA 2024 Report</span></div>
+        <div class="box" tabindex="0"><span class="big-val">15M</span><span class="label">ACRES FOREST LOST</span><span class="source">SOURCE: Global Forest Watch</span></div>
 
-        <div class="box" tabindex="0"><span class="big-val">$38B</span><span class="label">SELF STORAGE SPEND</span><span class="source">SSA 2025 Industry</span></div>
-        <div class="box" tabindex="0"><span class="big-val">92%</span><span class="label">PLASTIC UNRECYCLED</span><span class="source">EPA MSW Data</span></div>
-        <div class="box" tabindex="0"><span class="big-val">400M</span><span class="label">TONS TOXIC WASTE</span><span class="source">UNEP Global Outlook</span></div>
-        <div class="box" tabindex="0"><span class="big-val">2.5B</span><span class="label">PCS ELECTRONIC WASTE</span><span class="source">Global E-waste Monitor</span></div>
-        <div class="box" tabindex="0"><span class="big-val">8M</span><span class="label">LBS PLASTIC IN OCEAN</span><span class="source">Ocean Conservancy</span></div>
-        <div class="box" tabindex="0"><span class="big-val">320M</span><span class="label">TIRES SCRAPPED</span><span class="source">USTMA 2024 Report</span></div>
-        <div class="box" tabindex="0"><span class="big-val">10B</span><span class="label">GALLONS FRACK WATER</span><span class="source">USGS Water Science</span></div>
-        <div class="box" tabindex="0"><span class="big-val">15M</span><span class="label">ACRES FOREST LOST</span><span class="source">Global Forest Watch</span></div>
-        <div class="box" tabindex="0"><span class="big-val">2,640</span><span class="label">GLOBAL BILLIONAIRES</span><span class="source">Forbes 2024 List</span></div>
-        <div class="box" tabindex="0"><span class="big-val">9.5B</span><span class="label">TONS COAL MINED</span><span class="source">IEA Coal Report 2024</span></div>
+        <div class="box" tabindex="0"><span class="big-val">1.9M</span><span class="label">INCARCERATED</span><span class="source">SOURCE: BJS Statistics 2024</span></div>
+        <div class="box" tabindex="0"><span class="big-val">653K</span><span class="label">HOMELESS COUNT</span><span class="source">SOURCE: HUD PIT 2024</span></div>
+        <div class="box" tabindex="0"><span class="big-val">41.9%</span><span class="label">ADULT OBESITY</span><span class="source">SOURCE: CDC NHANES Data</span></div>
+        <div class="box" tabindex="0"><span class="big-val">107K</span><span class="label">OVERDOSE DEATHS</span><span class="source">SOURCE: CDC Vital Stats 2024</span></div>
+        <div class="box" tabindex="0"><span class="big-val">27.6M</span><span class="label">UNINSURED</span><span class="source">SOURCE: Census Bureau 2024</span></div>
+        <div class="box" tabindex="0"><span class="big-val">1 in 6</span><span class="label">CHILD POVERTY</span><span class="source">SOURCE: Children's Fund</span></div>
+        <div class="box" tabindex="0"><span class="big-val">42K</span><span class="label">TRAFFIC DEATHS</span><span class="source">SOURCE: NHTSA 2024 Est.</span></div>
+        <div class="box" tabindex="0"><span class="big-val">3,200</span><span class="label">ON DEATH ROW</span><span class="source">SOURCE: DPIC 2024 Report</span></div>
+        <div class="box" tabindex="0"><span class="big-val">2,640</span><span class="label">BILLIONAIRES</span><span class="source">SOURCE: Forbes 2024 List</span></div>
+        <div class="box" tabindex="0"><span class="big-val">7.3B</span><span class="label">SURVEILLANCE</span><span class="source">SOURCE: GAO Tech Audit</span></div>
     </div>
 
 </body>
