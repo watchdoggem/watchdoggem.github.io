@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>THE SINGULARITY | MULTI-SECTOR AUDIT</title>
+    <style>
+        :root { --bg: #000000; --neon: #00ff41; --gold: #ffcc00; --border: #1a1a1a; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: var(--bg); color: #fff; font-family: 'Arial Black', sans-serif; overflow-x: hidden; }
+
+        /* TAB NAVIGATION - INDUSTRIAL LOOK */
+        nav { background: #0a0a0a; border-bottom: 4px solid var(--neon); display: flex; flex-wrap: wrap; sticky: top; z-index: 100; }
+        .tab-btn { background: none; border: none; color: var(--neon); padding: 20px; cursor: pointer; font-family: 'Arial Black'; text-transform: uppercase; font-size: 1rem; border-right: 1px solid var(--border); }
+        .tab-btn:hover { background: #111; }
+        .tab-btn.active { background: var(--neon); color: #000; }
+
+        .main-wrapper { padding: 15px; }
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* DASHBOARD GRID */
+        .dashboard { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 10px; }
+        .stat-box { border: 4px solid var(--neon); padding: 25px; background: #000; display: flex; flex-direction: column; align-items: center; text-align: center; min-height: 250px; justify-content: center; }
+        .stat-box h2 { font-size: clamp(2.5rem, 10vw, 6rem); color: var(--neon); line-height: 0.9; margin-bottom: 10px; }
+        .stat-box p { font-size: 1.1rem; text-transform: uppercase; color: #fff; }
+
+        /* DATA TABLES */
+        .table-section { background: #080808; border: 4px solid var(--neon); padding: 20px; }
+        h1 { color: var(--neon); font-size: 2.2rem; margin-bottom: 20px; text-transform: uppercase; border-left: 15px solid var(--neon); padding-left: 15px;}
+        table { width: 100%; border-collapse: collapse; font-family: 'Courier New', monospace; margin-top: 10px; }
+        th { text-align: left; padding: 15px; background: var(--neon); color: #000; font-size: 0.9rem; }
+        td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 1.1rem; }
+        .facility-name { color: var(--gold); font-weight: bold; }
+        .money-val { color: var(--neon); font-weight: bold; }
+
+        @media (max-width: 900px) { .dashboard { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <button class="tab-btn active" onclick="openTab('animal-audit')">1. ANIMAL EXPENDITURE</button>
+        <button class="tab-btn" onclick="openTab('fraud-audit')">2. DAYCARE FRAUD (MN)</button>
+        <button class="tab-btn" onclick="openTab('debt-audit')">3. DEBT & SPENDING</button>
+        <button class="tab-btn" onclick="openTab('visa-audit')">4. H1-B VISA FLOW</button>
+    </nav>
+
+    <div class="main-wrapper">
+
+        <div id="animal-audit" class="page active">
+            <div class="dashboard">
+                <div class="stat-box"><h2>104,808</h2><p>Primates in Pharma Funded Research</p></div>
+                <div class="stat-box"><h2>$15.2B</h2><p>Total Annual NIH Animal Funding</p></div>
+            </div>
+            <div class="table-section">
+                <h1>ANIMAL RESEARCH FACILITY LOG</h1>
+                <table>
+                    <thead><tr><th>FACILITY</th><th>COUNT</th><th>EXPENDITURE</th></tr></thead>
+                    <tbody id="animalBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="fraud-audit" class="page">
+            <div class="dashboard">
+                <div class="stat-box"><h2>$250M</h2><p>Estimated Fraud Loss (Feeding Our Future Case)</p></div>
+                <div class="stat-box"><h2>70+</h2><p>Indicted Individuals</p></div>
+            </div>
+            <div class="table-section">
+                <h1>MN DEPARTMENT OF EDUCATION AUDIT</h1>
+                <p style="color: #888; margin-bottom: 20px;">Tracking the diversion of federal child nutrition program funds.</p>
+                <table>
+                    <thead><tr><th>ENTITY</th><th>FUNDS DIVERTED</th><th>STATUS</th></tr></thead>
+                    <tbody>
+                        <tr><td>Feeding Our Future</td><td>$250,000,000</td><td style="color:red">FEDERAL INDICTMENT</td></tr>
+                        <tr><td>S & S Catering</td><td>$11,000,000</td><td style="color:red">CHARGED</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="debt-audit" class="page">
+            <div class="dashboard">
+                <div class="stat-box"><h2>$34.0T</h2><p>Total United States National Debt</p></div>
+                <div class="stat-box"><h2>$2.0B</h2><p>Daily Interest Accumulation</p></div>
+            </div>
+            <div class="table-section">
+                <h1>FEDERAL BUDGET LEAKAGE</h1>
+                <table>
+                    <thead><tr><th>SECTOR</th><th>ANNUAL WASTE</th><th>SOURCE</th></tr></thead>
+                    <tbody>
+                        <tr><td>Improper Payments</td><td>$247,000,000,000</td><td>GAO 2023 Report</td></tr>
+                        <tr><td>Foreign Military Aid</td><td>$14,300,000,000</td><td>FY24 Supplemental</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="visa-audit" class="page">
+            <div class="dashboard">
+                <div class="stat-box"><h2>85,000</h2><p>Annual H1-B Visa Cap</p></div>
+                <div class="stat-box"><h2>750,000+</h2><p>Total Annual Registrations</p></div>
+            </div>
+            <div class="table-section">
+                <h1>TOP H1-B RECIPIENTS (OUTSOURCING)</h1>
+                <table>
+                    <thead><tr><th>COMPANY</th><th>VISA APPROVALS</th><th>AVG SALARY</th></tr></thead>
+                    <tbody>
+                        <tr><td>Cognizant Tech Solutions</td><td>7,500+</td><td>$98,000</td></tr>
+                        <tr><td>Tata Consultancy</td><td>6,200+</td><td>$102,000</td></tr>
+                        <tr><td>Amazon.com Services</td><td>5,800+</td><td>$145,000</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function openTab(tabId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        const animalData = [
+            {n: "Charles River Laboratories", p: "19,363", m: "$4.13 Billion"},
+            {n: "Labcorp Early Development", p: "8,604", m: "$1.20 Billion"},
+            {n: "University of Louisiana", p: "10,440", m: "$18.2 Million"},
+            {n: "Tulane University", p: "5,826", m: "$488 Million"},
+            {n: "Oregon Health Science", p: "5,660", m: "$312.9 Million"}
+        ];
+
+        document.getElementById('animalBody').innerHTML = animalData.map(row => `
+            <tr><td class="facility-name">${row.n}</td><td>${row.p}</td><td class="money-val">${row.m}</td></tr>
+        `).join('');
+    </script>
+</body>
+</html>
