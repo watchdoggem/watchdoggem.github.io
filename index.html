@@ -19,10 +19,11 @@
             overflow-x: hidden;
         }
 
+        /* SEARCH BAR TERMINAL */
         #search-container {
             display: flex;
             background: rgba(100, 255, 218, 0.03);
-            border: 2px solid rgba(100, 255, 218, 0.2);
+            border: 2px solid rgba(100, 255, 218, 0.3);
             padding: 15px;
             margin-bottom: 30px;
         }
@@ -32,12 +33,14 @@
             font-size: 28px; width: 100%; letter-spacing: 2px;
         }
 
+        /* THE GRID - 5 COLUMNS */
         .grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 15px;
         }
 
+        /* THE BOX - SYMMETRICAL SPLIT */
         .box {
             position: relative;
             background: var(--box-fill);
@@ -59,7 +62,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 52px; /* Adjusted for 6-digit precision */
+            font-size: 52px;
             border-bottom: 2px solid rgba(100, 255, 218, 0.2);
             letter-spacing: -1px;
         }
@@ -77,6 +80,7 @@
 
         .hidden { display: none; }
 
+        /* THE POPUP HUD */
         #hud {
             position: fixed;
             top: 50%; left: 50%;
@@ -99,8 +103,9 @@
         .hud-section { border-bottom: 1px solid rgba(100, 255, 218, 0.1); padding-bottom: 10px; }
         .hud-section:last-child { border: none; }
         .hud-title { font-size: 14px; opacity: 0.5; display: block; margin-bottom: 5px; letter-spacing: 4px; }
-        .hud-body { font-size: 32px; color: #fff; display: block; line-height: 1; }
+        .hud-body { font-size: 28px; color: #fff; display: block; line-height: 1.1; }
 
+        /* VOLUMETRIC TRACTOR BEAMS */
         #beam-svg {
             position: fixed;
             top: 0; left: 0;
@@ -115,7 +120,7 @@
 <body>
 
     <div id="search-container">
-        <input type="text" id="filter-input" placeholder="SEARCH SYSTEM..." onkeyup="filterGrid()">
+        <input type="text" id="filter-input" placeholder="SEARCH SYSTEM AUDIT..." onkeyup="filterGrid()">
     </div>
 
     <svg id="beam-svg">
@@ -139,11 +144,11 @@
     </div>
 
     <div class="grid" id="audit-grid">
-        <div class="box" data-search="104801 NON HUMAN PRIMATE TESTING MONKEYS" 
+        <div class="box" data-search="104801 NON HUMAN PRIMATE TESTING MONKEYS FDA NIH DEATH" 
              data-d="104,801 RESEARCH SUBJECTS" 
-             data-i="INVASIVE EXPOSURE TRIALS" 
-             data-in="MACQUES, RHESES, MARMOSETS" 
-             data-s="USDA APHIS 2023 REPORT"
+             data-i="GUARANTEED DEATH; ACUTE PAIN, FEAR, AND PERMANENT DAMAGE" 
+             data-in="FDA MANDATES, NIH FUNDING, USDA OVERSIGHT" 
+             data-s="USDA APHIS 2023 / NIH OFFICE OF LABORATORY WELFARE"
              onmouseenter="showHud(this)" onmouseleave="hideHud()" onclick="this.remove()">
             <div class="box-top">104,801</div>
             <div class="box-bottom">NON-HUMAN PRIMATE TESTING</div>
@@ -169,17 +174,21 @@
         };
 
         function showHud(el) {
+            // Populate HUD text
             document.getElementById('h-data').innerText = el.getAttribute('data-d') || "---";
             document.getElementById('h-impact').innerText = el.getAttribute('data-i') || "---";
             document.getElementById('h-includes').innerText = el.getAttribute('data-in') || "---";
             document.getElementById('h-source').innerText = el.getAttribute('data-s') || "---";
             
+            // Show HUD and Beams
             hud.style.transform = "translate(-50%, -50%) scale(1)";
             beamSvg.style.opacity = "1";
             
+            // Get coordinates
             const r = el.getBoundingClientRect();
             const h = hud.getBoundingClientRect();
             
+            // Draw 4 volumetric shrouds
             polys.top.setAttribute('points', `${r.left},${r.top} ${r.right},${r.top} ${h.right},${h.top} ${h.left},${h.top}`);
             polys.bottom.setAttribute('points', `${r.left},${r.bottom} ${r.right},${r.bottom} ${h.right},${h.bottom} ${h.left},${h.bottom}`);
             polys.left.setAttribute('points', `${r.left},${r.top} ${r.left},${r.bottom} ${h.left},${h.bottom} ${h.left},${h.top}`);
@@ -200,6 +209,7 @@
             }
         }
 
+        // Fill remaining grid to 50 slots
         const grid = document.getElementById('audit-grid');
         for(let i=4; i<=50; i++) {
             const b = document.createElement('div');
