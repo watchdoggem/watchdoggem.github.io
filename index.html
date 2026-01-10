@@ -14,24 +14,41 @@
         body { 
             background: var(--bg); 
             margin: 0; padding: 20px; 
-            font-family: 'Impact', 'Arial Black', sans-serif; 
+            font-family: 'Impact', sans-serif; 
             color: var(--glow);
             overflow-x: hidden;
         }
 
+        /* SEARCH BAR TERMINAL */
+        #search-container {
+            display: flex;
+            align-items: center;
+            background: rgba(100, 255, 218, 0.03);
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        #search-container span { margin-right: 15px; font-size: 14px; opacity: 0.7; }
+        #filter-input {
+            background: transparent; border: none; outline: none;
+            color: #fff; font-family: 'Impact', sans-serif;
+            font-size: 20px; width: 100%; letter-spacing: 1px;
+        }
+
+        /* GRID LAYOUT - 5 ACROSS */
         .grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr); /* 5 Across */
+            grid-template-columns: repeat(5, 1fr);
             gap: 15px;
             width: 100%;
         }
 
-        /* THE UNIFORM BOX */
         .box {
             position: relative;
             background: var(--box-fill);
             border: 2px solid rgba(100, 255, 218, 0.2);
-            height: 140px; /* Uniform Height */
+            height: 140px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -44,32 +61,35 @@
             border-color: var(--glow);
         }
 
-        .big-val { font-size: 50px; line-height: 0.8; letter-spacing: -1px; }
-        .label-text { font-size: 18px; margin-top: 10px; opacity: 0.8; }
+        .redacted { opacity: 0.1; filter: blur(1px); pointer-events: none; }
 
-        /* THE POPUP HUD */
+        .big-val { font-size: 50px; line-height: 0.8; letter-spacing: -1px; pointer-events: none; }
+        .label-text { font-size: 18px; margin-top: 10px; opacity: 0.8; pointer-events: none; }
+
+        /* THE HUD POPUP */
         #hud {
             position: fixed;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
-            width: 450px;
-            background: rgba(1, 10, 8, 0.95);
-            border: 3px solid var(--glow);
-            padding: 25px;
+            width: 480px;
+            background: rgba(1, 10, 8, 0.98);
+            border: 2px solid var(--glow);
+            padding: 20px;
             z-index: 1000;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
             text-align: center;
             pointer-events: none;
-            transition: transform 0.3s cubic-bezier(0.17, 0.84, 0.44, 1);
-            backdrop-filter: blur(10px);
+            transition: transform 0.2s ease-out;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 0 50px #000;
         }
 
-        .hud-section { border-bottom: 1px solid rgba(100, 255, 218, 0.2); padding-bottom: 5px; }
+        .hud-section { border-bottom: 1px solid rgba(100, 255, 218, 0.15); padding-bottom: 8px; }
         .hud-section:last-child { border: none; }
-        .hud-title { font-size: 12px; opacity: 0.6; display: block; margin-bottom: 4px; }
-        .hud-body { font-size: 22px; color: #fff; display: block; }
+        .hud-title { font-size: 11px; opacity: 0.5; display: block; margin-bottom: 4px; letter-spacing: 2px; }
+        .hud-body { font-size: 24px; color: #fff; display: block; line-height: 1.1; }
 
         /* THE TRACTOR BEAM SVG */
         #connector {
@@ -79,12 +99,18 @@
             pointer-events: none;
             z-index: 900;
             stroke: var(--glow);
-            stroke-width: 1;
-            opacity: 0.3;
+            stroke-width: 1.5;
+            opacity: 0;
+            transition: opacity 0.1s;
         }
     </style>
 </head>
 <body>
+
+    <div id="search-container">
+        <span>QUERY:></span>
+        <input type="text" id="filter-input" placeholder="SEARCH SYSTEM AUDIT..." onkeyup="filterGrid()">
+    </div>
 
     <svg id="connector"><line id="line1" /><line id="line2" /></svg>
 
@@ -95,11 +121,10 @@
         <div class="hud-section"><span class="hud-title">SOURCE</span><span id="h-source" class="hud-body"></span></div>
     </div>
 
-    <div class="grid">
-        <div class="box" 
-             data-val="104K" data-lab="NHP TESTING"
+    <div class="grid" id="audit-grid">
+        <div class="box" data-val="104K" data-lab="NHP TESTING"
              data-d="104,801 RESEARCH SUBJECTS" 
-             data-i="NON-HUMAN PRIMATE EXPOSURE" 
+             data-i="MONKEY EXPOSURE TRIALS" 
              data-in="MACQUES, RHESES, MARMOSETS" 
              data-s="USDA APHIS 2023 REPORT"
              onmouseenter="showHud(this)" onmouseleave="hideHud()" onclick="this.remove()">
@@ -107,34 +132,42 @@
             <span class="label-text">NHP TESTING</span>
         </div>
 
-        <div class="box" 
-             data-val="1.03M" data-lab="ABORT STAT"
-             data-d="1,031,000 ANNUAL PROCEDURES" 
-             data-i="U.S. REPRODUCTIVE TOTALS" 
-             data-in="CLINICAL & NON-CLINICAL" 
-             data-s="GUTTMACHER INSTITUTE"
+        <div class="box" data-val="1.1T" data-lab="TAX GAP"
+             data-d="$1.1 TRILLION UNPAID" 
+             data-i="ANNUAL REVENUE LEAKAGE" 
+             data-in="UNDERREPORTED & UNCOLLECTED" 
+             data-s="IRS COMMISSIONER 2024"
              onmouseenter="showHud(this)" onmouseleave="hideHud()" onclick="this.remove()">
-            <span class="big-val">1.03M</span>
-            <span class="label-text">ABORT STAT</span>
+            <span class="big-val">$1.1T</span>
+            <span class="label-text">TAX GAP</span>
         </div>
 
+        <div class="box" data-val="23K" data-lab="USDA LIC"
+             data-d="23,400 ACTIVE PERMITS" 
+             data-i="BREEDER & DEALER OVERSIGHT" 
+             data-in="CLASS A, B, AND C LICENSES" 
+             data-s="USDA ANIMAL CARE AUDIT"
+             onmouseenter="showHud(this)" onmouseleave="hideHud()" onclick="this.remove()">
+            <span class="big-val">23K</span>
+            <span class="label-text">USDA LIC</span>
         </div>
+    </div>
 
     <script>
         const hud = document.getElementById('hud');
+        const connector = document.getElementById('connector');
         const line1 = document.getElementById('line1');
         const line2 = document.getElementById('line2');
 
         function showHud(el) {
-            // Set Text
             document.getElementById('h-data').innerText = el.getAttribute('data-d');
             document.getElementById('h-impact').innerText = el.getAttribute('data-i');
             document.getElementById('h-includes').innerText = el.getAttribute('data-in');
             document.getElementById('h-source').innerText = el.getAttribute('data-s');
             
             hud.style.transform = "translate(-50%, -50%) scale(1)";
+            connector.style.opacity = "0.4";
             
-            // Draw Lines
             const rect = el.getBoundingClientRect();
             const hRect = hud.getBoundingClientRect();
             
@@ -147,19 +180,32 @@
 
         function hideHud() {
             hud.style.transform = "translate(-50%, -50%) scale(0)";
-            line1.setAttribute('x1', 0); line2.setAttribute('x1', 0);
+            connector.style.opacity = "0";
         }
 
-        // Generate placeholders
-        const grid = document.querySelector('.grid');
-        for(let i=0; i<38; i++) {
+        function filterGrid() {
+            let input = document.getElementById('filter-input').value.toUpperCase();
+            let boxes = document.getElementsByClassName('box');
+            for (let box of boxes) {
+                let content = box.innerText.toUpperCase() + box.getAttribute('data-d').toUpperCase();
+                if (content.includes(input)) {
+                    box.classList.remove('redacted');
+                } else {
+                    box.classList.add('redacted');
+                }
+            }
+        }
+
+        // Fill remaining grid (approx 40 more boxes)
+        const grid = document.getElementById('audit-grid');
+        for(let i=0; i<42; i++) {
             const b = document.createElement('div');
             b.className = 'box';
             b.innerHTML = `<span class="big-val">---</span><span class="label-text">EMPTY ${i+1}</span>`;
-            b.setAttribute('data-d', 'PENDING AUDIT');
-            b.setAttribute('data-i', 'NO DATA RECORDED');
-            b.setAttribute('data-in', 'N/A');
-            b.setAttribute('data-s', 'UNKNOWN');
+            b.setAttribute('data-d', 'BUFFERING DATA...');
+            b.setAttribute('data-i', 'SECTOR UNKNOWN');
+            b.setAttribute('data-in', 'NO ATTRIBUTES');
+            b.setAttribute('data-s', 'N/A');
             b.onmouseenter = function() { showHud(this); };
             b.onmouseleave = hideHud;
             b.onclick = function() { this.remove(); };
