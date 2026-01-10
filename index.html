@@ -1,65 +1,77 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Watchdog Grid</title>
+    <meta charset="UTF-8">
+    <title>System Audit</title>
     <style>
-        body { background: #000; color: white; font-family: sans-serif; margin: 0; padding: 10px; }
+        body { background: #000; color: #eee; font-family: 'Arial Black', Gadget, sans-serif; margin: 0; padding: 50px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         
-        /* This creates the 10-across grid */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(10, 1fr); /* 10 columns */
-            gap: 5px;
-        }
-
-        /* This is the "Micro Box" */
+        /* The Box Styling */
         .box {
-            background: #222;
-            border: 1px solid #444;
-            height: 60px;
-            font-size: 10px;
-            padding: 5px;
-            overflow: hidden;
-            transition: all 0.2s ease; /* This makes it "smooth" */
+            background: #cc0000;
+            color: #fff;
+            width: 150px;
+            height: 150px;
+            padding: 10px;
+            text-align: center;
             cursor: pointer;
+            border: 2px solid #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+            text-decoration: none;
+            box-shadow: 0 0 20px rgba(204, 0, 0, 0.5);
         }
 
-        /* Expand slightly on hover */
+        /* Hover: Enlarges ~2 inches and moves toward screen center */
         .box:hover {
-            transform: scale(1.1);
-            background: #cc0000; /* Turns red when you hover */
-            z-index: 10;
+            transform: scale(3); /* Huge enlargement */
+            z-index: 999;
+            box-shadow: 0 0 50px rgba(255, 255, 255, 0.8);
         }
 
-        /* Expand big when clicked */
-        .box:active, .box:focus {
-            grid-column: span 3;
-            grid-row: span 3;
-            height: auto;
-            font-size: 14px;
-            background: #444;
-            z-index: 100;
+        /* "Full" Text Look */
+        .big-text {
+            font-size: 45px;
+            line-height: 0.8;
+            margin-top: 5px;
+            letter-spacing: -2px;
         }
+
+        .mid-text {
+            font-size: 18px;
+            line-height: 1;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .disclaimer {
+            font-family: sans-serif;
+            font-size: 7px;
+            line-height: 1;
+            margin-top: 5px;
+            opacity: 0.8;
+            text-transform: none;
+        }
+
+        /* Click effect: This part uses a link to open the file in 3/4 screen */
+        .box:active {
+            transform: scale(1);
+        }
+
     </style>
 </head>
 <body>
 
-    <h1>Government Harm Watchdog</h1>
-    <div class="grid">
-        <div class="box" tabindex="0">
-            <strong>CODE 050</strong><br>
-            Defense Spending: $1.001T. Audit the Golden Dome replenishment.
-        </div>
-        <div class="box" tabindex="0"><strong>CODE 550</strong><br>NIH Transition Gap.</div>
-        <div class="box" tabindex="0"><strong>FARA</strong><br>Foreign Agents $4B.</div>
-        <div class="box" tabindex="0"><strong>GRAS</strong><br>Self-Certified Chemicals.</div>
-        <div class="box" tabindex="0"><strong>NHP</strong><br>Primate Supply Chain.</div>
-        <div class="box" tabindex="0"><strong>SOI</strong><br>Bleached Flour Gas.</div>
-        <div class="box" tabindex="0"><strong>CFR 114</strong><br>Acidified Food Killer.</div>
-        <div class="box" tabindex="0"><strong>CODE 900</strong><br>$1T Interest Debt.</div>
-        <div class="box" tabindex="0"><strong>EPA</strong><br>Fluoride Mandates.</div>
-        <div class="box" tabindex="0"><strong>USDA</strong><br>Meat Glue Standards.</div>
-    </div>
+    <a href="https://docs.google.com/spreadsheets/d/1FV6lpWM0o5YhYniuzaQqp7lCwg4Q6d22ou0a4HnTxm0/edit" 
+       target="_blank" 
+       class="box">
+        <div class="big-text">104k</div>
+        <div class="mid-text">NHP IN TESTING</div>
+        <div class="disclaimer">disclaimer: data compiled by ai may have some errors source is xyz</div>
+    </a>
 
 </body>
 </html>
