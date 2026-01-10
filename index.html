@@ -5,69 +5,90 @@
     <title>System Audit | Grid</title>
     <style>
         * { box-sizing: border-box; }
-        body { background: #0a0a0a; margin: 0; padding: 10px; font-family: "Arial Black", sans-serif; }
+        body { background: #0a0a0a; margin: 0; padding: 5px; font-family: 'Impact', 'Arial Black', sans-serif; }
 
-        /* The Grid */
         .grid {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
-            gap: 5px;
+            gap: 4px;
         }
 
-        /* The Individual Box */
         .box {
-            background: #2a2a2a; /* Neutral Grey */
+            background: #2a2a2a; 
             color: #eee;
             height: 100px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between; /* Pulls text to top and bottom edges */
             align-items: center;
             text-align: center;
             border: 1px solid #444;
-            transition: transform 0.2s, background 0.2s;
+            transition: transform 0.2s;
             cursor: pointer;
             overflow: hidden;
-            position: relative;
             text-decoration: none;
+            padding: 2px 0; /* Tiny bit of breathing room so letters don't clip */
         }
 
         .box:hover {
             transform: scale(1.1);
             background: #3a3a3a;
             z-index: 10;
-            border-color: #888;
         }
 
-        /* The Popup Logic: Click to center */
+        /* The "Zoom" Popup */
         .box:focus {
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(4); /* Centers and enlarges 4x */
+            transform: translate(-50%, -50%) scale(4.5);
             width: 200px; 
             height: 150px;
             z-index: 1000;
-            background: #444;
-            border: 1px solid #fff;
+            background: #111;
+            border: 2px solid #fff;
             outline: none;
-            box-shadow: 0 0 100px rgba(0,0,0,0.9);
-            display: flex;
+            box-shadow: 0 0 100px #000;
         }
 
-        /* Text Scaling */
-        .big-val { font-size: 18px; line-height: 0.9; display: block; width: 100%; padding: 0 2px; }
-        .label { font-size: 8px; background: #000; color: #888; width: 100%; margin: 4px 0; padding: 2px 0; text-transform: uppercase; }
-        .source { font-family: Arial; font-size: 6px; padding: 0 5px; opacity: 0.5; font-weight: bold; }
+        /* TEXT STYLING: CARTOONISHLY FULL */
+        .big-val { 
+            font-size: 36px; /* Huge numbers */
+            line-height: 0.8; 
+            width: 100%;
+            letter-spacing: -1px;
+            color: #fff;
+        }
+        
+        .label { 
+            font-size: 10px; /* Bigger labels */
+            background: #000; 
+            color: #888; 
+            width: 100%; 
+            margin: 0; 
+            padding: 2px 0; 
+            line-height: 0.9;
+            font-weight: bold;
+        }
+
+        .source { 
+            font-family: Arial, sans-serif; 
+            font-size: 6px; 
+            line-height: 1;
+            padding: 0 4px; 
+            opacity: 0.6; 
+            font-weight: bold;
+            text-transform: none; /* Keeps it readable */
+        }
     </style>
 </head>
 <body>
 
     <div class="grid">
         <div class="box" tabindex="0">
-            <span class="big-val">104k</span>
-            <span class="label">NHP TESTING</span>
-            <span class="source">disclaimer: data compiled by ai may have errors source is xyz</span>
+            <span class="big-val">104,801</span>
+            <span class="label">NON-HUMAN PRIMATES IN TESTING</span>
+            <span class="source">SOURCE: USDA APHIS 2023 Annual Report</span>
         </div>
 
         <div class="box" tabindex="0"><span class="big-val">EMPTY 2</span><span class="label">CATEGORY</span><span class="source">SOURCE</span></div>
@@ -119,16 +140,6 @@
         <div class="box" tabindex="0"><span class="big-val">EMPTY 48</span><span class="label">CATEGORY</span><span class="source">SOURCE</span></div>
         <div class="box" tabindex="0"><span class="big-val">EMPTY 49</span><span class="label">CATEGORY</span><span class="source">SOURCE</span></div>
         <div class="box" tabindex="0"><span class="big-val">EMPTY 50</span><span class="label">CATEGORY</span><span class="source">SOURCE</span></div>
-        <div class="box" tabindex="0"><span class="big-val">EMPTY 51</span><span class="label">CATEGORY</span><span class="source">SOURCE</span></div>
-        <div class="box" tabindex="0"><span class="big-val">EMPTY 52</span><span class="label">CATEGORY</span><span class="source">SOURCE</span></div>
-        <div class="box" tabindex="0"><span class="big-val">EMPTY 53</span><span class="label">CATEGORY</span><span class="source">SOURCE</span></div>
-        <div class="box" tabindex="0"><span class="big-val">EMPTY 54</span><span class="label">CATEGORY</span><span class="source">SOURCE</span></div>
-        <div class="box" tabindex="0"><span class="big-val">EMPTY 55</span><span class="label">CATEGORY</span><span class="source">SOURCE</span></div>
-        <div class="box" tabindex="0"><span class="big-val">EMPTY 56</span><span class="label">CATEGORY</span><span class="source">SOURCE</span></div>
-        <div class="box" tabindex="0"><span class="big-val">EMPTY 57</span><span class="label">CATEGORY</span><span class="source">SOURCE</span></div>
-        <div class="box" tabindex="0"><span class="big-val">EMPTY 58</span><span class="label">CATEGORY</span><span class="source">SOURCE</span></div>
-        <div class="box" tabindex="0"><span class="big-val">EMPTY 59</span><span class="label">CATEGORY</span><span class="source">SOURCE</span></div>
-        <div class="box" tabindex="0"><span class="big-val">EMPTY 60</span><span class="label">CATEGORY</span><span class="source">SOURCE</span></div>
     </div>
 
 </body>
