@@ -6,9 +6,8 @@
     <style>
         :root {
             --bg: #000000;
-            --muted-green: #4a6741; /* Muted, low-glare forest green */
-            --border: #222222;
-            --hover-bg: #0a0a0a;
+            --muted-green: #4a6741;
+            --border: #1a1a1a;
         }
 
         * { box-sizing: border-box; cursor: crosshair; }
@@ -38,92 +37,71 @@
             gap: 15px;
         }
 
-        /* NON-POPUP BOX: SPLIT TOP/BOTTOM */
         .box {
             position: relative;
             border: 1px solid var(--border);
-            height: 200px; /* Slightly taller for the split */
+            height: 180px;
             display: flex;
             flex-direction: column;
+            justify-content: center;
+            align-items: center;
             transition: background 0.1s;
             text-align: center;
+            padding: 10px;
         }
-        .box:hover { background: var(--hover-bg); border-color: var(--muted-green); }
-        .locked { border: 1px solid #111; opacity: 0.1; }
+        .box:hover { border-color: var(--muted-green); background: #050505; }
+        .locked { border: 1px solid #0a0a0a; opacity: 0.1; }
 
-        .box-split-top {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 52px;
-            border-bottom: 1px solid var(--border);
-            letter-spacing: -2px;
-        }
-        .box-split-bottom {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 26px;
-            text-transform: uppercase;
-        }
+        .box-num { font-size: 58px; line-height: 0.8; letter-spacing: -2px; }
+        .box-label { font-size: 22px; line-height: 1; margin-top: 5px; text-transform: uppercase; }
 
-        /* POPUP HUD */
         #hud {
             position: fixed;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
             width: 850px;
             background: #000;
-            border: 2px solid var(--muted-green);
+            border: 1px solid var(--muted-green);
             padding: 35px;
             z-index: 1000;
             display: flex;
             flex-direction: column;
             pointer-events: none;
             transition: transform 0.1s ease-out;
-            box-shadow: 0 0 80px rgba(74, 103, 65, 0.2);
         }
 
-        .hud-header { 
-            font-size: 28px; color: var(--muted-green); 
-            margin-bottom: 5px; 
-            text-align: center;
-            text-transform: uppercase;
-        }
+        .hud-header { font-size: 30px; margin-bottom: 5px; text-align: center; }
         .hud-species {
-            font-size: 14px; opacity: 0.7;
-            margin-bottom: 25px; letter-spacing: 3px;
+            font-size: 14px; margin-bottom: 25px; letter-spacing: 3px;
             text-align: center; border-bottom: 1px solid var(--border);
-            padding-bottom: 15px;
+            padding-bottom: 15px; color: var(--muted-green);
         }
         
         .hud-stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 8px;
             margin-bottom: 25px;
         }
         .stat-module {
             border: 1px solid var(--border);
-            padding: 20px;
-            background: #050505;
+            padding: 22px;
+            background: #030303;
             display: flex;
             justify-content: center;
             align-items: center;
             text-align: center;
         }
-        .stat-text { font-size: 22px; color: var(--muted-green); text-transform: uppercase; }
+        .stat-text { font-size: 20px; text-transform: uppercase; }
 
         .hud-footer {
             display: flex;
             justify-content: space-between;
             font-size: 11px;
-            opacity: 0.6;
             border-top: 1px solid var(--border);
             padding-top: 15px;
             letter-spacing: 1px;
+            color: var(--muted-green);
         }
 
         #beam-svg {
@@ -137,14 +115,14 @@
 <body>
 
     <div id="search-container">
-        <input type="text" id="filter-input" placeholder="WATCHDOGGEM SYSTEM..." onkeyup="filterGrid()">
+        <input type="text" id="filter-input" placeholder="WATCHDOGGEM SECURE AUDIT..." onkeyup="filterGrid()">
     </div>
 
     <svg id="beam-svg">
-        <polygon id="poly-top" fill="rgba(74, 103, 65, 0.1)" />
-        <polygon id="poly-bottom" fill="rgba(74, 103, 65, 0.1)" />
-        <polygon id="poly-left" fill="rgba(74, 103, 65, 0.1)" />
-        <polygon id="poly-right" fill="rgba(74, 103, 65, 0.1)" />
+        <polygon id="poly-top" fill="rgba(74, 103, 65, 0.15)" />
+        <polygon id="poly-bottom" fill="rgba(74, 103, 65, 0.15)" />
+        <polygon id="poly-left" fill="rgba(74, 103, 65, 0.15)" />
+        <polygon id="poly-right" fill="rgba(74, 103, 65, 0.15)" />
     </svg>
 
     <div id="hud">
@@ -160,12 +138,12 @@
     <div class="grid" id="audit-grid">
         <div class="box" 
              data-head="104,801 NON-HUMAN PRIMATES IN RESEARCH EXPERIMENTS"
-             data-stats="100% FATAL ANESTHETIC OVERDOSE, 20% CLINICAL SELF-HARM, 83% SOCIAL ISOLATION, 89% DISTRESSED PACING, 12% NO PAIN RELIEF (COLUMN E), 100% CAGE SEQUESTRATION, 5,123 CLASS A BREEDING FACILITIES, 2,341 CLASS B BROKER DEALERS"
-             data-src="SOURCE: USDA 2024 / APHIS CENSUS / OLAW"
+             data-stats="100% FATAL ANESTHETIC OVERDOSE, 20% CLINICAL SELF-HARM, 83% SOCIAL ISOLATION, 89% DISTRESSED PACING, 12% NO PAIN RELIEF (COLUMN E), 100% CAGE SEQUESTRATION, 66,000 MONKEYS HELD BY CLASS A BREEDERS, 44,000 MONKEYS HELD BY CLASS B DEALERS"
+             data-src="SOURCE: USDA 2024 / APHIS / OLAW"
              data-search="104801 NHP MONKEYS" 
              onmouseenter="showHud(this)" onmouseleave="hideHud()" onclick="this.remove()">
-            <div class="box-split-top">104,801</div>
-            <div class="box-split-bottom">NHP TESTING</div>
+            <div class="box-num">104,801</div>
+            <div class="box-label">NHP TESTING</div>
         </div>
     </div>
 
@@ -181,7 +159,6 @@
             if(el.classList.contains('locked')) return;
             document.getElementById('h-header').innerText = el.getAttribute('data-head');
             document.getElementById('h-source').innerText = el.getAttribute('data-src');
-            
             const statsContainer = document.getElementById('h-stats');
             statsContainer.innerHTML = '';
             const statsArray = el.getAttribute('data-stats').split(',');
@@ -191,10 +168,8 @@
                 div.innerHTML = `<span class="stat-text">${stat.trim()}</span>`;
                 statsContainer.appendChild(div);
             });
-            
             hud.style.transform = "translate(-50%, -50%) scale(1)";
             beamSvg.style.opacity = "1";
-            
             const r = el.getBoundingClientRect();
             const h = hud.getBoundingClientRect();
             polys.top.setAttribute('points', `${r.left},${r.top} ${r.right},${r.top} ${h.right},${h.top} ${h.left},${h.top}`);
