@@ -59,7 +59,7 @@
             position: fixed;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
-            width: 850px;
+            width: 900px;
             background: #000;
             border: 1px solid var(--muted-green);
             padding: 35px;
@@ -79,7 +79,7 @@
         
         .hud-stats-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, 1fr);
             gap: 10px;
             margin-bottom: 25px;
         }
@@ -92,16 +92,17 @@
             align-items: center;
             text-align: center;
         }
-        .stat-text { font-size: 17px; text-transform: uppercase; line-height: 1.1; white-space: nowrap; }
+        .stat-text { font-size: 18px; text-transform: uppercase; line-height: 1.1; white-space: nowrap; }
 
         .hud-footer {
             display: flex;
             justify-content: space-between;
-            font-size: 11px;
+            font-size: 14px; /* INCREASED SIZE */
             border-top: 1px solid var(--border);
             padding-top: 15px;
             letter-spacing: 1px;
             color: var(--muted-green);
+            text-transform: uppercase;
         }
 
         #beam-svg {
@@ -138,9 +139,9 @@
     <div class="grid" id="audit-grid">
         <div class="box" 
              data-head="104,801 NON-HUMAN PRIMATES IN RESEARCH EXPERIMENTS"
-             data-stats="100% FATAL ANESTHETIC OVERDOSE; 20% CLINICAL SELF-HARM; 83% SOCIAL ISOLATION; 89% DISTRESSED PACING; 12% NO PAIN RELIEF (COLUMN E); 100% CAGE SEQUESTRATION; 31,000 CAGED MONKEYS BY CLASS A BREEDERS; 13,375 CAGED MONKEYS BY CLASS B DEALERS"
-             data-src="SOURCE: USDA FY2024 ANNUAL SUMMARY"
-             data-search="104801 NHP MONKEYS" 
+             data-stats="100% FATAL ANESTHETIC OVERDOSE; 20% CLINICAL SELF-HARM; 83% SOCIAL ISOLATION; 89% DISTRESSED PACING; 12% NO PAIN RELIEF (COLUMN E); 100% CAGE SEQUESTRATION; 31,000 CAGED MONKEYS BY CLASS A BREEDERS; 13,375 CAGED MONKEYS BY CLASS B DEALERS; $800M+ U.S. DOMESTIC REVENUE; $300M+ TAXPAYER INFRASTRUCTURE"
+             data-src="SOURCE: USDA APHIS 2024 / NIH FINANCIALS"
+             data-search="104801 NHP MONKEYS PROFIT AMERICAN" 
              onmouseenter="showHud(this)" onmouseleave="hideHud()">
             <div class="box-num">104,801</div>
             <div class="box-label">NHP TESTING</div>
@@ -162,16 +163,13 @@
             const statsContainer = document.getElementById('h-stats');
             statsContainer.innerHTML = '';
             
-            // WE NOW SPLIT BY SEMICOLON (;) SO COMMAS DON'T BREAK THE BOXES
             const statsArray = el.getAttribute('data-stats').split(';');
             
-            statsArray.forEach((stat, index) => {
-                if(index < 8) {
-                    const div = document.createElement('div');
-                    div.className = 'stat-module';
-                    div.innerHTML = `<span class="stat-text">${stat.trim()}</span>`;
-                    statsContainer.appendChild(div);
-                }
+            statsArray.forEach((stat) => {
+                const div = document.createElement('div');
+                div.className = 'stat-module';
+                div.innerHTML = `<span class="stat-text">${stat.trim()}</span>`;
+                statsContainer.appendChild(div);
             });
 
             hud.style.transform = "translate(-50%, -50%) scale(1)";
