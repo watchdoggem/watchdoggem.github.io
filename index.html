@@ -7,12 +7,20 @@
     <style>
         :root {
             --bg-deep: #060a06;
-            --accent-neon: #d4c1ff; 
+            --accent-neon: #d4c1ff; /* Strict single color for all text */
             --accent-glow: rgba(212, 193, 255, 0.4);
             --border: rgba(212, 193, 255, 0.15);
+            --std-font: 22px; /* Standardized size for all HUD text */
         }
 
-        * { box-sizing: border-box; cursor: crosshair; -webkit-tap-highlight-color: transparent; }
+        * { 
+            box-sizing: border-box; 
+            cursor: crosshair; 
+            -webkit-tap-highlight-color: transparent; 
+            color: var(--accent-neon) !important; /* Forces uniform color everywhere */
+            font-family: 'Impact', sans-serif;
+            text-transform: uppercase;
+        }
         
         body { 
             background: var(--bg-deep);
@@ -22,8 +30,6 @@
                 linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
             background-size: 100% 100%, 100% 4px, 100% 100%;
             margin: 0; padding: 15px; 
-            font-family: 'Impact', sans-serif; 
-            color: var(--accent-neon);
             min-height: 100vh;
             overflow-x: hidden;
         }
@@ -37,24 +43,20 @@
         #search-container {
             flex-grow: 1;
             display: flex; border: 1px solid var(--border);
-            padding: 12px; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px);
+            padding: 10px; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px);
         }
 
         #filter-input {
             background: transparent;
             border: none; outline: none;
-            color: var(--accent-neon); font-family: 'Impact', sans-serif;
             font-size: 20px; width: 100%; letter-spacing: 2px;
         }
 
         .twitter-link {
-            width: 50px;
-            height: 50px; border: 1px solid var(--accent-neon);
+            width: 50px; height: 50px; border: 1px solid var(--accent-neon);
             display: flex; align-items: center; justify-content: center;
-            background: #000; transition: transform 0.2s;
-            overflow: hidden;
+            background: #000; transition: transform 0.2s; overflow: hidden;
         }
-        .twitter-link:hover { transform: scale(1.05); box-shadow: 0 0 10px var(--accent-glow); }
         .twitter-link img { width: 100%; height: 100%; object-fit: cover; }
 
         /* GRID SYSTEM */
@@ -74,10 +76,10 @@
         }
         .box:hover { border-color: var(--accent-neon); background: rgba(212, 193, 255, 0.05); }
         
-        .box-num { font-size: 32px; color: var(--accent-neon); }
-        .box-label { font-size: 16px; opacity: 0.7; color: var(--accent-neon); text-transform: uppercase; }
+        .box-num { font-size: 32px; }
+        .box-label { font-size: 16px; opacity: 1; }
 
-        /* HUD POPUP */
+        /* HUD - REMOVED DEAD SPACE BASED ON YOUR IMAGE */
         #hud {
             position: fixed;
             top: 50%; left: 50%;
@@ -85,35 +87,43 @@
             width: 94vw; max-width: 1100px;
             background: rgba(4, 6, 4, 0.98);
             border: 1px solid var(--accent-neon);
-            padding: 25px; z-index: 1000; display: flex; flex-direction: column;
+            padding: 10px; /* Tightened outer container */
+            z-index: 1000; display: flex; flex-direction: column;
             pointer-events: none;
             transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.2);
             box-shadow: 0 0 80px rgba(0,0,0,1);
-            min-height: 50px;
         }
 
-        .hud-header { font-size: 26px; text-align: center; line-height: 1.1; }
-        .hud-species { font-size: 15px; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 15px; opacity: 0.8; }
+        .hud-header { 
+            font-size: var(--std-font); 
+            text-align: center; 
+            margin: 0; 
+            padding: 5px 0;
+        }
         
-        .hud-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .hud-species { 
+            font-size: var(--std-font); 
+            text-align: center; 
+            border-bottom: 1px solid var(--border); 
+            padding: 0 0 10px 0;
+            margin-bottom: 10px;
+        }
+        
+        .hud-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; }
+        
         .stat-module {
             border: 1px solid var(--border);
-            padding: 12px;
-            background: rgba(212, 193, 255, 0.02); text-align: center; font-size: 14px;
-            text-transform: uppercase;
+            padding: 12px; /* Tightened module padding */
+            background: rgba(212, 193, 255, 0.02); 
+            text-align: center; 
+            font-size: var(--std-font);
         }
 
         .hud-footer {
             display: flex; justify-content: space-between;
-            font-size: 12px; border-top: 1px solid var(--border);
-            padding-top: 12px; margin-top: 15px; opacity: 0.6;
-        }
-
-        @media (min-width: 800px) {
-            .hud-header { font-size: 38px; }
-            .stat-module { font-size: 20px; padding: 18px; }
-            .hud-species { font-size: 20px; }
-            .hud-footer { font-size: 16px; }
+            font-size: var(--std-font); /* Matches all other text now */
+            border-top: 1px solid var(--border);
+            padding-top: 10px; margin-top: 10px; 
         }
 
         /* PROJECTION BEAMS */
@@ -178,11 +188,9 @@
         const projection = document.getElementById('poly-projection');
         let activeBox = null;
 
-        // Generate Boxes 2-30: Entirely Blank
         for (let i = 2; i <= 30; i++) {
             const b = document.createElement('div');
             b.className = 'box';
-            // Explicitly empty: no numbers, no labels
             b.onmouseenter = (e) => showHud(e.currentTarget, false);
             b.ontouchstart = (e) => { e.preventDefault(); showHud(e.currentTarget, false); };
             grid.appendChild(b);
@@ -192,7 +200,6 @@
             if (!activeBox) return;
             const r = activeBox.getBoundingClientRect(); 
             const h = hud.getBoundingClientRect();
-            // Polygon path connecting the box edges to the HUD corners
             const points = `${r.left},${r.top} ${h.left},${h.top} ${h.right},${h.top} ${r.right},${r.top} ${r.right},${r.bottom} ${h.right},${h.bottom} ${h.left},${h.bottom} ${r.left},${r.bottom}`;
             projection.setAttribute('points', points);
             requestAnimationFrame(updateBeams);
@@ -201,7 +208,6 @@
         function showHud(el, hasData) {
             activeBox = el;
             document.getElementById('hud-data').style.display = hasData ? 'block' : 'none';
-            // HUD stays thin/minimal for blank boxes, auto-expands for data
             hud.style.minHeight = hasData ? 'auto' : '100px'; 
             hud.style.transform = "translate(-50%, -50%) scale(1)";
             beamSvg.style.opacity = "1";
