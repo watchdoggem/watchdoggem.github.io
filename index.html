@@ -25,7 +25,7 @@
             font-family: 'Impact', sans-serif; 
             color: var(--accent-neon);
             min-height: 100vh;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
         #search-container {
@@ -42,7 +42,6 @@
             font-size: 24px; width: 100%; letter-spacing: 3px;
         }
 
-        /* MAIN SCREEN - THE SINGLE TRIGGER BOX */
         .grid { display: block; }
         .box {
             border: 1px solid var(--border);
@@ -50,13 +49,13 @@
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
             background: linear-gradient(145deg, rgba(26, 46, 26, 0.4), rgba(10, 15, 10, 0.6));
-            transition: border 0.3s;
+            position: relative;
+            z-index: 10;
         }
-        .box:hover { border-color: var(--accent-neon); }
+        
         .box-num { font-size: 62px; line-height: 0.8; }
         .box-label { font-size: 28px; margin-top: 12px; opacity: 0.6; }
 
-        /* THE HUD - CONTAINS THE 10 INTERNAL DATA BOXES */
         #hud {
             position: fixed; top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
@@ -65,54 +64,49 @@
             border: 1px solid var(--accent-neon);
             padding: 40px; z-index: 1000;
             display: flex; flex-direction: column;
-            transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 0 100px rgba(0,0,0,0.9);
+            transition: transform 0.1s ease-out;
+            pointer-events: none;
         }
 
         .hud-header { font-size: 42px; text-align: center; margin-bottom: 10px; }
         .hud-species { font-size: 22px; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 30px; }
         
-        /* 10 DATA MODULES INSIDE HUD */
         .hud-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 30px; }
         .stat-module {
             border: 1px solid var(--border); padding: 18px;
             background: rgba(212, 193, 255, 0.02);
-            text-align: center; font-size: 24px; text-transform: uppercase;
+            text-align: center; font-size: 24px;
         }
 
         .hud-footer {
             display: flex; justify-content: space-between;
-            font-size: 18px; border-top: 1px solid var(--border);
+            font-size: 20px; border-top: 1px solid var(--border);
             padding-top: 20px; font-weight: bold;
         }
 
         #beam-svg {
             position: fixed; top: 0; left: 0;
             width: 100vw; height: 100vh;
-            pointer-events: none; z-index: 900;
+            pointer-events: none; z-index: 500;
             opacity: 0;
         }
         .beam-path { 
-            fill: rgba(212, 193, 255, 0.05); 
-            stroke: rgba(212, 193, 255, 0.2); 
-            stroke-width: 1; 
+            fill: rgba(212, 193, 255, 0.08); 
+            stroke: rgba(212, 193, 255, 0.1); 
         }
     </style>
 </head>
-<body onclick="hideHud()">
+<body>
 
     <div id="search-container">
         <input type="text" id="filter-input" placeholder="SEARCH / FILTER AUDIT LOG">
     </div>
 
-    <svg id="beam-svg">
-        <polygon id="poly-projection" class="beam-path" />
-    </svg>
+    <svg id="beam-svg"><polygon id="poly-projection" class="beam-path" /></svg>
 
     <div id="hud">
         <div class="hud-header">104,801 NON-HUMAN PRIMATES IN RESEARCH</div>
         <div class="hud-species">SUBJECTS: RHESUS MACAQUES | CYNOMOLGUS</div>
-        
         <div class="hud-stats-grid">
             <div class="stat-module">100% FATAL ANESTHETIC OVERDOSE</div>
             <div class="stat-module">20% CLINICAL SELF-HARM</div>
@@ -125,7 +119,6 @@
             <div class="stat-module">$800M+ U.S. DOMESTIC REVENUE</div>
             <div class="stat-module">$300M+ TAXPAYER INFRASTRUCTURE</div>
         </div>
-
         <div class="hud-footer">
             <span>SOURCE: USDA APHIS 2024 / NIH FINANCIALS</span>
             <span>FDA REQUIRED | NIH FUNDED | USDA OVERSIGHT</span>
@@ -151,7 +144,14 @@
             const r = el.getBoundingClientRect(); 
             const h = hud.getBoundingClientRect(); 
 
-            const points = `${r.left},${r.top} ${h.left},${h.top} ${h.right},${h.top} ${r.right},${r.top} ${r.right},${r.bottom} ${h.right},${h.bottom} ${h.left},${h.bottom} ${r.left},${r.bottom}`;
+            // Corrected sequence: TR_box to TR_hud, BR_hud to BR_box, BL_box to BL_hud, TL_hud to TL_box
+            // This creates a clean non-inverted 4-sided wrap.
+            const points = `
+                ${r.left},${r.top} ${h.left},${h.top} 
+                ${h.right},${h.top} ${r.right},${r.top} 
+                ${r.right},${r.bottom} ${h.right},${h.bottom} 
+                ${h.left},${h.bottom} ${r.left},${r.bottom}
+            `;
             projection.setAttribute('points', points);
         }
 
