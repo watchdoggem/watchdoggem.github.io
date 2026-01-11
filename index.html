@@ -20,15 +20,22 @@
             margin: 0; padding: 20px; 
             font-family: 'Impact', sans-serif; 
             color: var(--accent-neon);
-            overflow: hidden;
             min-height: 100vh;
         }
+
+        #avatar-stamp {
+            position: fixed; top: 25px; right: 25px;
+            width: 70px; height: 70px;
+            border: 1px solid var(--accent-neon);
+            z-index: 1100; border-radius: 4px;
+        }
+        #avatar-stamp img { width: 100%; height: 100%; object-fit: cover; }
 
         #search-container {
             display: flex; border: 1px solid var(--border);
             padding: 15px; margin-bottom: 30px;
-            background: rgba(255, 255, 255, 0.03);
-            width: 400px;
+            background: rgba(255, 255, 255, 0.05);
+            width: calc(100% - 100px);
         }
 
         #filter-input {
@@ -37,43 +44,48 @@
             font-size: 24px; width: 100%; letter-spacing: 2px;
         }
 
-        .grid { display: grid; grid-template-columns: repeat(2, 280px); gap: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
 
         .box {
             position: relative; border: 1px solid var(--border);
             height: 180px; display: flex; flex-direction: column;
             justify-content: center; align-items: center;
-            text-align: center; padding: 15px; background: rgba(26, 36, 24, 0.4);
+            text-align: center; padding: 15px; background: rgba(0, 0, 0, 0.6);
             z-index: 10;
         }
         
         .box-num { font-size: 62px; line-height: 0.8; letter-spacing: -2px; }
-        .box-label { font-size: 28px; line-height: 1; margin-top: 12px; opacity: 0.8; }
+        .box-label { font-size: 28px; line-height: 1; margin-top: 12px; }
 
         #hud {
-            position: fixed; top: 50%; left: 65%;
+            position: fixed; top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
-            width: 60vw; max-width: 1000px;
-            background: rgba(10, 15, 10, 0.98); 
-            border: 1px solid var(--accent-neon);
+            width: 85vw; max-width: 1100px;
+            background: rgba(13, 18, 13, 0.98); 
+            border: 2px solid var(--accent-neon);
             padding: 40px; z-index: 1000;
             display: flex; flex-direction: column;
             pointer-events: none; transition: transform 0.1s ease-out;
-            box-shadow: 0 0 100px rgba(0,0,0,1);
         }
 
-        .hud-header { font-size: 36px; margin-bottom: 12px; text-align: center; text-transform: uppercase; }
-        .hud-species { font-size: 22px; margin-bottom: 30px; letter-spacing: 2px; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
-        .hud-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 30px; }
+        .hud-header { font-size: 38px; margin-bottom: 10px; text-align: center; text-transform: uppercase; }
+        .hud-species { font-size: 22px; margin-bottom: 25px; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+        .hud-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px; }
 
         .stat-module {
             border: 1px solid var(--border); padding: 20px;
             background: rgba(255, 255, 255, 0.03);
             display: flex; justify-content: center; align-items: center;
-            text-align: center; min-height: 85px;
+            text-align: center; min-height: 90px;
         }
 
-        .stat-text { font-size: 22px; text-transform: uppercase; line-height: 1.1; }
+        .stat-text { font-size: 24px; text-transform: uppercase; }
+
+        .hud-footer {
+            display: flex; justify-content: space-between;
+            font-size: 16px; border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
 
         #beam-svg {
             position: fixed; top: 0; left: 0;
@@ -82,30 +94,38 @@
             opacity: 0;
         }
         
-        .beam-flare { 
+        .beam-path { 
             fill: rgba(212, 193, 255, 0.1); 
-            stroke: rgba(212, 193, 255, 0.4); 
+            stroke: var(--accent-neon); 
             stroke-width: 2; 
         }
     </style>
 </head>
 <body onclick="hideHud()">
 
-    <div id="search-container">
-        <input type="text" id="filter-input" placeholder="AUDIT LOG">
+    <div id="avatar-stamp">
+        <img src="https://unavatar.io/x/watchdoggem" alt="WATCHDOGGEM">
+    </div>
+
+    <div id="search-container" onclick="event.stopPropagation()">
+        <input type="text" id="filter-input" placeholder="SEARCH / FILTER AUDIT LOG" onkeyup="filterGrid()">
     </div>
 
     <svg id="beam-svg">
-        <polygon id="flare-shape" class="beam-flare" /> 
+        <polygon id="poly-projection" class="beam-path" />
     </svg>
 
     <div id="hud">
         <div id="h-header" class="hud-header"></div>
         <div class="hud-species">SUBJECTS: RHESUS MACAQUES | CYNOMOLGUS</div>
         <div id="h-stats" class="hud-stats-grid"></div>
+        <div class="hud-footer">
+            <span id="h-source">SOURCE: USDA APHIS 2024 / NIH FINANCIALS</span>
+            <span>FDA REQUIRED | NIH FUNDED | USDA OVERSIGHT</span>
+        </div>
     </div>
 
-    <div class="grid">
+    <div class="grid" id="audit-grid">
         <div class="box" 
              data-head="104,801 NON-HUMAN PRIMATES IN RESEARCH"
              data-stats="100% FATAL ANESTHETIC OVERDOSE; 20% CLINICAL SELF-HARM; 83% SOCIAL ISOLATION; 89% DISTRESSED PACING; 12% NO PAIN RELIEF (COLUMN E); 100% CAGE SEQUESTRATION"
@@ -113,61 +133,64 @@
             <div class="box-num">104,801</div>
             <div class="box-label">NHP TESTING</div>
         </div>
-
-        <div class="box" 
-             data-head="U.S. DOMESTIC REVENUE & INFRASTRUCTURE"
-             data-stats="$800M+ ANNUAL REVENUE; $300M+ TAXPAYER FUNDED; 31,000 CLASS A BREEDERS; 13,375 CLASS B DEALERS; NIH FINANCIAL OVERLAY; USDA OVERSIGHT LOGICALS"
-             onmouseenter="showHud(this)" onmouseleave="hideHud()">
-            <div class="box-num">$1.1B</div>
-            <div class="box-label">MARKET VALUE</div>
-        </div>
     </div>
 
     <script>
         const hud = document.getElementById('hud');
         const beamSvg = document.getElementById('beam-svg');
-        const flare = document.getElementById('flare-shape');
+        const projection = document.getElementById('poly-projection');
 
         function showHud(el) {
-            // Update Text content
             document.getElementById('h-header').innerText = el.getAttribute('data-head');
             const statsContainer = document.getElementById('h-stats');
             statsContainer.innerHTML = '';
-            el.getAttribute('data-stats').split(';').forEach(stat => {
+            
+            el.getAttribute('data-stats').split(';').forEach((stat) => {
                 const div = document.createElement('div');
                 div.className = 'stat-module';
                 div.innerHTML = `<span class="stat-text">${stat.trim()}</span>`;
                 statsContainer.appendChild(div);
             });
 
-            // 1. MUST SHOW HUD FIRST so getBoundingClientRect() sees it at full size
+            // Show HUD
             hud.style.transform = "translate(-50%, -50%) scale(1)";
             beamSvg.style.opacity = "1";
             
-            // 2. Wrap in requestAnimationFrame to ensure the browser has rendered the HUD position
-            requestAnimationFrame(() => {
-                const r = el.getBoundingClientRect(); // Trigger Box corners
-                const h = hud.getBoundingClientRect(); // HUD corners
+            // MATH FIX: Get absolute screen coordinates
+            const r = el.getBoundingClientRect(); 
+            
+            // Since HUD is scale(0) or animating, we calculate its final 
+            // full-screen position manually to ensure the lines don't break.
+            const hudW = Math.min(window.innerWidth * 0.85, 1100);
+            const hudH = hud.offsetHeight || 600; // Fallback if not yet rendered
+            
+            const h = {
+                left: (window.innerWidth - hudW) / 2,
+                right: (window.innerWidth + hudW) / 2,
+                top: (window.innerHeight - hudH) / 2,
+                bottom: (window.innerHeight + hudH) / 2
+            };
 
-                // 3. Connect corners exactly as drawn (No twisting, no offset errors)
-                // Order: Box-TL, HUD-TL, HUD-TR, Box-TR, Box-BR, HUD-BR, HUD-BL, Box-BL
-                const points = `
-                    ${r.left},${r.top} 
-                    ${h.left},${h.top} 
-                    ${h.right},${h.top} 
-                    ${r.right},${r.top} 
-                    ${r.right},${r.bottom} 
-                    ${h.right},${h.bottom} 
-                    ${h.left},${h.bottom} 
-                    ${r.left},${r.bottom}
-                `;
-                flare.setAttribute('points', points);
-            });
+            // Corner-to-corner loop: Box TL -> HUD TL -> HUD TR -> Box TR -> Box BR -> HUD BR -> HUD BL -> Box BL
+            const points = `
+                ${r.left},${r.top} ${h.left},${h.top} 
+                ${h.right},${h.top} ${r.right},${r.top}
+                ${r.right},${r.bottom} ${h.right},${h.bottom}
+                ${h.left},${h.bottom} ${r.left},${r.bottom}
+            `;
+            projection.setAttribute('points', points);
         }
 
         function hideHud() { 
             hud.style.transform = "translate(-50%, -50%) scale(0)"; 
             beamSvg.style.opacity = "0"; 
+        }
+
+        function filterGrid() {
+            let q = document.getElementById('filter-input').value.toUpperCase();
+            document.querySelectorAll('.box').forEach(b => {
+                b.style.display = b.innerText.toUpperCase().includes(q) ? 'flex' : 'none';
+            });
         }
     </script>
 </body>
