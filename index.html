@@ -1,430 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>watchdoggem</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=VT323&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #05030f;
-            --accent-violet: #c79eff;
-            --accent-violet-dim: #a57eff;
-            --glow: rgba(199, 158, 255, 0.42);
-            --border: rgba(199, 158, 255, 0.32);
-            --panel-bg: rgba(199, 158, 255, 0.09);
-            --translucent: 0.85;
-            --design-width: 1600px;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>watchdoggem</title>
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            cursor: crosshair;
-        }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=VT323&display=swap" rel="stylesheet">
 
-        body {
-            background: var(--bg);
-            background-image: 
-                radial-gradient(circle at 30% 20%, rgba(199,158,255,0.08) 0%, transparent 50%),
-                radial-gradient(circle at 70% 80%, rgba(167,126,255,0.06) 0%, transparent 60%);
-            color: var(--accent-violet);
-            font-family: 'VT323', monospace;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        #scaler {
-            --scale: calc(100vw / var(--design-width));
-            width: var(--design-width);
-            transform: translateX(-50%) scale(var(--scale));
-            transform-origin: top center;
-            position: relative;
-            left: 50%;
-            height: auto;
-            padding: clamp(0.8rem, 1vw, 1.6rem);
-        }
-
-        header {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            gap: clamp(0.7rem, 0.9vw, 1.4rem);
-            margin-bottom: clamp(0.9rem, 1.1vw, 1.8rem);
-            border-bottom: 1px solid var(--border);
-            padding-bottom: clamp(0.5rem, 0.6vw, 1rem);
-        }
-
-        .title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(1.7rem, 2.1vw, 3.4rem);
-            font-weight: 900;
-            letter-spacing: clamp(3.5px, 0.36vw, 7px);
-            text-shadow: 0 0 16px var(--glow);
-            text-align: center;
-        }
-
-        .search-bar {
-            flex: 1;
-            min-width: clamp(130px, 13.5vw, 260px);
-            max-width: clamp(260px, 27vw, 520px);
-        }
-
-        #filter-input {
-            width: 100%;
-            padding: clamp(0.4rem, 0.44vw, 0.85rem) clamp(0.6rem, 0.63vw, 1.2rem);
-            background: rgba(0,0,0,0.6);
-            border: 1px solid var(--border);
-            color: var(--accent-violet);
-            font-size: clamp(0.8rem, 0.83vw, 1.6rem);
-            outline: none;
-            transition: all 0.25s;
-        }
-
-        #filter-input:focus {
-            border-color: var(--accent-violet);
-            box-shadow: 0 0 12px var(--glow);
-        }
-
-        .x-link {
-            width: clamp(29px, 3vw, 58px);
-            height: clamp(29px, 3vw, 58px);
-            border: 2px solid var(--accent-violet);
-            border-radius: 6px;
-            overflow: hidden;
-            transition: all 0.3s;
-        }
-
-        .x-link:hover {
-            transform: scale(1.08);
-            box-shadow: 0 0 20px var(--glow);
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: clamp(0.55rem, 0.57vw, 1.1rem);
-            max-width: 100%;
-            margin: 0 auto;
-        }
-
-        .box {
-            aspect-ratio: 1 / 1;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            background: var(--panel-bg);
-            backdrop-filter: blur(8px);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: clamp(1rem, 2vw, 3rem); /* increased padding slightly for bigger text */
-            transition: all 0.3s ease;
-            box-shadow: inset 0 0 20px rgba(199,158,255,0.08);
-        }
-
-        .box:hover,
-        .box.active {
-            border-color: var(--accent-violet);
-            box-shadow: 0 0 32px var(--glow), inset 0 0 24px rgba(199,158,255,0.15);
-            transform: translateY(-6px) scale(1.02);
-        }
-
-        .box-content {
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            text-align: center;
-            text-shadow: 0 0 14px var(--glow);
-            letter-spacing: clamp(1px, 0.1vw, 2px);
-            text-transform: uppercase;
-            line-height: 0.92;
-            width: 100%;
-        }
-
-       .box-num {
-    /* Increased middle value from 1.88vw to 3.5vw for a "fuller" look */
-    font-size: clamp(1.8rem, 4.5vw, 4.5rem); 
-    line-height: 0.9;
+<style>
+:root{
+    --bg:#05030f;
+    --accent:#c79eff;
+    --accent-dim:#a57eff;
+    --glow:rgba(199,158,255,.42);
+    --border:rgba(199,158,255,.32);
+    --panel-bg:rgba(199,158,255,.09);
+    --design-width:1600px;
 }
 
-.box-label {
-    /* Increased middle value to match/complement the number */
-    font-size: clamp(1.2rem, 4.5vw, 3.2rem); 
-    margin-top: clamp(0.15rem, 0.16vw, 0.3rem);
-    opacity: 0.92;
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box;cursor:crosshair;}
+body{
+    background:var(--bg);
+    color:var(--accent);
+    font-family:'VT323',monospace;
+    min-height:100vh;
+    overflow-x:hidden;
 }
 
-        .box.empty .box-content { opacity: 0.12; }
-
-#hud {
-    position: fixed;
-    /* Change from fixed 50% to a flexible top */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: clamp(300px, 50vw, 950px);
-    
- {
-    /* ... keep existing styles ... */
-    max-height: 80vh; /* Limits height to 80% of the screen */
-    overflow-y: auto; /* Adds a scrollbar INSIDE the HUD if content is too long */
-    display: flex;
-    flex-direction: column;
-}
-    background: rgba(5, 3, 15, var(--translucent));
-    border: 2px solid var(--accent-violet);
-    padding: clamp(0.8rem, 1.2vw, 2rem);
-    box-shadow: 0 0 80px rgba(0,0,0,0.9);
-    opacity: 0;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.35);
-    z-index: 1000;
-    border-radius: 8px;
-    pointer-events: none;
-    
-    /* Prevent the HUD itself from being "too tall" for the viewport */
-    display: flex;
-    flex-direction: column;
+/* SCALE WRAPPER */
+#scaler{
+    --scale:calc(100vw / var(--design-width));
+    width:var(--design-width);
+    transform:translateX(-50%) scale(var(--scale));
+    transform-origin:top center;
+    position:relative;
+    left:50%;
+    padding:1.2rem;
 }
 
-@media (max-width: 600px) {
-    #hud {
-        width: 94vw;
-        top: 4vh;
-        left: 50%;
-        transform: translateX(-50%);
-        max-height: 92vh;
-        overflow-y: auto;
-        overscroll-behavior: contain;
-        padding-bottom: 2rem;
+/* HEADER */
+header{
+    display:flex;
+    gap:1rem;
+    justify-content:center;
+    align-items:center;
+    border-bottom:1px solid var(--border);
+    padding-bottom:1rem;
+    margin-bottom:1.2rem;
+}
+.title{
+    font-family:'Orbitron',sans-serif;
+    font-weight:900;
+    font-size:2.4rem;
+    letter-spacing:6px;
+    text-shadow:0 0 16px var(--glow);
+}
+
+/* GRID */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1rem;
+}
+.box{
+    aspect-ratio:1/1;
+    border:2px solid var(--border);
+    background:var(--panel-bg);
+    border-radius:12px;
+    display:flex;
+    align-items:stretch;
+    justify-content:stretch;
+    transition:.3s;
+}
+.box:hover,.box.active{
+    border-color:var(--accent);
+    box-shadow:0 0 28px var(--glow);
+    transform:translateY(-6px);
+}
+
+/* SPLASH STACK (FIX #2) */
+.box-content.splash-stack{
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    padding:18% 10%;
+    font-family:'Orbitron',sans-serif;
+    font-weight:900;
+    text-align:center;
+    text-shadow:0 0 14px var(--glow);
+}
+.splash-top{
+    font-size:5.2rem;
+    line-height:1;
+}
+.splash-bottom{
+    font-size:2.6rem;
+    letter-spacing:.35em;
+    opacity:.9;
+}
+
+/* HUD */
+#hud{
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:900px;
+    max-height:85vh;
+    overflow-y:auto;
+    background:rgba(5,3,15,.92);
+    border:2px solid var(--accent);
+    padding:2rem;
+    box-shadow:0 0 80px #000;
+    opacity:0;
+    pointer-events:none;
+    transition:.35s;
+    z-index:1000;
+}
+#hud.active{opacity:1;pointer-events:auto}
+
+/* HUD CONTENT */
+.hud-header{
+    font-family:'Orbitron',sans-serif;
+    font-size:2.6rem;
+    text-align:center;
+    margin-bottom:.5rem;
+    text-shadow:0 0 18px var(--glow);
+}
+.hud-species{
+    text-align:center;
+    opacity:.85;
+    border-bottom:1px dashed var(--border);
+    padding-bottom:.8rem;
+    margin-bottom:1rem;
+}
+.hud-stats{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:.8rem;
+}
+.stat-item{
+    border:2px solid var(--border);
+    background:var(--panel-bg);
+    padding:1rem;
+    text-align:center;
+    border-radius:8px;
+}
+.stat-text{
+    font-family:'Orbitron',sans-serif;
+    font-weight:900;
+    font-size:1.1rem;
+}
+.hud-footer{
+    margin-top:1.2rem;
+    padding-top:.8rem;
+    border-top:1px dashed var(--border);
+    display:flex;
+    justify-content:space-between;
+    gap:.8rem;
+    font-size:.85rem;
+    flex-wrap:wrap;
+}
+
+/* MOBILE HUD FIX (FIX #1) */
+@media(max-width:600px){
+    #hud{
+        top:4vh;
+        left:50%;
+        transform:translateX(-50%);
+        width:94vw;
+        max-height:92vh;
+        overflow-y:auto;
     }
+    .hud-stats{grid-template-columns:1fr}
 }
-
-        #hud.active {
-            opacity: 1;
-        }
-
-        .hud-header {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(1.6rem, 1.67vw, 3.2rem);
-            text-align: center;
-            margin-bottom: clamp(0.25rem, 0.26vw, 0.5rem);
-            text-shadow: 0 0 18px var(--glow);
-            letter-spacing: clamp(1.5px, 0.16vw, 3px);
-            white-space: normal;
-        }
-
-        .hud-species {
-            text-align: center;
-            font-size: clamp(0.85rem, 0.89vw, 1.7rem);
-            opacity: 0.88;
-            margin-bottom: clamp(0.7rem, 0.73vw, 1.4rem);
-            border-bottom: 1px dashed var(--border);
-            padding-bottom: clamp(0.4rem, 0.42vw, 0.8rem);
-            text-transform: uppercase;
-        }
-
-        .hud-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: clamp(0.45rem, 0.47vw, 0.9rem);
-        }
-
-        .stat-item {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: clamp(0.6rem, 0.63vw, 1.2rem);
-            border: 2px solid var(--border);
-            background: var(--panel-bg);
-            text-align: center;
-            min-height: clamp(45px, 4.7vw, 90px);
-            border-radius: 8px;
-        }
-
-        .stat-item:hover {
-            box-shadow: 0 0 20px var(--glow);
-            border-color: var(--accent-violet-dim);
-        }
-
-        .stat-text {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(0.88rem, 0.91vw, 1.75rem);
-            font-weight: 900;
-            text-shadow: 0 0 10px var(--glow);
-            letter-spacing: clamp(0.5px, 0.05vw, 1px);
-            text-transform: uppercase;
-            line-height: 1.05;
-            white-space: normal;
-            width: 100%;
-        }
-
-        .hud-footer {
-            display: flex;
-            justify-content: space-between;
-            font-size: clamp(0.65rem, 0.68vw, 1.3rem);
-            opacity: 0.92;
-            margin-top: clamp(0.75rem, 0.78vw, 1.5rem);
-            padding-top: clamp(0.5rem, 0.52vw, 1rem);
-            border-top: 1px dashed var(--border);
-            flex-wrap: wrap;
-            gap: clamp(0.4rem, 0.42vw, 0.8rem);
-        }
-
-        /* BEAM */
-        #beam-svg {
-            position: fixed;
-            inset: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 900;
-            opacity: 0;
-            transition: opacity 0.6s;
-        }
-
-        .beam {
-            fill: none;
-            stroke: var(--accent-violet);
-            stroke-width: 1.5;
-            opacity: 0.3;
-            filter: drop-shadow(0 0 10px var(--glow));
-        }
-
-        @media (max-width: 900px) {
-            .hud-stats { grid-template-columns: 1fr; }
-        }
-
-        @media (max-width: 600px) {
-            #hud {
-                width: 92vw;
-                max-height: 86vh;
-                padding: 1.4rem 5vw;
-            }
-        }
-    </style>
+</style>
 </head>
-<body onmouseleave="handleMouseLeave(event)">
 
-    <div id="scaler">
-        <header>
-            <div class="title">WATCHDOGGEM</div>
-            <div class="search-bar">
-                <input type="text" id="filter-input" placeholder="SEARCH / FILTER..." autocomplete="off">
-            </div>
-            <a href="https://x.com/watchdoggem" target="_blank" class="x-link">
-                <img src="https://unavatar.io/x/watchdoggem" alt="X">
-            </a>
-        </header>
+<body>
+<div id="scaler">
 
-        <div class="grid">
-            <div class="box" data-has-data="true" 
-                 onmouseenter="showHud(this)" 
-                 onmouseleave="handleBoxLeave(this)"
-                 ontouchstart="showHud(this)">
-<div class="box-content splash-stack">
-    <div class="splash-top">104801</div>
-    <div class="splash-bottom">NHP TESTING</div>
+<header>
+    <div class="title">WATCHDOGGEM</div>
+</header>
+
+<div class="grid">
+    <div class="box" onmouseenter="showHud(this)" ontouchstart="showHud(this)">
+        <div class="box-content splash-stack">
+            <div class="splash-top">104801</div>
+            <div class="splash-bottom">NHP TESTING</div>
+        </div>
+    </div>
 </div>
 
-            </div>
+</div>
 
-            <!-- Empty ones -->
-            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-                <div class="box-content">EMPTY SLOT</div>
-            </div>
-            <!-- ... (the rest of your empty boxes stay exactly the same) -->
-        </div>
+<div id="hud">
+    <div class="hud-header">104801 PRIMATES IN RESEARCH</div>
+    <div class="hud-species">RHESUS & CYNOMOLGUS MACAQUES</div>
+
+    <div class="hud-stats">
+        <div class="stat-item"><div class="stat-text">FATAL ANESTHETIC OVERDOSE 100%</div></div>
+        <div class="stat-item"><div class="stat-text">CLINICAL SELF-HARM 20%</div></div>
+        <div class="stat-item"><div class="stat-text">SOCIAL ISOLATION 83%</div></div>
+        <div class="stat-item"><div class="stat-text">DISTRESSED PACING 89%</div></div>
+        <div class="stat-item"><div class="stat-text">NO PAIN RELIEF 12%</div></div>
+        <div class="stat-item"><div class="stat-text">CAGE SEQUESTRATION 100%</div></div>
     </div>
 
-    <svg id="beam-svg">
-        <polygon id="beam-poly" class="beam" points="0,0"/>
-    </svg>
-
-    <div id="hud">
-        <div class="hud-header">104,801 NON-HUMAN PRIMATES</div>
-        <div class="hud-species">SUBJECTS: RHESUS MACAQUES | CYNOMOLGUS MACAQUES</div>
-
-        <div class="hud-stats">
-            <div class="stat-item"><div class="stat-text">FATAL ANESTHETIC OVERDOSE 100%</div></div>
-            <div class="stat-item"><div class="stat-text">CLINICAL SELF-HARM 20%</div></div>
-            <div class="stat-item"><div class="stat-text">SOCIAL ISOLATION 83%</div></div>
-            <div class="stat-item"><div class="stat-text">DISTRESSED PACING 89%</div></div>
-            <div class="stat-item"><div class="stat-text">NO PAIN RELIEF COLUMN E 12%</div></div>
-            <div class="stat-item"><div class="stat-text">CAGE SEQUESTRATION 100%</div></div>
-            <div class="stat-item"><div class="stat-text">CLASS A BREEDERS CAGED 31,000</div></div>
-            <div class="stat-item"><div class="stat-text">CLASS B DEALERS CAGED 13,375</div></div>
-            <div class="stat-item"><div class="stat-text">U.S. DOMESTIC REVENUE $800M+</div></div>
-            <div class="stat-item"><div class="stat-text">TAXPAYER INFRASTRUCTURE $300M+</div></div>
-        </div>
-
-        <div class="hud-footer">
-            <span>SOURCE: USDA APHIS 2024 • NIH FINANCIALS</span>
-            <span>FDA REQUIRED • NIH FUNDED • USDA OVERSIGHT</span>
-        </div>
+    <div class="hud-footer">
+        <span>USDA APHIS 2024</span>
+        <span>NIH FUNDED</span>
     </div>
+</div>
 
-    <script>
-        const hud = document.getElementById('hud');
-        const beamSvg = document.getElementById('beam-svg');
-        const beamPoly = document.getElementById('beam-poly');
-        let activeBox = null;
-        let leaveTimeout = null;
+<script>
+const hud=document.getElementById('hud');
+function showHud(){hud.classList.add('active')}
+document.addEventListener('touchstart',e=>{
+    if(!e.target.closest('.box')&&!e.target.closest('#hud')){
+        hud.classList.remove('active');
+    }
+});
+</script>
 
-        function updateBeam() {
-            if (!activeBox) return;
-            const b = activeBox.getBoundingClientRect();
-            const h = hud.getBoundingClientRect();
-            const points = [
-                b.left, b.top, h.left, h.top, h.right, h.top,
-                b.right, b.top, b.right, b.bottom, h.right, h.bottom,
-                h.left, h.bottom, b.left, b.bottom
-            ].join(',');
-            beamPoly.setAttribute('points', points);
-        }
-
-        function showHud(el, hasData = true) {
-            if (!hasData) return;
-            if (leaveTimeout) clearTimeout(leaveTimeout);
-            if (activeBox === el) return;
-
-            activeBox = el;
-            document.querySelectorAll('.box').forEach(b => b.classList.remove('active'));
-            el.classList.add('active');
-            hud.classList.add('active');
-            beamSvg.style.opacity = '1';
-            updateBeam();
-        }
-
-        function handleBoxLeave(el) {
-            if (activeBox !== el) return;
-            leaveTimeout = setTimeout(() => {
-                if (activeBox === el) {
-                    activeBox = null;
-                    document.querySelectorAll('.box').forEach(b => b.classList.remove('active'));
-                    hud.classList.remove('active');
-                    beamSvg.style.opacity = '0';
-                }
-            }, 100);
-        }
-
-        function handleMouseLeave(e) {
-            if (!e.relatedTarget || !document.body.contains(e.relatedTarget)) {
-                if (activeBox) handleBoxLeave(activeBox);
-            }
-        }
-
-        window.addEventListener('resize', updateBeam);
-        window.addEventListener('scroll', updateBeam);
-
-        document.addEventListener('touchstart', (e) => {
-            if (!e.target.closest('#hud') && !e.target.closest('.box')) {
-                if (activeBox) handleBoxLeave(activeBox);
-            }
-        });
-    </script>
 </body>
 </html>
