@@ -42,20 +42,20 @@
             font-size: 24px; width: 100%; letter-spacing: 3px;
         }
 
-        .grid { display: block; }
+        /* MAIN TRIGGER BOX */
         .box {
             border: 1px solid var(--border);
             height: 180px; width: 250px;
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
-            background: linear-gradient(145deg, rgba(26, 46, 26, 0.4), rgba(10, 15, 10, 0.6));
+            background: rgba(26, 46, 26, 0.4);
             position: relative;
-            z-index: 10;
+            z-index: 1001;
         }
-        
         .box-num { font-size: 62px; line-height: 0.8; }
         .box-label { font-size: 28px; margin-top: 12px; opacity: 0.6; }
 
+        /* HUD - EXACTLY AS PER IMAGE */
         #hud {
             position: fixed; top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
@@ -84,6 +84,7 @@
             padding-top: 20px; font-weight: bold;
         }
 
+        /* THE LIGHT BEAM */
         #beam-svg {
             position: fixed; top: 0; left: 0;
             width: 100vw; height: 100vh;
@@ -92,7 +93,7 @@
         }
         .beam-path { 
             fill: rgba(212, 193, 255, 0.08); 
-            stroke: rgba(212, 193, 255, 0.1); 
+            stroke: rgba(212, 193, 255, 0.15); 
         }
     </style>
 </head>
@@ -125,11 +126,9 @@
         </div>
     </div>
 
-    <div class="grid">
-        <div class="box" onmouseenter="showHud(this)" onmouseleave="hideHud()">
-            <div class="box-num">104,801</div>
-            <div class="box-label">NHP TESTING</div>
-        </div>
+    <div class="box" onmouseenter="showHud(this)" onmouseleave="hideHud()">
+        <div class="box-num">104,801</div>
+        <div class="box-label">NHP TESTING</div>
     </div>
 
     <script>
@@ -144,8 +143,8 @@
             const r = el.getBoundingClientRect(); 
             const h = hud.getBoundingClientRect(); 
 
-            // Corrected sequence: TR_box to TR_hud, BR_hud to BR_box, BL_box to BL_hud, TL_hud to TL_box
-            // This creates a clean non-inverted 4-sided wrap.
+            // Sequence to build a solid projection without inverting:
+            // TL_box -> TL_hud -> TR_hud -> TR_box -> BR_box -> BR_hud -> BL_hud -> BL_box
             const points = `
                 ${r.left},${r.top} ${h.left},${h.top} 
                 ${h.right},${h.top} ${r.right},${r.top} 
