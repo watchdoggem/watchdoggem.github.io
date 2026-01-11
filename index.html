@@ -335,14 +335,15 @@ const panels = [
       {text:"12% PAIN RELIEF WITHHELD", ref:1},
       {text:"100% CAGE SEQUESTRATION", ref:1},
       {text:"$800M+ U.S. DOMESTIC RESEARCH FUNDING", ref:2},
-      {text:"$300M+ TAXPAYER INFRASTRUCTURE SUPPORT", ref:1},
-      {text:"$104k SOMETHING ELSE", ref:1} // example for your 104k citation
+      {text:"$300M+ TAXPAYER INFRASTRUCTURE SUPPORT", ref:1}
     ],
     footer:"FDA REQUIRED • NIH FUNDED • USDA OVERSIGHT"
   },
-  {id:"EMPTY1", empty:true},
-  {id:"EMPTY2", empty:true},
-  {id:"EMPTY3", empty:true}
+  // 16 empty boxes
+  {id:"EMPTY1", empty:true},{id:"EMPTY2", empty:true},{id:"EMPTY3", empty:true},{id:"EMPTY4", empty:true},
+  {id:"EMPTY5", empty:true},{id:"EMPTY6", empty:true},{id:"EMPTY7", empty:true},{id:"EMPTY8", empty:true},
+  {id:"EMPTY9", empty:true},{id:"EMPTY10", empty:true},{id:"EMPTY11", empty:true},{id:"EMPTY12", empty:true},
+  {id:"EMPTY13", empty:true},{id:"EMPTY14", empty:true},{id:"EMPTY15", empty:true},{id:"EMPTY16", empty:true}
 ];
 
 let activeCategories = new Set();
@@ -364,7 +365,7 @@ function renderGrid() {
             content.textContent = "EMPTY SLOT";
         } else {
             content.innerHTML = `<div class="splash-top">${p.id}</div>
-                                 <div class="splash-mid">${p.title}</div>
+                                 <div class="splash-mid">${p.title}<sup>1</sup></div>
                                  <div class="splash-bottom">${p.subtitle}</div>`;
 
             if(p.categories && p.categories.length){
@@ -394,7 +395,6 @@ function applyFilters(){
     document.querySelectorAll('.box').forEach((box,i)=>{
         const p = panels[i];
         const categoryMatch = (activeCategories.size===0 || (!p.empty && p.categories.some(c=>activeCategories.has(c))));
-        // Only hide empty boxes when a category is active
         if(p.empty && activeCategories.size>0){
             box.style.display = "none";
         } else {
@@ -441,7 +441,7 @@ function showHud(el,panel){
     el.classList.add('active');
 
     hud.classList.add('active');
-    hud.querySelector('.hud-header').textContent = panel.title;
+    hud.querySelector('.hud-header').textContent = `104801 ${panel.title}¹`;
     hud.querySelector('.hud-species').textContent = panel.species.join(" | ");
 
     const statsDiv = hud.querySelector('.hud-stats');
