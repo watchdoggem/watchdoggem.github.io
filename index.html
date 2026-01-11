@@ -2,96 +2,76 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WATCHDOGGEM | TERMINAL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TERMINAL</title>
     <style>
         :root {
             --bg-deep: #060a06;
             --accent-neon: #d4c1ff; 
-            --border: rgba(212, 193, 255, 0.25);
+            --border: rgba(212, 193, 255, 0.2);
         }
 
-        * { box-sizing: border-box; cursor: crosshair; }
-        
         body { 
             background: var(--bg-deep);
-            background-image: radial-gradient(circle at 50% 50%, #101a10 0%, #060a06 100%);
-            margin: 0; padding: 15px; 
+            margin: 0; padding: 20px; 
             font-family: 'Impact', sans-serif; 
             color: var(--accent-neon);
-            min-height: 100vh;
             overflow: hidden;
         }
 
-        #header-row { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-        #search-container {
-            flex-grow: 1; border: 1px solid var(--border);
-            padding: 12px; background: rgba(0, 0, 0, 0.4);
-        }
-        #filter-input {
-            background: transparent; border: none; outline: none;
-            color: var(--accent-neon); font-family: 'Impact', sans-serif;
-            font-size: 20px; width: 100%; letter-spacing: 2px;
-        }
-
-        /* BACKGROUND GRID - NODES ONLY */
+        /* 1. TOTALLY BLANK BACKGROUND NODES */
         .grid { 
             display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px;
             max-width: 1400px; margin: 0 auto;
         }
         .box {
             border: 1px solid var(--border); height: 130px;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
             background: rgba(212, 193, 255, 0.02);
+            display: flex; align-items: center; justify-content: center;
         }
         .box-num { font-size: 32px; }
-        .box-label { font-size: 14px; opacity: 0.4; }
 
-        /* HUD - VERTICAL FILL */
+        /* 2. TRANSLUCENT HUD (0.85) */
         #hud {
             position: fixed; top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
-            width: 94vw; max-width: 1200px; height: 88vh;
-            background: rgba(4, 6, 4, 0.99);
+            width: 90vw; max-width: 1000px; height: 80vh;
+            background: rgba(4, 6, 4, 0.85); 
             border: 2px solid var(--accent-neon);
             padding: 40px; z-index: 1000;
             display: flex; flex-direction: column;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+            transition: transform 0.2s ease-out;
             pointer-events: none;
         }
 
-        /* HEADER - NO WIDENING */
+        /* 3. FIXING FONTS & SIZING */
         .hud-header { 
-            font-size: 42px; text-align: center; margin-bottom: 5px; 
+            font-size: 40px; text-align: center; margin-bottom: 5px;
+            letter-spacing: 1px;
         }
         .hud-species { 
             font-size: 14px; text-align: center; border-bottom: 1px solid var(--border);
-            padding-bottom: 15px; margin-bottom: 25px; opacity: 0.6; letter-spacing: 6px;
+            padding-bottom: 15px; margin-bottom: 30px; opacity: 0.6; letter-spacing: 4px;
         }
         
-        /* 10 BOX GRID - KILLS DEAD SPACE */
         .hud-stats-grid { 
             display: grid; grid-template-columns: repeat(2, 1fr); 
-            gap: 12px; flex-grow: 1; /* FORCES VERTICAL EXPANSION */
+            gap: 15px; flex-grow: 1;
         }
         
-        /* THE "EXA" RECTANGLE */
+        /* BOX PRESENTATION: NORMAL FILL */
         .stat-module {
             border: 1px solid var(--border);
-            background: rgba(212, 193, 255, 0.04); 
-            padding: 0 40px; /* ANCHORS WORDS TO THE SIDES */
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; /* WORD-TO-WALL ANCHOR */
-            font-size: 24px;
-            height: 100%; /* KILLS VERTICAL DEAD SPACE */
+            background: rgba(212, 193, 255, 0.05);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 25px;
+            font-size: 20px; /* Balanced size */
+            height: 100%; /* Fills vertical space */
         }
 
-        /* FOOTNOTES - READABLE */
         .hud-footer {
             display: flex; justify-content: space-between;
-            margin-top: 25px; padding-top: 15px; border-top: 1px solid var(--border);
-            font-family: monospace; font-size: 11px; opacity: 0.5;
+            margin-top: 30px; font-family: monospace; font-size: 11px; opacity: 0.5;
         }
 
         #beam-svg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 900; opacity: 0; }
@@ -100,8 +80,10 @@
 </head>
 <body onclick="hideHud()">
 
-    <div id="header-row">
-        <div id="search-container"><input type="text" id="filter-input" placeholder="SEARCH SYSTEM..."></div>
+    <div class="grid" id="main-grid">
+        <div class="box" onmouseenter="showHud(this, true)">
+            <div class="box-num">104,801</div>
+        </div>
     </div>
 
     <svg id="beam-svg"><polygon id="poly-projection" class="beam-path" /></svg>
@@ -127,14 +109,6 @@
                 <div>FDA REQUIRED | NIH FUNDED | USDA OVERSIGHT</div>
             </div>
         </div>
-        <div id="hud-empty" style="display:none; text-align:center; padding-top:100px; font-size:24px; opacity:0.2;">NO DATA RECORDED</div>
-    </div>
-
-    <div class="grid" id="main-grid">
-        <div class="box" onmouseenter="showHud(this, true)" ontouchstart="showHud(this, true)">
-            <div class="box-num">104,801</div>
-            <div class="box-label">NHP TESTING</div>
-        </div>
     </div>
 
     <script>
@@ -144,10 +118,10 @@
         const projection = document.getElementById('poly-projection');
         let activeBox = null;
 
+        // Generate 29 BLANK nodes
         for (let i = 2; i <= 30; i++) {
             const b = document.createElement('div');
             b.className = 'box';
-            b.innerHTML = `<div class="box-num"></div><div class="box-label">NODE ${i}</div>`;
             b.onmouseenter = (e) => showHud(e.currentTarget, false);
             grid.appendChild(b);
         }
@@ -162,8 +136,7 @@
 
         function showHud(el, hasData) {
             activeBox = el;
-            document.getElementById('hud-data').style.display = hasData ? 'block' : 'none';
-            document.getElementById('hud-empty').style.display = hasData ? 'none' : 'block';
+            document.getElementById('hud-data').style.visibility = hasData ? 'visible' : 'hidden';
             hud.style.transform = "translate(-50%, -50%) scale(1)";
             beamSvg.style.opacity = "1";
             updateBeams();
