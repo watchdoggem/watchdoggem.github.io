@@ -151,13 +151,6 @@
             <div class="box-num">104,801</div>
             <div class="box-label">NHP TESTING</div>
         </div>
-        <div class="box" 
-             data-head="800M+ U.S. DOMESTIC REVENUE"
-             data-stats="NIH FUNDING OVERLAY; 31,000 CLASS A BREEDERS; 13,375 CLASS B DEALERS; 100% TAXPAYER INFRASTRUCTURE"
-             onmouseenter="showHud(this)" onmouseleave="hideHud()">
-            <div class="box-num">$800M+</div>
-            <div class="box-label">REVENUE</div>
-        </div>
     </div>
 
     <script>
@@ -180,19 +173,24 @@
             hud.style.transform = "translate(-50%, -50%) scale(1)";
             beamSvg.style.opacity = "1";
             
-            // We use a small timeout to ensure HUD is positioned before drawing
-            setTimeout(() => {
-                const r = el.getBoundingClientRect(); 
-                const h = hud.getBoundingClientRect(); 
+            const r = el.getBoundingClientRect(); 
+            const hW = Math.min(window.innerWidth * 0.85, 1100);
+            const hH = hud.offsetHeight || 600;
+            
+            const h = {
+                left: (window.innerWidth - hW) / 2,
+                right: (window.innerWidth + hW) / 2,
+                top: (window.innerHeight - hH) / 2,
+                bottom: (window.innerHeight + hH) / 2
+            };
 
-                const points = `
-                    ${r.left},${r.top} ${h.left},${h.top} 
-                    ${h.right},${h.top} ${r.right},${r.top} 
-                    ${r.right},${r.bottom} ${h.right},${h.bottom} 
-                    ${h.left},${h.bottom} ${r.left},${r.bottom}
-                `;
-                projection.setAttribute('points', points);
-            }, 50);
+            const points = `
+                ${r.left},${r.top} ${h.left},${h.top} 
+                ${h.right},${h.top} ${r.right},${r.top} 
+                ${r.right},${r.bottom} ${h.right},${h.bottom} 
+                ${h.left},${h.bottom} ${r.left},${r.bottom}
+            `;
+            projection.setAttribute('points', points);
         }
 
         function hideHud() { 
