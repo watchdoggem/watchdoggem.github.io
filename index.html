@@ -16,7 +16,7 @@
             --border: rgba(199, 158, 255, 0.32);
             --panel-bg: rgba(199, 158, 255, 0.09);
             --translucent: 0.85;
-            --design-width: 1600px;
+            --design-width: 1600px; /* Based on grid max-width for snap-fit */
         }
 
         * {
@@ -157,7 +157,7 @@
 
         .box.empty .box-content { opacity: 0.12; }
 
-        /* HUD - unchanged from your best version */
+        /* HUD */
         #hud {
             position: fixed;
             top: 50%;
@@ -175,7 +175,7 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.35);
             z-index: 1000;
             border-radius: 8px;
-            pointer-events: none;
+            pointer-events: none; /* Mouse through */
         }
 
         #hud.active {
@@ -189,7 +189,7 @@
             margin-bottom: clamp(0.25rem, 0.26vw, 0.5rem);
             text-shadow: 0 0 18px var(--glow);
             letter-spacing: clamp(1.5px, 0.16vw, 3px);
-            white-space: normal;
+            white-space: normal; /* Allow wrap if needed */
         }
 
         .hud-species {
@@ -233,7 +233,7 @@
             letter-spacing: clamp(0.5px, 0.05vw, 1px);
             text-transform: uppercase;
             line-height: 1.05;
-            white-space: normal;
+            white-space: normal; /* Allow wrap, no cutoff */
             width: 100%;
         }
 
@@ -249,15 +249,7 @@
             gap: clamp(0.4rem, 0.42vw, 0.8rem);
         }
 
-        @media (max-width: 900px) {
-            .hud-stats { grid-template-columns: 1fr; }
-        }
-
-        @media (max-width: 600px) {
-            #hud { width: 85vw; }
-        }
-
-        /* BEAM unchanged */
+        /* BEAM */
         #beam-svg {
             position: fixed;
             inset: 0;
@@ -275,6 +267,14 @@
             stroke-width: 1.5;
             opacity: 0.3;
             filter: drop-shadow(0 0 10px var(--glow));
+        }
+
+        @media (max-width: 900px) {
+            .hud-stats { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            #hud { width: 90vw; } /* Tighter for phone without fill */
         }
     </style>
 </head>
@@ -302,11 +302,43 @@
                 </div>
             </div>
 
-            <!-- Your empty boxes here - unchanged -->
+            <!-- Empty ones - expanded to 12 for full test -->
             <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
                 <div class="box-content">EMPTY SLOT</div>
             </div>
-            <!-- ... repeat as many as you have ... -->
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
         </div>
     </div>
 
@@ -357,7 +389,7 @@
         }
 
         function showHud(el, hasData = true) {
-            if (!hasData) return;
+            if (!hasData) return; // Only show for box 1
             if (leaveTimeout) clearTimeout(leaveTimeout);
             if (activeBox === el) return;
 
@@ -378,7 +410,7 @@
                     hud.classList.remove('active');
                     beamSvg.style.opacity = '0';
                 }
-            }, 100);
+            }, 100); // Slightly longer buffer for smoother hovers
         }
 
         function handleMouseLeave(e) {
