@@ -21,6 +21,7 @@
     --design-width:1600px;
 }
 
+/* GLOBAL RESET */
 *{margin:0;padding:0;box-sizing:border-box;cursor:crosshair}
 
 body{
@@ -34,13 +35,18 @@ body{
     overflow-x:hidden;
 }
 
+/* SCALE FOR DESKTOP */
 #scaler{
-    width:100%;
-    max-width:var(--design-width);
-    margin:0 auto;
+    --scale:calc(100vw / var(--design-width));
+    width:var(--design-width);
+    transform:translateX(-50%) scale(var(--scale));
+    transform-origin:top center;
+    position:relative;
+    left:50%;
     padding:clamp(.8rem,1vw,1.6rem);
 }
 
+/* HEADER */
 header{
     display:flex;
     flex-wrap:wrap;
@@ -60,52 +66,50 @@ header{
     text-shadow:0 0 16px var(--glow);
 }
 
-/* SEARCH + AVATAR */
+/* SEARCH BAR */
 .search-bar {
-    flex:1 1 auto;
-    display:flex;
-    align-items:center;
-    gap:.5rem;
+    flex: 1 1 auto;
+    min-width: 120px;
+    max-width: 100%;
 }
 
 #filter-input {
-    flex:1;
-    padding:.5rem 1rem;
-    background: rgba(5,3,15,0.85);
-    border:1px solid var(--border);
-    border-radius:6px;
-    color:var(--accent-violet);
-    font-size:clamp(0.9rem,2.5vw,1.6rem);
-    outline:none;
+    width: 100%;
+    padding: clamp(.4rem,.44vw,.85rem) clamp(.6rem,.63vw,1.2rem);
+    background: rgba(5,3,15,0.8);
+    border: 1px solid var(--border);
+    color: var(--accent-violet);
+    font-size: clamp(.9rem,2.5vw,1.6rem);
+    outline: none;
 }
 
 #filter-input::placeholder {
     color: rgba(199,158,255,.55);
 }
 
+/* TWITTER AVATAR */
 .x-link {
-    flex:0 0 auto;
-    width:50px;
-    height:50px;
-    border-radius:6px;
-    overflow:hidden;
-    border:2px solid var(--accent-violet);
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    flex: 0 0 auto;
+    width: clamp(40px, 6vw, 70px);
+    height: clamp(40px, 6vw, 70px);
+    overflow: hidden;
+    border-radius: 6px;
+    border: 2px solid var(--accent-violet);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .x-link img {
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    display:block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-/* GRID & BOXES */
+/* GRID / SPLASH BOXES */
 .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(200px,1fr));
+    grid-template-columns:repeat(4,1fr);
     gap:clamp(.55rem,.57vw,1.1rem);
 }
 
@@ -140,37 +144,35 @@ header{
 }
 
 .box[data-has-data="true"] .box-content {
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
+/* SPLASH TEXT */
 .splash-top {
-    font-size: clamp(3rem, 5vw, 5rem);
+    font-size: clamp(2.5rem, 6vw, 5rem);
     line-height:1;
 }
+
 .splash-mid {
-    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-size: clamp(1.2rem, 3.5vw, 2.2rem);
+    line-height:1.1;
     opacity:.85;
     margin-top:.35em;
+    white-space: nowrap;
 }
+
 .splash-bottom {
-    font-size: clamp(1.2rem, 2.5vw, 2rem);
+    font-size: clamp(1rem, 3vw, 2rem);
     letter-spacing:.18em;
     opacity:.75;
     margin-top:.2em;
+    white-space: nowrap;
 }
 
-/* Mobile override */
-@media (max-width:600px){
-    .splash-top { font-size:4rem; line-height:1.1; }
-    .splash-mid { font-size:2rem; }
-    .splash-bottom { font-size:1.6rem; letter-spacing:.12em; }
-}
-
-/* Empty boxes */
 .box.empty .box-content{opacity:.12}
 
 /* HUD */
@@ -251,16 +253,24 @@ header{
     flex-wrap:wrap;
 }
 
+/* MOBILE FIXES */
 @media (max-width:600px){
+    #scaler {transform: none; width:100%; padding:1rem;}
+    .grid {grid-template-columns:repeat(4,1fr); gap:.5rem;}
+    .box {padding:.6rem;}
+    .box:hover,.box.active{transform:none;box-shadow:none;}
+    
+    .splash-top {font-size:5vw;}
+    .splash-mid {font-size:3.5vw;}
+    .splash-bottom {font-size:3vw; letter-spacing:.15em;}
+
+    /* HUD smaller */
     #hud{
-        inset:4vh 3vw auto 3vw;
-        width:auto;
-        max-height:calc(100dvh - 8vh);
-        transform:none;
-        overflow-y:auto;
-        -webkit-overflow-scrolling:touch;
+        width:50vw;
+        max-height:50vh;
+        inset:auto;
+        transform:translate(-50%,-50%);
     }
-    .hud-stats{grid-template-columns:1fr}
 }
 
 /* BEAM */
@@ -291,10 +301,10 @@ header{
     <div class="title">WATCHDOGGEM</div>
     <div class="search-bar">
         <input type="text" id="filter-input" placeholder="SEARCH / FILTER..." autocomplete="off">
-        <a href="https://x.com/watchdoggem" target="_blank" class="x-link">
-            <img src="https://unavatar.io/x/watchdoggem" alt="X">
-        </a>
     </div>
+    <a href="https://x.com/watchdoggem" target="_blank" class="x-link">
+        <img src="https://unavatar.io/x/watchdoggem" alt="X">
+    </a>
 </header>
 
 <div class="grid">
