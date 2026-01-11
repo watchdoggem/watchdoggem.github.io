@@ -5,10 +5,11 @@
     <title>WATCHDOGGEM | TERMINAL</title>
     <style>
         :root {
-            --bg: #0a0b0c;
-            --slate: #2c3e50;
-            --bone: #e0e0e0;
-            --crimson: #8b0000;
+            --bg: #080808;
+            --border: #333333;
+            --text-dim: #888888;
+            --text-main: #bbbbbb;
+            --hover-bg: #111111;
         }
 
         * { box-sizing: border-box; cursor: crosshair; }
@@ -16,20 +17,19 @@
             background: var(--bg); 
             margin: 0; padding: 20px; 
             font-family: 'Impact', sans-serif; 
-            color: var(--bone);
+            color: var(--text-main);
             overflow-x: hidden;
         }
 
         #search-container {
             display: flex;
-            border: 1px solid var(--slate);
+            border: 1px solid var(--border);
             padding: 15px;
             margin-bottom: 30px;
-            background: rgba(255,255,255,0.02);
         }
         #filter-input {
             background: transparent; border: none; outline: none;
-            color: var(--bone); font-family: 'Impact', sans-serif;
+            color: var(--text-main); font-family: 'Impact', sans-serif;
             font-size: 24px; width: 100%; letter-spacing: 1px;
         }
 
@@ -41,20 +41,21 @@
 
         .box {
             position: relative;
-            border: 1px solid var(--slate);
+            border: 1px solid var(--border);
             height: 180px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: all 0.2s;
+            transition: background 0.1s;
             text-align: center;
             padding: 20px;
-            background: rgba(255,255,255,0.03);
         }
-        .box:hover { border-color: var(--bone); background: rgba(255,255,255,0.08); }
-        .locked { border: 1px solid #1a1a1a; background: transparent; }
+        .box:hover { background: var(--hover-bg); border-color: var(--text-dim); }
+        .locked { border: 1px solid #1a1a1a; opacity: 0.3; }
 
-        .box-text { font-size: 48px; color: var(--bone); letter-spacing: -2px; }
+        .box-num { font-size: 48px; line-height: 1; color: var(--text-main); }
+        .box-label { font-size: 18px; color: var(--text-dim); margin-top: 5px; text-transform: uppercase; }
 
         #hud {
             position: fixed;
@@ -62,27 +63,25 @@
             transform: translate(-50%, -50%) scale(0);
             width: 800px;
             background: #050505;
-            border: 2px solid var(--slate);
+            border: 1px solid var(--text-dim);
             padding: 40px;
             z-index: 1000;
             display: flex;
             flex-direction: column;
             pointer-events: none;
             transition: transform 0.1s ease-out;
-            box-shadow: 0 0 50px #000;
         }
 
         .hud-header { 
-            font-size: 26px; color: #fff; 
+            font-size: 26px; color: var(--text-main); 
             margin-bottom: 5px; 
             white-space: nowrap;
             text-align: center;
-            letter-spacing: 2px;
         }
         .hud-species {
-            font-size: 14px; color: var(--slate);
+            font-size: 14px; color: var(--text-dim);
             margin-bottom: 30px; letter-spacing: 3px;
-            text-align: center; border-bottom: 1px solid var(--slate);
+            text-align: center; border-bottom: 1px solid var(--border);
             padding-bottom: 15px;
         }
         
@@ -93,45 +92,45 @@
             margin-bottom: 30px;
         }
         .stat-module {
-            border: 1px solid #1a1a1a;
+            border: 1px solid var(--border);
             padding: 25px;
-            background: #080808;
+            background: #0a0a0a;
             display: flex;
             justify-content: center;
             align-items: center;
             text-align: center;
         }
-        .stat-text { font-size: 22px; color: var(--bone); text-transform: uppercase; }
+        .stat-text { font-size: 22px; color: var(--text-main); text-transform: uppercase; }
 
         .hud-footer {
             display: flex;
             justify-content: space-between;
             font-size: 11px;
-            color: var(--slate);
-            border-top: 1px solid #1a1a1a;
+            color: var(--text-dim);
+            border-top: 1px solid var(--border);
             padding-top: 20px;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
         }
 
         #beam-svg {
             position: fixed; top: 0; left: 0;
             width: 100vw; height: 100vh;
             pointer-events: none; z-index: 900;
-            opacity: 0; transition: opacity 0.2s;
+            opacity: 0; transition: opacity 0.1s;
         }
     </style>
 </head>
 <body>
 
     <div id="search-container">
-        <input type="text" id="filter-input" placeholder="WATCHDOGGEM ACCESS..." onkeyup="filterGrid()">
+        <input type="text" id="filter-input" placeholder="WATCHDOGGEM SYSTEM..." onkeyup="filterGrid()">
     </div>
 
     <svg id="beam-svg">
-        <polygon id="poly-top" fill="rgba(255, 255, 255, 0.05)" />
-        <polygon id="poly-bottom" fill="rgba(255, 255, 255, 0.05)" />
-        <polygon id="poly-left" fill="rgba(255, 255, 255, 0.05)" />
-        <polygon id="poly-right" fill="rgba(255, 255, 255, 0.05)" />
+        <polygon id="poly-top" fill="rgba(136, 136, 136, 0.1)" />
+        <polygon id="poly-bottom" fill="rgba(136, 136, 136, 0.1)" />
+        <polygon id="poly-left" fill="rgba(136, 136, 136, 0.1)" />
+        <polygon id="poly-right" fill="rgba(136, 136, 136, 0.1)" />
     </svg>
 
     <div id="hud">
@@ -147,11 +146,12 @@
     <div class="grid" id="audit-grid">
         <div class="box" 
              data-head="104,801 NON-HUMAN PRIMATES IN RESEARCH EXPERIMENTS"
-             data-stats="100% FATAL OVERDOSE, 20% CLINICAL SELF-HARM, 83% SOCIAL ISOLATION, 89% DISTRESSED PACING, NO PAIN RELIEF PROVIDED, 24/7 CAGE SEQUESTRATION"
-             data-src="SOURCE: USDA 2024 / NIH OLAW / JAAWS"
-             data-search="104801 NHP MONKEYS RHESUS MACAQUE" 
+             data-stats="100% FATAL ANESTHETIC OVERDOSE, 20% CLINICAL SELF-HARM, 83% SOCIAL ISOLATION, 89% DISTRESSED PACING, NO PAIN RELIEF PROVIDED, 24/7 CAGE SEQUESTRATION"
+             data-src="SOURCE: USDA 2024 / NIH OLAW"
+             data-search="104801 NHP MONKEYS" 
              onmouseenter="showHud(this)" onmouseleave="hideHud()" onclick="this.remove()">
-            <div class="box-text">104,801</div>
+            <div class="box-num">104,801</div>
+            <div class="box-label">NHP TESTING</div>
         </div>
     </div>
 
