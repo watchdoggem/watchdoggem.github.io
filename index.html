@@ -95,8 +95,9 @@
 
         .hud-footer {
             display: flex; justify-content: space-between;
-            font-size: 14px; border-top: 1px solid var(--border);
-            padding-top: 20px; opacity: 0.5;
+            font-size: 18px; border-top: 1px solid var(--border);
+            padding-top: 20px; opacity: 0.8; /* Sized up and more visible */
+            letter-spacing: 1px;
         }
 
         #beam-svg {
@@ -144,12 +145,35 @@
     </div>
 
     <div class="grid" id="audit-grid">
-        <div class="box" 
-             data-head="104,801 NON-HUMAN PRIMATES IN RESEARCH"
-             data-stats="100% FATAL ANESTHETIC OVERDOSE; 20% CLINICAL SELF-HARM; 83% SOCIAL ISOLATION; 89% DISTRESSED PACING; 12% NO PAIN RELIEF (COLUMN E); 100% CAGE SEQUESTRATION"
-             onmouseenter="showHud(this)" onmouseleave="hideHud()">
-            <div class="box-num">104,801</div>
-            <div class="box-label">NHP TESTING</div>
+        <div class="box" data-head="104,801 NHP IN RESEARCH" data-stats="100% FATAL; 20% SELF-HARM; 83% ISOLATION; 89% DISTRESS" onmouseenter="showHud(this)" onmouseleave="hideHud()">
+            <div class="box-num">104,801</div><div class="box-label">NHP TESTING</div>
+        </div>
+        <div class="box" data-head="REVENUE METRICS" data-stats="$800M+ REVENUE; $300M+ TAXPAYER; 31,000 BREEDERS" onmouseenter="showHud(this)" onmouseleave="hideHud()">
+            <div class="box-num">$1.1B</div><div class="box-label">MARKET VALUE</div>
+        </div>
+        <div class="box" data-head="AUDIT LOG 03" data-stats="DATA PENDING; DATA PENDING" onmouseenter="showHud(this)" onmouseleave="hideHud()">
+            <div class="box-num">03</div><div class="box-label">LOG ENTRY</div>
+        </div>
+        <div class="box" data-head="AUDIT LOG 04" data-stats="DATA PENDING; DATA PENDING" onmouseenter="showHud(this)" onmouseleave="hideHud()">
+            <div class="box-num">04</div><div class="box-label">LOG ENTRY</div>
+        </div>
+        <div class="box" data-head="AUDIT LOG 05" data-stats="DATA PENDING; DATA PENDING" onmouseenter="showHud(this)" onmouseleave="hideHud()">
+            <div class="box-num">05</div><div class="box-label">LOG ENTRY</div>
+        </div>
+        <div class="box" data-head="AUDIT LOG 06" data-stats="DATA PENDING; DATA PENDING" onmouseenter="showHud(this)" onmouseleave="hideHud()">
+            <div class="box-num">06</div><div class="box-label">LOG ENTRY</div>
+        </div>
+        <div class="box" data-head="AUDIT LOG 07" data-stats="DATA PENDING; DATA PENDING" onmouseenter="showHud(this)" onmouseleave="hideHud()">
+            <div class="box-num">07</div><div class="box-label">LOG ENTRY</div>
+        </div>
+        <div class="box" data-head="AUDIT LOG 08" data-stats="DATA PENDING; DATA PENDING" onmouseenter="showHud(this)" onmouseleave="hideHud()">
+            <div class="box-num">08</div><div class="box-label">LOG ENTRY</div>
+        </div>
+        <div class="box" data-head="AUDIT LOG 09" data-stats="DATA PENDING; DATA PENDING" onmouseenter="showHud(this)" onmouseleave="hideHud()">
+            <div class="box-num">09</div><div class="box-label">LOG ENTRY</div>
+        </div>
+        <div class="box" data-head="AUDIT LOG 10" data-stats="DATA PENDING; DATA PENDING" onmouseenter="showHud(this)" onmouseleave="hideHud()">
+            <div class="box-num">10</div><div class="box-label">LOG ENTRY</div>
         </div>
     </div>
 
@@ -162,7 +186,6 @@
             document.getElementById('h-header').innerText = el.getAttribute('data-head');
             const statsContainer = document.getElementById('h-stats');
             statsContainer.innerHTML = '';
-            
             el.getAttribute('data-stats').split(';').forEach((stat) => {
                 const div = document.createElement('div');
                 div.className = 'stat-module';
@@ -173,16 +196,9 @@
             hud.style.transform = "translate(-50%, -50%) scale(1)";
             beamSvg.style.opacity = "1";
             
+            // MATH LOCK: Recalculate based on current scroll/window size
             const r = el.getBoundingClientRect(); 
-            const hW = Math.min(window.innerWidth * 0.85, 1100);
-            const hH = hud.offsetHeight || 600;
-            
-            const h = {
-                left: (window.innerWidth - hW) / 2,
-                right: (window.innerWidth + hW) / 2,
-                top: (window.innerHeight - hH) / 2,
-                bottom: (window.innerHeight + hH) / 2
-            };
+            const h = hud.getBoundingClientRect(); 
 
             const points = `
                 ${r.left},${r.top} ${h.left},${h.top} 
