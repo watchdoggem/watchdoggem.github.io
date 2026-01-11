@@ -92,7 +92,7 @@
             align-items: center;
             text-align: center;
         }
-        .stat-text { font-size: 19px; text-transform: uppercase; line-height: 1.1; white-space: nowrap; }
+        .stat-text { font-size: 17px; text-transform: uppercase; line-height: 1.1; white-space: nowrap; }
 
         .hud-footer {
             display: flex;
@@ -138,7 +138,7 @@
     <div class="grid" id="audit-grid">
         <div class="box" 
              data-head="104,801 NON-HUMAN PRIMATES IN RESEARCH EXPERIMENTS"
-             data-stats="100% FATAL ANESTHETIC OVERDOSE, 20% CLINICAL SELF-HARM, 83% SOCIAL ISOLATION, 89% DISTRESSED PACING, 12% NO PAIN RELIEF (COLUMN E), 100% CAGE SEQUESTRATION, 31,000 MONKEYS HELD BY CLASS A BREEDERS, 13,375 MONKEYS HELD BY CLASS B DEALERS"
+             data-stats="100% FATAL ANESTHETIC OVERDOSE; 20% CLINICAL SELF-HARM; 83% SOCIAL ISOLATION; 89% DISTRESSED PACING; 12% NO PAIN RELIEF (COLUMN E); 100% CAGE SEQUESTRATION; 31,000 CAGED MONKEYS BY CLASS A BREEDERS; 13,375 CAGED MONKEYS BY CLASS B DEALERS"
              data-src="SOURCE: USDA FY2024 ANNUAL SUMMARY"
              data-search="104801 NHP MONKEYS" 
              onmouseenter="showHud(this)" onmouseleave="hideHud()">
@@ -161,13 +161,17 @@
             document.getElementById('h-source').innerText = el.getAttribute('data-src');
             const statsContainer = document.getElementById('h-stats');
             statsContainer.innerHTML = '';
-            const statsArray = el.getAttribute('data-stats').split(',');
             
-            statsArray.slice(0, 8).forEach(stat => {
-                const div = document.createElement('div');
-                div.className = 'stat-module';
-                div.innerHTML = `<span class="stat-text">${stat.trim()}</span>`;
-                statsContainer.appendChild(div);
+            // WE NOW SPLIT BY SEMICOLON (;) SO COMMAS DON'T BREAK THE BOXES
+            const statsArray = el.getAttribute('data-stats').split(';');
+            
+            statsArray.forEach((stat, index) => {
+                if(index < 8) {
+                    const div = document.createElement('div');
+                    div.className = 'stat-module';
+                    div.innerHTML = `<span class="stat-text">${stat.trim()}</span>`;
+                    statsContainer.appendChild(div);
+                }
             });
 
             hud.style.transform = "translate(-50%, -50%) scale(1)";
