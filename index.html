@@ -51,7 +51,7 @@ header{
     justify-content:space-between;
     align-items:center;
     gap:clamp(.7rem,.9vw,1.4rem);
-    margin-bottom:clamp(2rem,3vw,3.5rem); /* increased to avoid overlap */
+    margin-bottom:clamp(.9rem,1.1vw,1.8rem);
     border-bottom:1px solid var(--border);
     padding-bottom:clamp(.5rem,.6vw,1rem);
 }
@@ -105,7 +105,7 @@ header{
 /* GRID */
 .grid{
     display:grid;
-    grid-template-columns:repeat(4,1fr); /* 3 rows x 4 columns for 12 panels */
+    grid-template-columns:repeat(auto-fit, minmax(250px,1fr));
     gap:clamp(.55rem,.57vw,1.1rem);
 }
 
@@ -179,7 +179,7 @@ header{
     box-shadow:0 0 12px var(--glow);
 }
 
-.box.empty .box-content{opacity:0} /* completely blank */
+.box.empty .box-content{opacity:.12}
 
 /* HUD */
 #hud{
@@ -252,16 +252,11 @@ header{
     border-top:1px dashed var(--border);
     flex-wrap:wrap;
 }
-.hud-footer-section{
+.hud-footer-column{
     display:flex;
     flex-direction:column;
-    gap:.3rem;
-}
-.hud-footer-section-title{
-    font-weight:900;
-    font-size:clamp(.65rem,.68vw,1rem);
-    text-transform:uppercase;
-    opacity:.8;
+    gap:.3em;
+    text-align:left;
 }
 
 /* BEAM */
@@ -312,14 +307,7 @@ header{
     <div class="hud-header"></div>
     <div class="hud-species"></div>
     <div class="hud-stats"></div>
-    <div class="hud-footer">
-        <div id="hud-citations" class="hud-footer-section">
-            <div class="hud-footer-section-title">Citations</div>
-        </div>
-        <div id="hud-agencies" class="hud-footer-section">
-            <div class="hud-footer-section-title">Agencies</div>
-        </div>
-    </div>
+    <div class="hud-footer"></div>
 </div>
 
 <script>
@@ -341,10 +329,14 @@ const panels = [
       {text:"$800M+ U.S. DOMESTIC RESEARCH FUNDING", ref:2},
       {text:"$300M+ TAXPAYER INFRASTRUCTURE SUPPORT", ref:1}
     ],
-    footerCitations:["Citation 1","Citation 2","Citation 3"],
-    footerAgencies:["FDA","NIH","USDA"]
+    footer:{
+      agencies:["FDA","NIH","USDA"],
+      citations:["Study 1","Study 2","Study 3","Study 4","Study 5"]
+    }
   },
-  {empty:true},{empty:true},{empty:true},{empty:true},{empty:true},{empty:true},{empty:true},{empty:true},{empty:true},{empty:true},{empty:true}
+  {id:"EMPTY1", empty:true},
+  {id:"EMPTY2", empty:true},
+  {id:"EMPTY3", empty:true}
 ];
 
 let activeCategories = new Set();
@@ -363,7 +355,7 @@ function renderGrid() {
 
         if(p.empty){
             box.classList.add('empty');
-            content.innerHTML = ""; // completely blank
+            content.textContent = "EMPTY SLOT";
         } else {
             content.innerHTML = `<div class="splash-top">${p.id}</div>
                                  <div class="splash-mid">${p.title}</div>
@@ -396,7 +388,11 @@ function renderGrid() {
 function applyFilters(){
     document.querySelectorAll('.box').forEach((box,i)=>{
         const p = panels[i];
-        if(p.empty) { box.style.display="flex"; return; } // empty boxes are ignored
+        if(p.empty){
+            // Hide empty boxes if any filter is active
+            box.style.display = activeCategories.size>0 ? "none" : "flex";
+            return;
+        }
         const categoryMatch = activeCategories.size===0 || p.categories.some(c=>activeCategories.has(c));
         box.style.display = categoryMatch ? "flex" : "none";
     });
@@ -452,25 +448,26 @@ function showHud(el,panel){
         statsDiv.appendChild(stat);
     });
 
-    // Footer structured
-    const citationsDiv = document.getElementById('hud-citations');
-    citationsDiv.innerHTML='<div class="hud-footer-section-title">Citations</div>';
-    if(panel.footerCitations){
-        panel.footerCitations.forEach(c=>{ 
-            const div = document.createElement('div'); 
-            div.textContent=c; 
-            citationsDiv.appendChild(div);
-        });
-    }
-
-    const agenciesDiv = document.getElementById('hud-agencies');
-    agenciesDiv.innerHTML='<div class="hud-footer-section-title">Agencies</div>';
-    if(panel.footerAgencies){
-        panel.footerAgencies.forEach(a=>{
-            const div=document.createElement('div');
+    // HUD FOOTER - structured agencies & citations
+    const footer = hud.querySelector('.hud-footer');
+    footer.innerHTML="";
+    if(panel.footer){
+        const agenciesCol = document.createElement('div');
+        agenciesCol.classList.add('hud-footer-column');
+        panel.footer.agencies.forEach(a=>{
+            const div = document.createElement('div');
             div.textContent=a;
-            agenciesDiv.appendChild(div);
+            agenciesCol.appendChild(div);
         });
+        const citationsCol = document.createElement('div');
+        citationsCol.classList.add('hud-footer-column');
+        panel.footer.citations.forEach(c=>{
+            const div = document.createElement('div');
+            div.textContent=c;
+            citationsCol.appendChild(div);
+        });
+        footer.appendChild(agenciesCol);
+        footer.appendChild(citationsCol);
     }
 
     beamSvg.style.opacity='1';
