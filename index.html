@@ -293,7 +293,7 @@ header{
 </header>
 
 <div id="category-bar">
-    <div class="category-button" data-category="animal">Animal</div>
+    <div class="category-button" data-category="animal">Animal Harm</div>
 </div>
 
 <div class="grid" id="grid">
@@ -365,7 +365,7 @@ function renderGrid() {
             content.textContent = "EMPTY SLOT";
         } else {
             content.innerHTML = `<div class="splash-top">${p.id}</div>
-                                 <div class="splash-mid">${p.title}<sup>1</sup></div>
+                                 <div class="splash-mid">${p.title}</div>
                                  <div class="splash-bottom">${p.subtitle}</div>`;
 
             if(p.categories && p.categories.length){
