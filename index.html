@@ -40,7 +40,7 @@
             gap: 15px;
         }
 
-        /* THE BOX - FULL TEXT STACK */
+        /* THE BOX */
         .box {
             position: relative;
             background: var(--box-fill);
@@ -145,17 +145,17 @@
     </div>
 
     <div class="grid" id="audit-grid">
-        <div class="box" data-search="104801 NHP MONKEYS FDA NIH USDA COLUMN E DISTRESS DEATH" 
+        <div class="box" data-search="104801 NHP USDA COLUMN E SIB ISOLATION" 
              data-d="104,801 RESEARCH SUBJECTS" 
-             data-i="TERMINAL EUTHANASIA; 71% CLINICAL ANXIETY; 24HR ISOLATION; STERILE CAGE SEQUESTRATION" 
-             data-in="FDA PRE-CLINICAL MANDATES; NIH INTRAMURAL FUNDING; USDA COLUMN E (PAIN/NO RELIEF)" 
-             data-s="USDA APHIS 2023 / AALAS PSYCHOLOGICAL WELL-BEING AUDIT"
+             data-i="USDA COLUMN E (PAIN/DISTRESS WITHOUT RELIEF); CHRONIC SIB (SELF-INJURIOUS BEHAVIOR); ISOLATION SEQUESTRATION" 
+             data-in="FDA PRE-CLINICAL MANDATES; NIH INTRAMURAL FUNDING; USDA ANIMAL CARE COMPLIANCE" 
+             data-s="USDA APHIS 2023 / AALAS LABORATORY CARE STANDARDS"
              onmouseenter="showHud(this)" onmouseleave="hideHud()" onclick="this.remove()">
             <div class="box-top">104,801</div>
             <div class="box-bottom">NON-HUMAN PRIMATE TESTING</div>
         </div>
 
-        <div class="box" data-search="1031010 ABORTIONS CLINICAL MIFEPRISTONE" 
+        <div class="box" data-search="1031010 ABORTIONS MIFEPRISTONE CLINICAL" 
              data-d="1,031,010 CLINICAL PROCEDURES" 
              data-i="63% PHARMACOLOGICAL (MIFEPRISTONE); 37% SURGICAL ASPIRATION; 11% INCREASE SINCE 2020" 
              data-in="INCLUDES SPONTANEOUS POST-FECA INTERVENTION; CLINICAL TERMINATION" 
@@ -166,10 +166,10 @@
         </div>
 
         <div class="box" data-search="34000 CFR 114 FDA ACIDIFIED FOOD KITCHEN" 
-             data-d="34,000 PROJECTED CLOSURES" 
-             data-i="LEGISLATIVE ELIMINATION OF SMALL-SCALE PRODUCERS; MANDATORY THERMAL PROCESSING STANDARDS" 
-             data-in="CFR TITLE 21 PART 114 COMPLIANCE COSTS; EXCISE LICENSING BARRIERS" 
-             data-s="FEDERAL REGISTER / SBA REGULATORY IMPACT AUDIT"
+             data-d="34,000+ REGISTERED FACILITIES" 
+             data-i="21 CFR 114.80 THERMAL PROCESSING MANDATES; SCHEDULED PROCESS COMPLIANCE COSTS" 
+             data-in="ACIDIFIED FOOD REGULATORY BARRIERS; BPCS (BETTER PROCESS CONTROL SCHOOL) REQUIREMENTS" 
+             data-s="FDA FOOD SAFETY MODERNIZATION ACT (FSMA) IMPACT REPORT"
              onmouseenter="showHud(this)" onmouseleave="hideHud()" onclick="this.remove()">
             <div class="box-top">34,000</div>
             <div class="box-bottom">CFR 114 KITCHEN RISK</div>
@@ -218,7 +218,6 @@
             }
         }
 
-        // Fill remaining grid slots to 50
         const grid = document.getElementById('audit-grid');
         for(let i=4; i<=50; i++) {
             const b = document.createElement('div');
