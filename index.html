@@ -238,6 +238,7 @@ header{
     text-transform:uppercase;
 }
 
+/* FOOTNOTES */
 .hud-footer{
     display:flex;
     justify-content:space-between;
@@ -249,7 +250,16 @@ header{
     flex-wrap:wrap;
 }
 
-    
+.hud-footnote-left, .hud-footnote-right {
+    flex:1;
+}
+.hud-footnote-left {
+    text-align:left;
+}
+.hud-footnote-right {
+    text-align:right;
+}
+
 @media (max-width: 600px){
     #hud{
         inset:10vh 3vw auto 3vw;
@@ -318,7 +328,10 @@ header{
     <div class="hud-header"></div>
     <div class="hud-species"></div>
     <div class="hud-stats"></div>
-    <div class="hud-footer"></div>
+    <div class="hud-footer">
+        <div class="hud-footnote-left"></div>
+        <div class="hud-footnote-right"></div>
+    </div>
 </div>
 
 <script>
@@ -341,9 +354,9 @@ const panels = [
       {text:"$800M+ U.S. DOMESTIC RESEARCH FUNDING", ref:2},
       {text:"$300M+ TAXPAYER INFRASTRUCTURE SUPPORT", ref:1}
     ],
-    footnotes: {
-      1: "USDA APHIS 2024",
-      2: "NIH FY2024 Financials"
+    footnotes:{
+        1:"USDA APHIS 2024",
+        2:"NIH FY2024 Financials"
     },
     footer:"FDA REQUIRED • NIH FUNDED • USDA OVERSIGHT"
   },
@@ -425,9 +438,8 @@ function showHud(el,panel){
     
     hud.classList.add('active');
     
-    // HUD title FIXED
+    // FIXED HUD HEADER
     hud.querySelector('.hud-header').textContent = "PRIMATES IN RESEARCH";
-
     hud.querySelector('.hud-species').textContent = panel.species.join(" | ");
     
     const statsDiv = hud.querySelector('.hud-stats');
@@ -439,14 +451,15 @@ function showHud(el,panel){
         statsDiv.appendChild(stat);
     });
     
-    // Footer FIXED: include footnotes
-    let footnotesText = "";
-    if(panel.footnotes){
-        footnotesText = Object.entries(panel.footnotes)
-                              .map(([num,text])=>`<sup>${num}</sup> ${text}`)
-                              .join(" • ");
-    }
-    hud.querySelector('.hud-footer').innerHTML = `${footnotesText} • ${panel.footer}`;
+    // FOOTNOTES LEFT + RIGHT
+    const left = hud.querySelector('.hud-footnote-left');
+    const right = hud.querySelector('.hud-footnote-right');
+    
+    left.innerHTML = panel.footnotes ? Object.entries(panel.footnotes)
+        .filter(([k,v])=>k==1)
+        .map(([k,v])=>`<sup>${k}</sup> ${v}`).join("<br>") : "";
+    
+    right.textContent = panel.footer || "";
     
     beamSvg.style.opacity='1';
     updateBeam();
