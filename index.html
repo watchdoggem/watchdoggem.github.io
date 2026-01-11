@@ -12,9 +12,9 @@
             --bg: #05030f;
             --accent-violet: #c79eff;
             --accent-violet-dim: #a57eff;
-            --glow: rgba(199, 158, 255, 0.35);
-            --border: rgba(199, 158, 255, 0.22);
-            --critical-bg: rgba(199, 158, 255, 0.08);
+            --glow: rgba(199, 158, 255, 0.38);
+            --border: rgba(199, 158, 255, 0.25);
+            --critical-bg: rgba(199, 158, 255, 0.10);
         }
 
         * {
@@ -27,14 +27,14 @@
         body {
             background: var(--bg);
             background-image: 
-                radial-gradient(circle at 30% 20%, rgba(199,158,255,0.06) 0%, transparent 50%),
-                radial-gradient(circle at 70% 80%, rgba(167,126,255,0.04) 0%, transparent 60%);
+                radial-gradient(circle at 30% 20%, rgba(199,158,255,0.07) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(167,126,255,0.05) 0%, transparent 60%);
             color: var(--accent-violet);
             font-family: 'VT323', monospace;
             font-size: 22px;
-            line-height: 1.3;
+            line-height: 1.2;
             min-height: 100vh;
-            padding: 2rem;
+            padding: 1.8rem;
             overflow-x: hidden;
         }
 
@@ -44,14 +44,14 @@
             justify-content: center;
             align-items: center;
             gap: 1.5rem;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
             border-bottom: 1px solid var(--border);
-            padding-bottom: 1.5rem;
+            padding-bottom: 1.2rem;
         }
 
         .title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 3.8rem;
+            font-size: 3.6rem;
             font-weight: 900;
             letter-spacing: 8px;
             text-shadow: 0 0 18px var(--glow);
@@ -60,30 +60,30 @@
 
         .search-bar {
             flex: 1;
-            min-width: 300px;
-            max-width: 600px;
+            min-width: 280px;
+            max-width: 550px;
         }
 
         #filter-input {
             width: 100%;
-            padding: 1rem 1.5rem;
-            background: rgba(0,0,0,0.5);
+            padding: 0.9rem 1.3rem;
+            background: rgba(0,0,0,0.55);
             border: 1px solid var(--border);
             color: var(--accent-violet);
             font-family: 'VT323', monospace;
-            font-size: 1.8rem;
+            font-size: 1.7rem;
             outline: none;
             transition: all 0.25s;
         }
 
         #filter-input:focus {
             border-color: var(--accent-violet);
-            box-shadow: 0 0 15px var(--glow);
+            box-shadow: 0 0 14px var(--glow);
         }
 
         .x-link {
-            width: 64px;
-            height: 64px;
+            width: 60px;
+            height: 60px;
             border: 2px solid var(--accent-violet);
             border-radius: 6px;
             overflow: hidden;
@@ -92,41 +92,40 @@
 
         .x-link:hover {
             transform: scale(1.1);
-            box-shadow: 0 0 25px var(--glow);
+            box-shadow: 0 0 22px var(--glow);
         }
 
-        /* GRID - 2 columns */
+        /* GRID - 4 columns on large screens */
         .grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-            max-width: 1400px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.2rem;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
-        @media (max-width: 900px) {
-            .grid { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 1200px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 900px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px)  { .grid { grid-template-columns: 1fr; } }
 
         .box {
-            aspect-ratio: 1 / 1;
+            aspect-ratio: 1.1 / 1;
             border: 2px solid var(--border);
-            background: rgba(10, 5, 25, 0.5);
-            backdrop-filter: blur(6px);
+            background: rgba(10, 5, 25, 0.55);
+            backdrop-filter: blur(5px);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             transition: all 0.3s ease;
             position: relative;
-            overflow: hidden;
         }
 
         .box:hover,
         .box.active {
             border-color: var(--accent-violet);
-            box-shadow: 0 0 30px var(--glow);
-            transform: translateY(-6px);
+            box-shadow: 0 0 28px var(--glow);
+            transform: translateY(-5px);
         }
 
         .box-num,
@@ -135,39 +134,39 @@
             font-weight: 900;
             text-align: center;
             text-shadow: 0 0 12px var(--glow);
-            letter-spacing: 3px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         .box-num {
-            font-size: 4.2rem;
+            font-size: 3.2rem;
         }
 
         .box-label {
-            font-size: 2rem;
-            opacity: 0.85;
-            margin-top: 0.5rem;
+            font-size: 1.8rem;
+            opacity: 0.9;
+            margin-top: 0.4rem;
         }
 
-        /* Empty boxes stay visible but blank */
         .box.empty .box-num,
         .box.empty .box-label { opacity: 0; }
 
-        /* HUD */
+        /* HUD - dense & full */
         #hud {
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(0.95);
+            transform: translate(-50%, -50%) scale(0.94);
             width: 94vw;
-            max-width: 1200px;
-            background: rgba(5, 3, 15, 0.97);
+            max-width: 1250px;
+            background: rgba(5, 3, 15, 0.98);
             border: 2px solid var(--accent-violet);
             border-image: linear-gradient(to right, transparent, var(--accent-violet), transparent) 1;
-            padding: 2.5rem;
-            box-shadow: 0 0 80px rgba(0,0,0,0.9), inset 0 0 50px rgba(199,158,255,0.1);
+            padding: 2.2rem;
+            box-shadow: 0 0 90px rgba(0,0,0,0.95), inset 0 0 60px rgba(199,158,255,0.12);
             opacity: 0;
             pointer-events: none;
-            transition: all 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.4);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.35);
             z-index: 1000;
         }
 
@@ -179,61 +178,67 @@
 
         .hud-header {
             font-family: 'Orbitron', sans-serif;
-            font-size: 4rem;
+            font-size: 4.2rem;
             text-align: center;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 20px var(--glow);
-            letter-spacing: 5px;
+            margin-bottom: 0.8rem;
+            text-shadow: 0 0 22px var(--glow);
+            letter-spacing: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .hud-species {
             text-align: center;
-            font-size: 2rem;
-            opacity: 0.8;
-            margin-bottom: 2rem;
+            font-size: 2.1rem;
+            opacity: 0.82;
+            margin-bottom: 1.8rem;
             border-bottom: 1px dashed var(--border);
-            padding-bottom: 1.2rem;
+            padding-bottom: 1rem;
+            text-transform: uppercase;
         }
 
         .hud-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-            gap: 1.2rem;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 1rem;
         }
 
         .stat-item {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            padding: 1.4rem 2rem;
+            padding: 1.6rem 1.8rem;
             border: 2px solid var(--border);
             background: var(--critical-bg);
             transition: all 0.25s;
+            text-align: center;
+            min-height: 110px;
         }
 
         .stat-item:hover {
-            transform: translateX(8px);
-            box-shadow: 0 0 20px var(--glow);
+            transform: scale(1.03);
+            box-shadow: 0 0 24px var(--glow);
             border-color: var(--accent-violet-dim);
         }
 
-        .stat-label {
-            font-size: 1.8rem;
-        }
-
-        .stat-value {
-            font-size: 2.2rem;
+        .stat-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.1rem;
             font-weight: 900;
-            text-shadow: 0 0 10px var(--glow);
+            text-shadow: 0 0 12px var(--glow);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            line-height: 1.15;
         }
 
         .hud-footer {
             display: flex;
             justify-content: space-between;
             font-size: 1.3rem;
-            opacity: 0.7;
-            margin-top: 2.5rem;
-            padding-top: 1.5rem;
+            opacity: 0.72;
+            margin-top: 2rem;
+            padding-top: 1.2rem;
             border-top: 1px dashed var(--border);
         }
 
@@ -246,27 +251,26 @@
             pointer-events: none;
             z-index: 900;
             opacity: 0;
-            transition: opacity 0.7s;
+            transition: opacity 0.6s;
         }
 
         .beam {
             fill: none;
             stroke: var(--accent-violet);
-            stroke-width: 1.5;
-            opacity: 0.3;
-            filter: drop-shadow(0 0 10px var(--glow));
+            stroke-width: 1.6;
+            opacity: 0.32;
+            filter: drop-shadow(0 0 12px var(--glow));
         }
 
         @media (max-width: 900px) {
-            .hud-header { font-size: 3rem; }
+            .hud-header { font-size: 3.2rem; }
             .hud-stats { grid-template-columns: 1fr; }
-            .title { font-size: 3rem; }
-            .box-num { font-size: 3.5rem; }
+            .box-num { font-size: 2.8rem; }
             .box-label { font-size: 1.6rem; }
         }
     </style>
 </head>
-<body onclick="hideHud(event)">
+<body onmouseleave="handleMouseLeave(event)">
 
     <header>
         <div class="title">WATCHDOGGEM</div>
@@ -289,16 +293,16 @@
         <div class="hud-species">SUBJECTS: RHESUS MACAQUES | CYNOMOLGUS MACAQUES</div>
 
         <div class="hud-stats">
-            <div class="stat-item"><span class="stat-label">FATAL ANESTHETIC OVERDOSE</span><span class="stat-value">100%</span></div>
-            <div class="stat-item"><span class="stat-label">CLINICAL SELF-HARM</span><span class="stat-value">20%</span></div>
-            <div class="stat-item"><span class="stat-label">SOCIAL ISOLATION</span><span class="stat-value">83%</span></div>
-            <div class="stat-item"><span class="stat-label">DISTRESSED PACING</span><span class="stat-value">89%</span></div>
-            <div class="stat-item"><span class="stat-label">NO PAIN RELIEF (COLUMN E)</span><span class="stat-value">12%</span></div>
-            <div class="stat-item"><span class="stat-label">CAGE SEQUESTRATION</span><span class="stat-value">100%</span></div>
-            <div class="stat-item"><span class="stat-label">CLASS A BREEDERS (CAGED)</span><span class="stat-value">31,000</span></div>
-            <div class="stat-item"><span class="stat-label">CLASS B DEALERS (CAGED)</span><span class="stat-value">13,375</span></div>
-            <div class="stat-item"><span class="stat-label">U.S. DOMESTIC REVENUE</span><span class="stat-value">$800M+</span></div>
-            <div class="stat-item"><span class="stat-label">TAXPAYER INFRASTRUCTURE</span><span class="stat-value">$300M+</span></div>
+            <div class="stat-item"><div class="stat-text">FATAL ANESTHETIC OVERDOSE 100%</div></div>
+            <div class="stat-item"><div class="stat-text">CLINICAL SELF-HARM 20%</div></div>
+            <div class="stat-item"><div class="stat-text">SOCIAL ISOLATION 83%</div></div>
+            <div class="stat-item"><div class="stat-text">DISTRESSED PACING 89%</div></div>
+            <div class="stat-item"><div class="stat-text">NO PAIN RELIEF (COLUMN E) 12%</div></div>
+            <div class="stat-item"><div class="stat-text">CAGE SEQUESTRATION 100%</div></div>
+            <div class="stat-item"><div class="stat-text">CLASS A BREEDERS CAGED 31,000</div></div>
+            <div class="stat-item"><div class="stat-text">CLASS B DEALERS CAGED 13,375</div></div>
+            <div class="stat-item"><div class="stat-text">U.S. DOMESTIC REVENUE $800M+</div></div>
+            <div class="stat-item"><div class="stat-text">TAXPAYER INFRASTRUCTURE $300M+</div></div>
         </div>
 
         <div class="hud-footer">
@@ -309,24 +313,27 @@
 
     <div class="grid">
         <!-- Main data box -->
-        <div class="box" data-has-data="true" onmouseenter="showHud(this)" ontouchstart="showHud(this)">
+        <div class="box" data-has-data="true" 
+             onmouseenter="showHud(this)" 
+             onmouseleave="handleBoxLeave(this)"
+             ontouchstart="showHud(this)">
             <div class="box-num">104,801</div>
             <div class="box-label">NHP SUBJECTS</div>
         </div>
 
-        <!-- 12 empty full-style boxes -->
-        <div class="box empty" onmouseenter="showHud(this, false)" ontouchstart="showHud(this, false)"></div>
-        <div class="box empty" onmouseenter="showHud(this, false)" ontouchstart="showHud(this, false)"></div>
-        <div class="box empty" onmouseenter="showHud(this, false)" ontouchstart="showHud(this, false)"></div>
-        <div class="box empty" onmouseenter="showHud(this, false)" ontouchstart="showHud(this, false)"></div>
-        <div class="box empty" onmouseenter="showHud(this, false)" ontouchstart="showHud(this, false)"></div>
-        <div class="box empty" onmouseenter="showHud(this, false)" ontouchstart="showHud(this, false)"></div>
-        <div class="box empty" onmouseenter="showHud(this, false)" ontouchstart="showHud(this, false)"></div>
-        <div class="box empty" onmouseenter="showHud(this, false)" ontouchstart="showHud(this, false)"></div>
-        <div class="box empty" onmouseenter="showHud(this, false)" ontouchstart="showHud(this, false)"></div>
-        <div class="box empty" onmouseenter="showHud(this, false)" ontouchstart="showHud(this, false)"></div>
-        <div class="box empty" onmouseenter="showHud(this, false)" ontouchstart="showHud(this, false)"></div>
-        <div class="box empty" onmouseenter="showHud(this, false)" ontouchstart="showHud(this, false)"></div>
+        <!-- 12 empty boxes -->
+        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)"></div>
+        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)"></div>
+        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)"></div>
+        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)"></div>
+        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)"></div>
+        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)"></div>
+        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)"></div>
+        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)"></div>
+        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)"></div>
+        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)"></div>
+        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)"></div>
+        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)"></div>
     </div>
 
     <script>
@@ -356,17 +363,32 @@
             updateBeam();
         }
 
-        function hideHud(e) {
-            if (e.target.closest('#hud') || e.target.closest('.box')) return;
-            activeBox = null;
-            document.querySelectorAll('.box').forEach(b => b.classList.remove('active'));
-            hud.classList.remove('active');
-            beamSvg.style.opacity = '0';
+        function handleBoxLeave(el) {
+            // Only hide if the currently active box is the one we're leaving
+            if (activeBox === el) {
+                activeBox = null;
+                document.querySelectorAll('.box').forEach(b => b.classList.remove('active'));
+                hud.classList.remove('active');
+                beamSvg.style.opacity = '0';
+            }
+        }
+
+        function handleMouseLeave(e) {
+            // Fallback: if mouse leaves body entirely (rare), hide
+            if (!e.relatedTarget || !document.body.contains(e.relatedTarget)) {
+                if (activeBox) handleBoxLeave(activeBox);
+            }
         }
 
         window.addEventListener('resize', updateBeam);
         window.addEventListener('scroll', updateBeam);
-        document.addEventListener('click', hideHud);
+
+        // Touch devices fallback (tap outside)
+        document.addEventListener('touchstart', (e) => {
+            if (!e.target.closest('#hud') && !e.target.closest('.box')) {
+                if (activeBox) handleBoxLeave(activeBox);
+            }
+        });
     </script>
 </body>
 </html>
