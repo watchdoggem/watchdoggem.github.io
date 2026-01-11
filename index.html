@@ -1,232 +1,372 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Your Splash Page</title>
-  <style>
-    :root {
-      --primary: #6e48aa;
-      --primary-dark: #4c2e7a;
-      --bg: #0f0f1a;
-      --card-bg: #1a1a2e;
-      --text: #e0e0ff;
-      --text-light: #a0a0cc;
-    }
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+ <title>WATCHDOGGEM | NHP TERMINAL</title>
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=VT323&display=swap" rel="stylesheet">
+ <style>
+ :root {
+ --bg: #05030f;
+ --accent-violet: #c79eff;
+ --accent-violet-dim: #a57eff;
+ --glow: rgba(199, 158, 255, 0.42);
+ --border: rgba(199, 158, 255, 0.32);
+ --panel-bg: rgba(199, 158, 255, 0.09);
+ --translucent: 0.85;
+ }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ cursor: crosshair;
+ }
 
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      line-height: 1.5;
-    }
+ body {
+ background: var(--bg);
+ background-image: 
+ radial-gradient(circle at 30% 20%, rgba(199,158,255,0.08) 0%, transparent 50%),
+ radial-gradient(circle at 70% 80%, rgba(167,126,255,0.06) 0%, transparent 60%);
+ color: var(--accent-violet);
+ font-family: 'VT323', monospace;
+ font-size: 22px;
+ min-height: 100vh;
+ padding: 1.6rem;
+ overflow-x: hidden;
+ }
 
-    .container {
-      max-width: 1600px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem;
-    }
+ header {
+ display: flex;
+ flex-wrap: wrap;
+ justify-content: center;
+ align-items: center;
+ gap: 1.4rem;
+ margin-bottom: 1.8rem;
+ border-bottom: 1px solid var(--border);
+ padding-bottom: 1rem;
+ }
 
-    header {
-      text-align: center;
-      padding: 3rem 0 4rem;
-    }
+ .title {
+ font-family: 'Orbitron', sans-serif;
+ font-size: 3.4rem;
+ font-weight: 900;
+ letter-spacing: 7px;
+ text-shadow: 0 0 16px var(--glow);
+ text-align: center;
+ }
 
-    h1 {
-      font-size: clamp(2.8rem, 6vw, 5rem);
-      margin-bottom: 0.8rem;
-      background: linear-gradient(90deg, #a78bfa, #7c3aed);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+ .search-bar {
+ flex: 1;
+ min-width: 260px;
+ max-width: 520px;
+ }
 
-    .subtitle {
-      font-size: clamp(1.1rem, 3vw, 1.4rem);
-      color: var(--text-light);
-      max-width: 600px;
-      margin: 0 auto;
-    }
+ #filter-input {
+ width: 100%;
+ padding: 0.85rem 1.2rem;
+ background: rgba(0,0,0,0.6);
+ border: 1px solid var(--border);
+ color: var(--accent-violet);
+ font-size: 1.6rem;
+ outline: none;
+ transition: all 0.25s;
+ }
 
-    .splash-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin: 2rem 0;
-    }
+ #filter-input:focus {
+ border-color: var(--accent-violet);
+ box-shadow: 0 0 12px var(--glow);
+ }
 
-    .card {
-      background: var(--card-bg);
-      border-radius: 16px;
-      overflow: hidden;
-      transition: all 0.25s ease;
-      border: 1px solid rgba(100, 100, 255, 0.12);
-      cursor: pointer;
-      position: relative;
-    }
+ .x-link {
+ width: 58px;
+ height: 58px;
+ border: 2px solid var(--accent-violet);
+ border-radius: 6px;
+ overflow: hidden;
+ transition: all 0.3s;
+ }
 
-    .card:hover {
-      transform: translateY(-8px);
-      border-color: rgba(100, 100, 255, 0.4);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-    }
+ .x-link:hover {
+ transform: scale(1.08);
+ box-shadow: 0 0 20px var(--glow);
+ }
 
-    .card-img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      background: #111;
-    }
+ /* GRID BOXES - now full bubbly like HUD panels */
+ .grid {
+ display: grid;
+ grid-template-columns: repeat(4, 1fr);
+ gap: 1.1rem;
+ max-width: 1600px;
+ margin: 0 auto;
+ }
 
-    .card-content {
-      padding: 1.4rem;
-    }
+ @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+ @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
 
-    .card-title {
-      font-size: 1.35rem;
-      margin-bottom: 0.6rem;
-    }
+ .box {
+ aspect-ratio: 1 / 1;
+ border: 2px solid var(--border);
+ border-radius: 12px; /* bubbly rounded */
+ background: var(--panel-bg);
+ backdrop-filter: blur(8px);
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+ align-items: center;
+ padding: 1.2rem;
+ transition: all 0.3s ease;
+ box-shadow: inset 0 0 20px rgba(199,158,255,0.08);
+ }
 
-    .card-desc {
-      color: var(--text-light);
-      font-size: 0.95rem;
-    }
+ .box:hover,
+ .box.active {
+ border-color: var(--accent-violet);
+ box-shadow: 0 0 32px var(--glow), inset 0 0 24px rgba(199,158,255,0.15);
+ transform: translateY(-6px) scale(1.02);
+ }
 
-    /* HUD Popup */
-    .hud-popup {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: var(--card-bg);
-      border-radius: 16px;
-      width: 90%;
-      max-width: 420px;
-      padding: 1.5rem;
-      border: 1px solid rgba(100, 100, 255, 0.3);
-      box-shadow: 0 25px 60px rgba(0,0,0,0.6);
-      z-index: 1000;
-      display: none; /* hidden by default */
-    }
+ .box-content {
+ font-family: 'Orbitron', sans-serif;
+ font-weight: 900;
+ text-align: center;
+ text-shadow: 0 0 14px var(--glow);
+ letter-spacing: 2px;
+ text-transform: uppercase;
+ line-height: 1.05;
+ width: 100%;
+ }
 
-    .hud-popup.show {
-      display: block;
-    }
+ .box-num {
+ font-size: 2.8rem;
+ }
 
-    .hud-close {
-      position: absolute;
-      top: 1rem;
-      right: 1.2rem;
-      font-size: 1.8rem;
-      cursor: pointer;
-      color: var(--text-light);
-    }
+ .box-label {
+ font-size: 2.8rem;
+ margin-top: 0.3rem;
+ opacity: 0.92;
+ }
 
-    .hud-title {
-      font-size: 1.6rem;
-      margin: 0 0 1rem 0;
-      background: linear-gradient(90deg, #c4b5fd, #a78bfa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      line-height: 1.25;
-      white-space: normal;
-    }
+ .box.empty .box-content { opacity: 0.12; } /* faint for empty */
 
-    .hud-body {
-      color: var(--text-light);
-      font-size: 1rem;
-    }
+ /* HUD - smaller, translucent */
+ #hud {
+ position: fixed;
+ top: 50%;
+ left: 50%;
+ transform: translate(-50%, -50%) scale(0.96);
+ width: 60vw;
+ max-width: 900px;
+ background: rgba(5, 3, 15, var(--translucent));
+ border: 2px solid var(--accent-violet);
+ border-image: linear-gradient(to right, transparent, var(--accent-violet), transparent) 1;
+ padding: 1.6rem;
+ box-shadow: 0 0 80px rgba(0,0,0,0.9);
+ opacity: 0;
+ pointer-events: none;
+ transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.35);
+ z-index: 1000;
+ border-radius: 8px;
+ }
 
-    /* Responsive adjustments */
-    @media (max-width: 900px) {
-      .splash-grid {
-        grid-template-columns: repeat(2, 1fr); /* locked 2 columns on mobile/tablet */
-        gap: 1.2rem;
-      }
-      
-      .container {
-        padding: 1.5rem 1rem;
-      }
-      
-      header {
-        padding: 2.5rem 0 3rem;
-      }
-    }
+ #hud.active {
+ opacity: 1;
+ transform: translate(-50%, -50%) scale(1);
+ pointer-events: auto;
+ }
 
-    @media (max-width: 480px) {
-      .splash-grid {
-        grid-template-columns: 1fr; /* 1 column on tiny phones */
-      }
-      
-      .card-img {
-        height: 160px;
-      }
-      
-      .hud-popup {
-        padding: 1.2rem;
-        max-width: 94vw;
-      }
-    }
-  </style>
+ .hud-header {
+ font-family: 'Orbitron', sans-serif;
+ font-size: 3.4rem;
+ text-align: center;
+ margin-bottom: 0.5rem;
+ text-shadow: 0 0 18px var(--glow);
+ letter-spacing: 4px;
+ white-space: normal;
+ }
+
+ .hud-species {
+ text-align: center;
+ font-size: 1.7rem;
+ opacity: 0.88;
+ margin-bottom: 1.4rem;
+ border-bottom: 1px dashed var(--border);
+ padding-bottom: 0.8rem;
+ text-transform: uppercase;
+ }
+
+ .hud-stats {
+ display: grid;
+ grid-template-columns: repeat(2, 1fr);
+ grid-template-rows: repeat(5, auto);
+ gap: 0.9rem;
+ }
+
+ .stat-item {
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ padding: 1.3rem;
+ border: 2px solid var(--border);
+ background: var(--panel-bg);
+ text-align: center;
+ min-height: 95px;
+ border-radius: 8px;
+ }
+
+ .stat-item:hover {
+ box-shadow: 0 0 20px var(--glow);
+ border-color: var(--accent-violet-dim);
+ }
+
+ .stat-text {
+ font-family: 'Orbitron', sans-serif;
+ font-size: 1.8rem;
+ font-weight: 900;
+ text-shadow: 0 0 10px var(--glow);
+ letter-spacing: 1.2px;
+ text-transform: uppercase;
+ line-height: 1.1;
+ }
+
+ .hud-footer {
+ display: flex;
+ justify-content: space-between;
+ font-size: 1.35rem;
+ opacity: 0.92;
+ margin-top: 1.6rem;
+ padding-top: 1rem;
+ border-top: 1px dashed var(--border);
+ }
+
+ /* BEAM */
+ #beam-svg {
+ position: fixed;
+ inset: 0;
+ width: 100vw;
+ height: 100vh;
+ pointer-events: none;
+ z-index: 900;
+ opacity: 0;
+ transition: opacity 0.6s;
+ }
+
+ .beam {
+ fill: none;
+ stroke: var(--accent-violet);
+ stroke-width: 1.5;
+ opacity: 0.3;
+ filter: drop-shadow(0 0 10px var(--glow));
+ }
+
+ @media (max-width: 900px) {
+ #hud { width: 88vw; padding: 1.4rem; }
+ .hud-header { font-size: 2.6rem; }
+ .hud-stats { grid-template-columns: 1fr; }
+ }
+ </style>
 </head>
-<body>
+<body onmouseleave="handleMouseLeave(event)">
 
-  <div class="container">
-    <header>
-      <h1>Your Project Name</h1>
-      <p class="subtitle">Short catchy description that fits on mobile too</p>
-    </header>
+ <header>
+ <div class="title">WATCHDOGGEM</div>
+ <div class="search-bar">
+ <input type="text" id="filter-input" placeholder="QUERY NHP DATABASE..." autocomplete="off">
+ </div>
+ <a href="https://x.com/watchdoggem" target="_blank" class="x-link">
+ <img src="https://unavatar.io/x/watchdoggem" alt="X">
+ </a>
+ </header>
 
-    <div class="splash-grid">
-      <!-- Example cards - replace with yours -->
-      <div class="card" onclick="showHud('Card One', 'This is the detailed description for card number one...')">
-        <img src="https://via.placeholder.com/400x180/1a1a2e/6e48aa?text=Card+1" alt="" class="card-img">
-        <div class="card-content">
-          <h3 class="card-title">Feature One</h3>
-          <p class="card-desc">Short teaser text that looks good on any screen size.</p>
-        </div>
-      </div>
+ <svg id="beam-svg">
+ <polygon id="beam-poly" class="beam" points="0,0"/>
+ </svg>
 
-      <div class="card" onclick="showHud('Card Two', 'Much longer description here that should wrap nicely without being cut off...')">
-        <img src="https://via.placeholder.com/400x180/1a1a2e/7c3aed?text=Card+2" alt="" class="card-img">
-        <div class="card-content">
-          <h3 class="card-title">Feature Two</h3>
-          <p class="card-desc">Another nice little description.</p>
-        </div>
-      </div>
+ <div id="hud">
+ <div class="hud-header">104,801 NON-HUMAN PRIMATES</div>
+ <div class="hud-species">SUBJECTS: RHESUS MACAQUES | CYNOMOLGUS MACAQUES</div>
 
-      <!-- Add more cards as needed... -->
-    </div>
-  </div>
+ <div class="hud-stats">
+ <div class="stat-item"><div class="stat-text">FATAL ANESTHETIC OVERDOSE 100%</div></div>
+ <div class="stat-item"><div class="stat-text">CLINICAL SELF-HARM 20%</div></div>
+ <div class="stat-item"><div class="stat-text">SOCIAL ISOLATION 83%</div></div>
+ <div class="stat-item"><div class="stat-text">DISTRESSED PACING 89%</div></div>
+ <div class="stat-item"><div class="stat-text">NO PAIN RELIEF COLUMN E 12%</div></div>
+ <div class="stat-item"><div class="stat-text">CAGE SEQUESTRATION 100%</div></div>
+ <div class="stat-item"><div class="stat-text">CLASS A BREEDERS CAGED 31,000</div></div>
+ <div class="stat-item"><div class="stat-text">CLASS B DEALERS CAGED 13,375</div></div>
+ <div class="stat-item"><div class="stat-text">U.S. DOMESTIC REVENUE $800M+</div></div>
+ <div class="stat-item"><div class="stat-text">TAXPAYER INFRASTRUCTURE $300M+</div></div>
+ </div>
 
-  <!-- HUD Popup Example -->
-  <div class="hud-popup" id="hud">
-    <span class="hud-close" onclick="hideHud()">×</span>
-    <h2 class="hud-title" id="hudTitle"></h2>
-    <div class="hud-body" id="hudBody"></div>
-  </div>
+ <div class="hud-footer">
+ <span>SOURCE: USDA APHIS 2024 • NIH FINANCIALS</span>
+ <span>FDA REQUIRED • NIH FUNDED • USDA OVERSIGHT</span>
+ </div>
+ </div>
 
-  <script>
-    function showHud(title, body) {
-      document.getElementById('hudTitle').textContent = title;
-      document.getElementById('hudBody').textContent = body;
-      document.getElementById('hud').classList.add('show');
-    }
+ <div class="grid">
+ <div class="box" data-has-data="true" 
+ onmouseenter="showHud(this)" 
+ onmouseleave="handleBoxLeave(this)"
+ ontouchstart="showHud(this)">
+ <div class="box-content">
+ <div class="box-num">104,801</div>
+ <div class="box-label">NHP SUBJECTS</div>
+ </div>
+ </div>
 
-    function hideHud() {
-      document.getElementById('hud').classList.remove('show');
-    }
+ <!-- Empty ones - same full bubbly style -->
+ <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+ <div class="box-content">EMPTY SLOT</div>
+ </div>
+ <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+ <div class="box-content">EMPTY SLOT</div>
+ </div>
+ <!-- Repeat the empty pattern 10 more times -->
+ <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+ <div class="box-content">EMPTY SLOT</div>
+ </div>
+ <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+ <div class="box-content">EMPTY SLOT</div>
+ </div>
+ <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+ <div class="box-content">EMPTY SLOT</div>
+ </div>
+ <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+ <div class="box-content">EMPTY SLOT</div>
+ </div>
+ <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+ <div class="box-content">EMPTY SLOT</div>
+ </div>
+ <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+ <div class="box-content">EMPTY SLOT</div>
+ </div>
+ <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+ <div class="box-content">EMPTY SLOT</div>
+ </div>
+ <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+ <div class="box-content">EMPTY SLOT</div>
+ </div>
+ <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+ <div class="box-content">EMPTY SLOT</div>
+ </div>
+ <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+ <div class="box-content">EMPTY SLOT</div>
+ </div>
+ </div>
 
-    // Optional: close on outside click
-    document.getElementById('hud').addEventListener('click', function(e) {
-      if (e.target === this) hideHud();
-    });
-  </script>
-</body>
-</html>
+ <script>
+ const hud = document.getElementById('hud');
+ const beamSvg = document.getElementById('beam-svg');
+ const beamPoly = document.getElementById('beam-poly');
+ let activeBox = null;
+
+ function updateBeam() {
+ if (!activeBox) return;
+ const b = activeBox.getBoundingClientRect();
+ const h = hud.getBoundingClientRect();
+ const points = [
+ b.left, b.top, h.left, h.top, h.right, h 
