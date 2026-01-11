@@ -71,7 +71,7 @@ header{
 }
 @media (max-width: 600px) {
     #filter-input {
-        font-size: clamp(1.2rem, 4vw, 1.6rem); /* bigger for mobile */
+        font-size: clamp(1.2rem, 4vw, 1.6rem);
         padding: clamp(.6rem, 1.5vw, 1rem) clamp(.8rem, 2vw, 1.2rem);
     }
 
@@ -341,20 +341,15 @@ const panels = [
       {text:"$800M+ U.S. DOMESTIC RESEARCH FUNDING", ref:2},
       {text:"$300M+ TAXPAYER INFRASTRUCTURE SUPPORT", ref:1}
     ],
+    footnotes: {
+      1: "USDA APHIS 2024",
+      2: "NIH FY2024 Financials"
+    },
     footer:"FDA REQUIRED • NIH FUNDED • USDA OVERSIGHT"
   },
-  {
-    id:"EMPTY1",
-    empty:true
-  },
-  {
-    id:"EMPTY2",
-    empty:true
-  },
-  {
-    id:"EMPTY3",
-    empty:true
-  }
+  { id:"EMPTY1", empty:true },
+  { id:"EMPTY2", empty:true },
+  { id:"EMPTY3", empty:true }
 ];
 
 // ======================
@@ -430,7 +425,9 @@ function showHud(el,panel){
     
     hud.classList.add('active');
     
-    hud.querySelector('.hud-header').textContent = `${panel.id} ${panel.title}`;
+    // HUD title FIXED
+    hud.querySelector('.hud-header').textContent = "PRIMATES IN RESEARCH";
+
     hud.querySelector('.hud-species').textContent = panel.species.join(" | ");
     
     const statsDiv = hud.querySelector('.hud-stats');
@@ -442,7 +439,14 @@ function showHud(el,panel){
         statsDiv.appendChild(stat);
     });
     
-    hud.querySelector('.hud-footer').textContent = panel.footer;
+    // Footer FIXED: include footnotes
+    let footnotesText = "";
+    if(panel.footnotes){
+        footnotesText = Object.entries(panel.footnotes)
+                              .map(([num,text])=>`<sup>${num}</sup> ${text}`)
+                              .join(" • ");
+    }
+    hud.querySelector('.hud-footer').innerHTML = `${footnotesText} • ${panel.footer}`;
     
     beamSvg.style.opacity='1';
     updateBeam();
