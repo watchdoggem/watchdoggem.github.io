@@ -16,7 +16,7 @@
             --border: rgba(199, 158, 255, 0.32);
             --panel-bg: rgba(199, 158, 255, 0.09);
             --translucent: 0.85;
-            --design-width: 1600px;
+            --design-width: 1600px; /* Based on grid max-width for snap-fit */
         }
 
         * {
@@ -42,7 +42,7 @@
             width: var(--design-width);
             transform: scale(var(--scale));
             transform-origin: top left;
-            margin: 0 auto;
+            margin: 0 auto; /* Centers when window > design width */
             height: auto;
             padding: clamp(0.8rem, 1vw, 1.6rem);
         }
@@ -107,11 +107,8 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: clamp(0.55rem, 0.57vw, 1.1rem);
-            /* Removed max-width: 100% to prevent right-side cutoff on full screen */
+            max-width: 100%;
             margin: 0 auto;
-            justify-items: center; /* Better centering of grid items */
-            width: 100%;
-            max-width: 1600px; /* Cap overall width but allow full breathing */
         }
 
         .box {
@@ -127,7 +124,6 @@
             padding: clamp(0.6rem, 0.63vw, 1.2rem);
             transition: all 0.3s ease;
             box-shadow: inset 0 0 20px rgba(199,158,255,0.08);
-            width: 100%; /* Ensure boxes fill their grid cell */
         }
 
         .box:hover,
@@ -149,7 +145,7 @@
         }
 
         .box-num {
-            font-size: clamp(1.8rem, 1.88vw, 3.6rem);
+            font-size: clamp(1.8rem, 1.88vw, 3.6rem); /* Bumped to fill more */
         }
 
         .box-label {
@@ -160,14 +156,14 @@
 
         .box.empty .box-content { opacity: 0.12; }
 
-        /* HUD - tightened mobile handling */
+        /* HUD */
         #hud {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: clamp(300px, 50vw, 950px);
-            max-height: 85vh; /* Slightly more breathing room */
+            width: clamp(300px, 50vw, 950px); /* Lowered min for phone */
+            max-height: 88vh;
             overflow-y: auto;
             background: rgba(5, 3, 15, var(--translucent));
             border: 2px solid var(--accent-violet);
@@ -178,7 +174,7 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.35);
             z-index: 1000;
             border-radius: 8px;
-            pointer-events: none;
+            pointer-events: none; /* Mouse through */
         }
 
         #hud.active {
@@ -192,7 +188,7 @@
             margin-bottom: clamp(0.25rem, 0.26vw, 0.5rem);
             text-shadow: 0 0 18px var(--glow);
             letter-spacing: clamp(1.5px, 0.16vw, 3px);
-            white-space: normal;
+            white-space: normal; /* Allow wrap if needed */
         }
 
         .hud-species {
@@ -236,7 +232,7 @@
             letter-spacing: clamp(0.5px, 0.05vw, 1px);
             text-transform: uppercase;
             line-height: 1.05;
-            white-space: normal;
+            white-space: normal; /* Allow wrap, no cutoff */
             width: 100%;
         }
 
@@ -252,7 +248,7 @@
             gap: clamp(0.4rem, 0.42vw, 0.8rem);
         }
 
-        /* BEAM unchanged */
+        /* BEAM */
         #beam-svg {
             position: fixed;
             inset: 0;
@@ -277,11 +273,7 @@
         }
 
         @media (max-width: 600px) {
-            #hud {
-                width: 92vw;          /* Main phone fix: narrower, no cutoff */
-                max-height: 82vh;     /* More vertical breathing room */
-                padding: 1rem;        /* Slightly less padding to fit content */
-            }
+            #hud { width: 90vw; } /* Tighter for phone without fill */
         }
     </style>
 </head>
@@ -289,7 +281,7 @@
 
     <div id="scaler">
         <header>
-            <div class="title">watchdoggem</div>
+            <div class="title">WATCHDOGGEM</div>
             <div class="search-bar">
                 <input type="text" id="filter-input" placeholder="SEARCH / FILTER..." autocomplete="off">
             </div>
@@ -299,7 +291,6 @@
         </header>
 
         <div class="grid">
-            <!-- Your boxes here – same as before -->
             <div class="box" data-has-data="true" 
                  onmouseenter="showHud(this)" 
                  onmouseleave="handleBoxLeave(this)"
@@ -310,15 +301,45 @@
                 </div>
             </div>
 
-            <!-- Empty boxes (repeat as needed) -->
+            <!-- Empty ones -->
             <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
                 <div class="box-content">EMPTY SLOT</div>
             </div>
-            <!-- ... add the rest ... -->
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
         </div>
     </div>
-
-    <!-- HUD and script unchanged from your last working version -->
 
     <svg id="beam-svg">
         <polygon id="beam-poly" class="beam" points="0,0"/>
@@ -329,7 +350,16 @@
         <div class="hud-species">SUBJECTS: RHESUS MACAQUES | CYNOMOLGUS MACAQUES</div>
 
         <div class="hud-stats">
-            <!-- Your stats items here -->
+            <div class="stat-item"><div class="stat-text">FATAL ANESTHETIC OVERDOSE 100%</div></div>
+            <div class="stat-item"><div class="stat-text">CLINICAL SELF-HARM 20%</div></div>
+            <div class="stat-item"><div class="stat-text">SOCIAL ISOLATION 83%</div></div>
+            <div class="stat-item"><div class="stat-text">DISTRESSED PACING 89%</div></div>
+            <div class="stat-item"><div class="stat-text">NO PAIN RELIEF COLUMN E 12%</div></div>
+            <div class="stat-item"><div class="stat-text">CAGE SEQUESTRATION 100%</div></div>
+            <div class="stat-item"><div class="stat-text">CLASS A BREEDERS CAGED 31,000</div></div>
+            <div class="stat-item"><div class="stat-text">CLASS B DEALERS CAGED 13,375</div></div>
+            <div class="stat-item"><div class="stat-text">U.S. DOMESTIC REVENUE $800M+</div></div>
+            <div class="stat-item"><div class="stat-text">TAXPAYER INFRASTRUCTURE $300M+</div></div>
         </div>
 
         <div class="hud-footer">
@@ -338,7 +368,64 @@
         </div>
     </div>
 
-    <!-- Your existing script remains exactly the same -->
+    <script>
+        const hud = document.getElementById('hud');
+        const beamSvg = document.getElementById('beam-svg');
+        const beamPoly = document.getElementById('beam-poly');
+        let activeBox = null;
+        let leaveTimeout = null;
 
+        function updateBeam() {
+            if (!activeBox) return;
+            const b = activeBox.getBoundingClientRect();
+            const h = hud.getBoundingClientRect();
+            const points = [
+                b.left, b.top, h.left, h.top, h.right, h.top,
+                b.right, b.top, b.right, b.bottom, h.right, h.bottom,
+                h.left, h.bottom, b.left, b.bottom
+            ].join(',');
+            beamPoly.setAttribute('points', points);
+        }
+
+        function showHud(el, hasData = true) {
+            if (!hasData) return; // Only show for box 1
+            if (leaveTimeout) clearTimeout(leaveTimeout);
+            if (activeBox === el) return;
+
+            activeBox = el;
+            document.querySelectorAll('.box').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            hud.classList.add('active');
+            beamSvg.style.opacity = '1';
+            updateBeam();
+        }
+
+        function handleBoxLeave(el) {
+            if (activeBox !== el) return;
+            leaveTimeout = setTimeout(() => {
+                if (activeBox === el) {
+                    activeBox = null;
+                    document.querySelectorAll('.box').forEach(b => b.classList.remove('active'));
+                    hud.classList.remove('active');
+                    beamSvg.style.opacity = '0';
+                }
+            }, 100); // Slightly longer buffer for smoother hovers
+        }
+
+        function handleMouseLeave(e) {
+            if (!e.relatedTarget || !document.body.contains(e.relatedTarget)) {
+                if (activeBox) handleBoxLeave(activeBox);
+            }
+        }
+
+        window.addEventListener('resize', updateBeam);
+        window.addEventListener('scroll', updateBeam);
+
+        document.addEventListener('touchstart', (e) => {
+            if (!e.target.closest('#hud') && !e.target.closest('.box')) {
+                if (activeBox) handleBoxLeave(activeBox);
+            }
+        });
+    </script>
 </body>
 </html>
