@@ -9,7 +9,7 @@
             --bg-deep: #060a06;
             --accent-neon: #d4c1ff; 
             --accent-glow: rgba(212, 193, 255, 0.4);
-            --border: rgba(212, 193, 255, 0.25); /* Increased visibility */
+            --border: rgba(212, 193, 255, 0.15);
         }
 
         * { box-sizing: border-box; cursor: crosshair; -webkit-tap-highlight-color: transparent; }
@@ -29,23 +29,15 @@
         }
 
         /* HEADER & SEARCH */
-        #header-row {
-            display: flex;
-            align-items: center; gap: 12px; margin-bottom: 20px;
-        }
-
+        #header-row { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
         #search-container {
-            flex-grow: 1;
-            display: flex; border: 1px solid var(--border);
-            padding: 12px; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px);
+            flex-grow: 1; display: flex; border: 1px solid var(--border);
+            padding: 12px; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px);
         }
-
         #filter-input {
-            background: transparent;
-            border: none; outline: none;
+            background: transparent; border: none; outline: none;
             color: var(--accent-neon); font-family: 'Impact', sans-serif;
             font-size: 20px; width: 100%; letter-spacing: 2px;
-            text-transform: uppercase;
         }
 
         .twitter-link {
@@ -56,52 +48,47 @@
         .twitter-link:hover { transform: scale(1.05); box-shadow: 0 0 10px var(--accent-glow); }
         .twitter-link img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* UNIFORM GRID */
-        .grid { 
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); gap: 10px;
-            max-width: 1400px; margin: 0 auto;
-        }
+        /* GRID */
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-width: 1400px; margin: 0 auto; }
         @media (min-width: 1000px) { .grid { grid-template-columns: repeat(5, 1fr); gap: 15px; } }
 
         .box {
-            border: 1px solid var(--border);
-            height: 130px;
+            border: 1px solid var(--border); height: 130px;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             background: linear-gradient(145deg, rgba(26, 46, 26, 0.4), rgba(10, 15, 10, 0.6));
-            transition: all 0.2s;
-            text-decoration: none;
+            transition: all 0.2s; position: relative; overflow: hidden;
         }
-        .box:hover { border-color: var(--accent-neon); background: rgba(212, 193, 255, 0.08); }
+        .box:hover { border-color: var(--accent-neon); background: rgba(212, 193, 255, 0.05); }
         
-        .box-num { font-size: 28px; color: var(--accent-neon); letter-spacing: 1px; }
-        .box-label { font-size: 14px; opacity: 0.8; color: var(--accent-neon); text-transform: uppercase; margin-top: 5px; }
+        /* Box 1 Content Styling */
+        .box-meta { position: absolute; top: 5px; left: 8px; font-size: 10px; opacity: 0.5; letter-spacing: 1px; }
+        .box-num { font-size: 32px; color: var(--accent-neon); }
+        .box-label { font-size: 16px; opacity: 0.7; color: var(--accent-neon); text-transform: uppercase; }
 
         /* THE HUD */
         #hud {
-            position: fixed;
-            top: 50%; left: 50%;
+            position: fixed; top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
             width: 94vw; max-width: 1000px;
-            background: rgba(4, 6, 4, 0.98);
-            border: 1px solid var(--accent-neon);
-            padding: 25px; z-index: 1000; display: flex; flex-direction: column;
-            pointer-events: none;
-            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+            background: rgba(4, 6, 4, 0.98); border: 1px solid var(--accent-neon);
+            padding: 20px; z-index: 1000; display: flex; flex-direction: column;
+            pointer-events: none; transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.2);
             box-shadow: 0 0 80px rgba(0,0,0,1);
         }
 
-        .hud-header { font-size: 24px; text-align: center; color: var(--accent-neon); letter-spacing: 1px; }
-        .hud-species { font-size: 14px; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 12px;
-            margin-bottom: 15px; opacity: 0.9; color: var(--accent-neon); }
+        .hud-header { font-size: 24px; text-align: center; margin-bottom: 2px; }
+        .hud-species { font-size: 14px; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 15px; opacity: 0.8; }
         
-        .hud-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .hud-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
         .stat-module {
-            border: 1px solid var(--border);
-            padding: 12px;
-            background: rgba(212, 193, 255, 0.03); text-align: center; 
-            font-size: 14px; color: var(--accent-neon);
-            text-transform: uppercase;
+            border: 1px solid var(--border); padding: 10px;
+            background: rgba(212, 193, 255, 0.02); text-align: center; font-size: 14px;
+        }
+
+        /* HUD Footer - Fills Dead Space */
+        .hud-footer { 
+            margin-top: 15px; padding-top: 10px; border-top: 1px dashed var(--border);
+            display: flex; justify-content: space-between; font-size: 11px; opacity: 0.6;
         }
 
         @media (min-width: 800px) {
@@ -110,15 +97,11 @@
             .hud-species { font-size: 18px; }
         }
 
-        #hud-empty { text-align: center; padding: 60px; font-size: 28px; color: var(--accent-neon); opacity: 0.4; letter-spacing: 5px; }
+        #hud-empty { text-align: center; padding: 60px; font-size: 28px; opacity: 0.2; letter-spacing: 5px; }
 
         /* BEAMS */
-        #beam-svg {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            pointer-events: none; z-index: 900; opacity: 0;
-        }
-        .beam-path { fill: rgba(212, 193, 255, 0.05); stroke: var(--accent-neon); stroke-width: 1; opacity: 0.6; }
+        #beam-svg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 900; opacity: 0; }
+        .beam-path { fill: rgba(212, 193, 255, 0.04); stroke: var(--accent-neon); stroke-width: 0.8; opacity: 0.5; }
     </style>
 </head>
 <body onclick="hideHud()">
@@ -150,12 +133,18 @@
                 <div class="stat-module">$800M+ U.S. DOMESTIC REVENUE</div>
                 <div class="stat-module">$300M+ TAXPAYER INFRASTRUCTURE</div>
             </div>
+            <div class="hud-footer">
+                <span>AGENCY: USDA / APHIS</span>
+                <span>SYSTEM_STATUS: ENCRYPTED</span>
+                <span>REF: ANNUAL_REPORT_2024</span>
+            </div>
         </div>
-        <div id="hud-empty" style="display:none;">DATA STREAM CORRUPTED</div>
+        <div id="hud-empty" style="display:none;">NO DATA RECORDED</div>
     </div>
 
     <div class="grid" id="main-grid">
         <div class="box" onmouseenter="showHud(this, true)" ontouchstart="showHud(this, true)">
+            <div class="box-meta">ID: 001-NHP // ACTIVE</div>
             <div class="box-num">104,801</div>
             <div class="box-label">NHP TESTING</div>
         </div>
@@ -168,15 +157,11 @@
         const projection = document.getElementById('poly-projection');
         let activeBox = null;
 
-        // Populate empty nodes with randomized "system" data to fill deadspace
-        for (let i = 2; i <= 35; i++) {
+        // Restore blank nodes for 2-30
+        for (let i = 2; i <= 30; i++) {
             const b = document.createElement('div');
             b.className = 'box';
-            
-            // Random hex-style ID for filler
-            const randomID = (Math.random() * 0xFFFFFF << 0).toString(16).toUpperCase().padStart(6, '0');
-            
-            b.innerHTML = `<div class="box-num">${randomID}</div><div class="box-label">NODE_${i.toString().padStart(2, '0')}</div>`;
+            b.innerHTML = `<div class="box-num">000,000</div><div class="box-label">NODE ${i}</div>`;
             b.onmouseenter = (e) => showHud(e.currentTarget, false);
             b.ontouchstart = (e) => { e.preventDefault(); showHud(e.currentTarget, false); };
             grid.appendChild(b);
@@ -186,7 +171,6 @@
             if (!activeBox) return;
             const r = activeBox.getBoundingClientRect(); 
             const h = hud.getBoundingClientRect();
-            // 8-point polygon for the beam projection
             const points = `${r.left},${r.top} ${h.left},${h.top} ${h.right},${h.top} ${r.right},${r.top} ${r.right},${r.bottom} ${h.right},${h.bottom} ${h.left},${h.bottom} ${r.left},${r.bottom}`;
             projection.setAttribute('points', points);
             requestAnimationFrame(updateBeams);
