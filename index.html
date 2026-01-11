@@ -120,9 +120,10 @@
             background: var(--panel-bg);
             backdrop-filter: blur(10px);
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            padding: clamp(1.2rem, 3vw, 3.5rem);
+            align-items: center;
+            padding: clamp(1rem, 2.5vw, 3rem);
             transition: all 0.35s ease;
             box-shadow: inset 0 0 30px rgba(199,158,255,0.15);
         }
@@ -137,7 +138,6 @@
         .box:first-child {
             border-color: var(--accent-violet);
             box-shadow: 0 0 70px var(--glow), inset 0 0 50px rgba(199,158,255,0.35);
-            transform: scale(1.04);
         }
 
         .box-content {
@@ -150,22 +150,21 @@
                 0 0 80px var(--glow);
             letter-spacing: clamp(6px, 1.2vw, 24px);
             text-transform: uppercase;
-            line-height: 0.85;
+            line-height: 0.88;
             width: 100%;
         }
 
-        /* ── Only real change: massive fill for the first box text ── */
-        .box:first-child .box-num {
-            font-size: clamp(6.5rem, 14vw, 26rem);
-            line-height: 0.74;
-            margin: -0.18em 0 -0.32em 0;
-            letter-spacing: clamp(8px, 1.8vw, 36px);
+        .box-num {
+            font-size: clamp(6rem, 14vw, 26rem);
+            line-height: 0.8;
+            margin-bottom: -0.12em;
+            white-space: nowrap;
         }
 
-        .box:first-child .box-label {
-            font-size: clamp(4.2rem, 9.5vw, 18rem);
-            letter-spacing: clamp(10px, 2.2vw, 44px);
-            opacity: 0.97;
+        .box-label {
+            font-size: clamp(4.2rem, 10vw, 18rem);
+            letter-spacing: clamp(10px, 2vw, 40px);
+            opacity: 0.96;
         }
 
         .box.empty .box-content {
@@ -174,19 +173,19 @@
             letter-spacing: 4px;
         }
 
-        /* HUD ── only change: much better mobile fit ───────────────────────────── */
+        /* HUD - improved mobile behavior without changing desktop look */
         #hud {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: clamp(340px, 90vw, 1100px);
-            max-width: 94vw;
+            width: clamp(340px, 92vw, 1100px);
+            max-width: 96vw;
             max-height: 92vh;
             overflow-y: auto;
             background: rgba(5, 3, 15, var(--translucent));
             border: 3px solid var(--accent-violet);
-            padding: clamp(1.6rem, 5.5vw, 3.2rem);
+            padding: clamp(1.4rem, 4vw, 2.8rem);
             box-shadow: 0 0 120px rgba(0,0,0,0.95);
             opacity: 0;
             transition: opacity 0.4s ease, transform 0.4s ease;
@@ -197,7 +196,6 @@
 
         #hud.active {
             opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
         }
 
         .hud-header {
@@ -287,9 +285,9 @@
 
         @media (max-width: 700px) {
             #hud {
-                width: 94vw;
-                max-height: 88vh;
-                padding: 2rem 6vw;
+                width: 96vw;
+                max-height: 90vh;
+                padding: 1.6rem 5vw;
                 border-width: 2.5px;
             }
             
