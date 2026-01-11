@@ -8,7 +8,7 @@
         :root {
             --bg-deep: #0a0f0a;
             --accent-neon: #d4c1ff; 
-            --accent-glow: rgba(212, 193, 255, 0.3);
+            --accent-glow: rgba(212, 193, 255, 0.4);
             --border: rgba(212, 193, 255, 0.15);
         }
 
@@ -24,37 +24,20 @@
             min-height: 100vh;
         }
 
-        /* SCANLINE EFFECT */
-        body::before {
-            content: " ";
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
-            background-size: 100% 4px, 3px 100%;
-            pointer-events: none; z-index: 2000;
-        }
-
         #avatar-stamp {
             position: fixed; top: 25px; right: 25px;
             width: 70px; height: 70px;
             border: 1px solid var(--accent-neon);
             background: rgba(0,0,0,0.5);
             z-index: 1100; overflow: hidden; border-radius: 4px;
-            animation: pulse-glow 3s infinite;
         }
-
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 5px var(--accent-glow); }
-            50% { box-shadow: 0 0 20px var(--accent-glow); }
-        }
-
         #avatar-stamp img { width: 100%; height: 100%; object-fit: cover; }
 
         #search-container {
             display: flex; border: 1px solid var(--border);
             padding: 15px; margin-bottom: 30px;
             background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(5px); width: calc(100% - 100px);
+            width: calc(100% - 100px);
         }
 
         #filter-input {
@@ -69,26 +52,22 @@
             position: relative; border: 1px solid var(--border);
             height: 180px; display: flex; flex-direction: column;
             justify-content: center; align-items: center;
-            transition: all 0.3s ease; text-align: center;
-            padding: 15px; background: rgba(26, 36, 24, 0.4);
+            text-align: center; padding: 15px; background: rgba(26, 36, 24, 0.4);
         }
         
-        .box:hover { border-color: var(--accent-neon); background: rgba(212, 193, 255, 0.08); }
         .box-num { font-size: 62px; line-height: 0.8; letter-spacing: -2px; }
         .box-label { font-size: 28px; line-height: 1; margin-top: 12px; opacity: 0.8; }
 
-        /* HIGH TRANSLUCENCY HUD */
         #hud {
             position: fixed; top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
             width: 80vw; max-width: 1000px;
-            background: rgba(10, 15, 10, 0.6); 
-            backdrop-filter: blur(20px);
+            background: rgba(10, 15, 10, 0.95); /* Solid & Sharp */
             border: 1px solid var(--accent-neon);
             padding: 40px; z-index: 1000;
             display: flex; flex-direction: column;
             pointer-events: none; transition: transform 0.2s ease-out;
-            box-shadow: 0 0 100px rgba(0,0,0,1);
+            box-shadow: 0 0 80px rgba(0,0,0,1);
         }
 
         .hud-header { font-size: 32px; margin-bottom: 12px; text-align: center; text-transform: uppercase; }
@@ -107,7 +86,7 @@
         .hud-footer {
             display: flex; justify-content: space-between;
             font-size: 15px; border-top: 1px solid var(--border);
-            padding-top: 20px; letter-spacing: 2px; opacity: 0.8;
+            padding-top: 20px; letter-spacing: 2px;
         }
 
         #beam-svg {
@@ -116,6 +95,9 @@
             pointer-events: none; z-index: 900;
             opacity: 0; transition: opacity 0.2s;
         }
+        
+        /* Light rays connecting corners */
+        .beam-line { fill: rgba(212, 193, 255, 0.08); stroke: rgba(212, 193, 255, 0.15); stroke-width: 1; }
     </style>
 </head>
 <body onclick="hideHud()">
@@ -129,11 +111,7 @@
     </div>
 
     <svg id="beam-svg">
-        <polygon id="poly-top" fill="rgba(212, 193, 255, 0.05)" />
-        <polygon id="poly-bottom" fill="rgba(212, 193, 255, 0.05)" />
-        <polygon id="poly-left" fill="rgba(212, 193, 255, 0.05)" />
-        <polygon id="poly-right" fill="rgba(212, 193, 255, 0.05)" />
-    </svg>
+        <polygon id="p1" class="beam-line" /> <polygon id="p2" class="beam-line" /> <polygon id="p3" class="beam-line" /> <polygon id="p4" class="beam-line" /> </svg>
 
     <div id="hud">
         <div id="h-header" class="hud-header"></div>
@@ -160,9 +138,9 @@
     <script>
         const hud = document.getElementById('hud');
         const beamSvg = document.getElementById('beam-svg');
-        const polys = {
-            top: document.getElementById('poly-top'), bottom: document.getElementById('poly-bottom'),
-            left: document.getElementById('poly-left'), right: document.getElementById('poly-right')
+        const p = {
+            t: document.getElementById('p1'), b: document.getElementById('p2'),
+            l: document.getElementById('p3'), r: document.getElementById('p4')
         };
 
         function showHud(el, e) {
@@ -172,8 +150,7 @@
             const statsContainer = document.getElementById('h-stats');
             statsContainer.innerHTML = '';
             
-            const statsArray = el.getAttribute('data-stats').split(';');
-            statsArray.forEach((stat) => {
+            el.getAttribute('data-stats').split(';').forEach((stat) => {
                 const div = document.createElement('div');
                 div.className = 'stat-module';
                 div.innerHTML = `<span class="stat-text">${stat.trim()}</span>`;
@@ -186,27 +163,20 @@
             const r = el.getBoundingClientRect();
             const h = hud.getBoundingClientRect();
 
-            // FIXED FLARE LOGIC: Smaller at Box (r), Larger at HUD (h)
-            polys.top.setAttribute('points', `${r.left},${r.top} ${r.right},${r.top} ${h.right},${h.top} ${h.left},${h.top}`);
-            polys.bottom.setAttribute('points', `${r.left},${r.bottom} ${r.right},${r.bottom} ${h.right},${h.bottom} ${h.left},${h.bottom}`);
-            polys.left.setAttribute('points', `${r.left},${r.top} ${r.left},${r.bottom} ${h.left},${h.bottom} ${h.left},${h.top}`);
-            polys.right.setAttribute('points', `${r.right},${r.top} ${r.right},${r.bottom} ${h.right},${h.bottom} ${h.right},${h.top}`);
+            // Corner-to-Corner mapping
+            p.t.setAttribute('points', `${r.left},${r.top} ${r.right},${r.top} ${h.right},${h.top} ${h.left},${h.top}`);
+            p.b.setAttribute('points', `${r.left},${r.bottom} ${r.right},${r.bottom} ${h.right},${h.bottom} ${h.left},${h.bottom}`);
+            p.l.setAttribute('points', `${r.left},${r.top} ${r.left},${r.bottom} ${h.left},${h.bottom} ${h.left},${h.top}`);
+            p.r.setAttribute('points', `${r.right},${r.top} ${r.right},${r.bottom} ${h.right},${h.bottom} ${h.right},${h.top}`);
         }
 
-        function hideHud() { 
-            hud.style.transform = "translate(-50%, -50%) scale(0)"; 
-            beamSvg.style.opacity = "0"; 
-        }
-
+        function hideHud() { hud.style.transform = "translate(-50%, -50%) scale(0)"; beamSvg.style.opacity = "0"; }
         window.addEventListener('keydown', (e) => { if(e.key === "Escape") hideHud(); });
-
         function filterGrid() {
             let q = document.getElementById('filter-input').value.toUpperCase();
-            let boxes = document.querySelectorAll('.box');
-            for (let b of boxes) { 
-                const match = b.innerText.toUpperCase().includes(q) || b.getAttribute('data-search').toUpperCase().includes(q);
-                b.style.display = match ? 'flex' : 'none'; 
-            }
+            document.querySelectorAll('.box').forEach(b => {
+                b.style.display = b.innerText.toUpperCase().includes(q) ? 'flex' : 'none';
+            });
         }
     </script>
 </body>
