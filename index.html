@@ -13,8 +13,8 @@
             --accent-violet: #c79eff;
             --accent-violet-dim: #a57eff;
             --glow: rgba(199, 158, 255, 0.38);
-            --border: rgba(199, 158, 255, 0.25);
-            --critical-bg: rgba(199, 158, 255, 0.10);
+            --border: rgba(199, 158, 255, 0.28);
+            --critical-bg: rgba(199, 158, 255, 0.12);
         }
 
         * {
@@ -95,7 +95,7 @@
             box-shadow: 0 0 22px var(--glow);
         }
 
-        /* GRID - 4 columns on large screens */
+        /* GRID - 4 columns */
         .grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -118,7 +118,6 @@
             justify-content: center;
             align-items: center;
             transition: all 0.3s ease;
-            position: relative;
         }
 
         .box:hover,
@@ -151,18 +150,18 @@
         .box.empty .box-num,
         .box.empty .box-label { opacity: 0; }
 
-        /* HUD - dense & full */
+        /* HUD - smaller, ~75% width */
         #hud {
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(0.94);
-            width: 94vw;
-            max-width: 1250px;
+            transform: translate(-50%, -50%) scale(0.95);
+            width: 75vw;
+            max-width: 1100px;
             background: rgba(5, 3, 15, 0.98);
             border: 2px solid var(--accent-violet);
             border-image: linear-gradient(to right, transparent, var(--accent-violet), transparent) 1;
-            padding: 2.2rem;
+            padding: 2rem;
             box-shadow: 0 0 90px rgba(0,0,0,0.95), inset 0 0 60px rgba(199,158,255,0.12);
             opacity: 0;
             pointer-events: none;
@@ -178,11 +177,11 @@
 
         .hud-header {
             font-family: 'Orbitron', sans-serif;
-            font-size: 4.2rem;
+            font-size: 3.8rem;
             text-align: center;
-            margin-bottom: 0.8rem;
-            text-shadow: 0 0 22px var(--glow);
-            letter-spacing: 6px;
+            margin-bottom: 0.6rem;
+            text-shadow: 0 0 20px var(--glow);
+            letter-spacing: 5px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -190,17 +189,18 @@
 
         .hud-species {
             text-align: center;
-            font-size: 2.1rem;
-            opacity: 0.82;
-            margin-bottom: 1.8rem;
+            font-size: 1.9rem;
+            opacity: 0.85;
+            margin-bottom: 1.5rem;
             border-bottom: 1px dashed var(--border);
-            padding-bottom: 1rem;
+            padding-bottom: 0.9rem;
             text-transform: uppercase;
         }
 
         .hud-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(5, auto);
             gap: 1rem;
         }
 
@@ -208,38 +208,39 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 1.6rem 1.8rem;
+            padding: 1.4rem;
             border: 2px solid var(--border);
             background: var(--critical-bg);
             transition: all 0.25s;
             text-align: center;
-            min-height: 110px;
+            min-height: 100px;
         }
 
         .stat-item:hover {
-            transform: scale(1.03);
-            box-shadow: 0 0 24px var(--glow);
+            transform: scale(1.04);
+            box-shadow: 0 0 22px var(--glow);
             border-color: var(--accent-violet-dim);
         }
 
         .stat-text {
             font-family: 'Orbitron', sans-serif;
-            font-size: 2.1rem;
+            font-size: 1.9rem;
             font-weight: 900;
-            text-shadow: 0 0 12px var(--glow);
-            letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--glow);
+            letter-spacing: 1.5px;
             text-transform: uppercase;
-            line-height: 1.15;
+            line-height: 1.1;
         }
 
         .hud-footer {
             display: flex;
             justify-content: space-between;
-            font-size: 1.3rem;
-            opacity: 0.72;
-            margin-top: 2rem;
-            padding-top: 1.2rem;
+            font-size: 1.4rem;
+            opacity: 0.9;
+            margin-top: 1.8rem;
+            padding-top: 1rem;
             border-top: 1px dashed var(--border);
+            color: var(--accent-violet-dim);
         }
 
         /* BEAM */
@@ -263,8 +264,9 @@
         }
 
         @media (max-width: 900px) {
-            .hud-header { font-size: 3.2rem; }
-            .hud-stats { grid-template-columns: 1fr; }
+            #hud { width: 90vw; padding: 1.5rem; }
+            .hud-header { font-size: 2.8rem; }
+            .hud-stats { grid-template-columns: 1fr; grid-template-rows: repeat(10, auto); }
             .box-num { font-size: 2.8rem; }
             .box-label { font-size: 1.6rem; }
         }
@@ -297,7 +299,7 @@
             <div class="stat-item"><div class="stat-text">CLINICAL SELF-HARM 20%</div></div>
             <div class="stat-item"><div class="stat-text">SOCIAL ISOLATION 83%</div></div>
             <div class="stat-item"><div class="stat-text">DISTRESSED PACING 89%</div></div>
-            <div class="stat-item"><div class="stat-text">NO PAIN RELIEF (COLUMN E) 12%</div></div>
+            <div class="stat-item"><div class="stat-text">NO PAIN RELIEF COLUMN E 12%</div></div>
             <div class="stat-item"><div class="stat-text">CAGE SEQUESTRATION 100%</div></div>
             <div class="stat-item"><div class="stat-text">CLASS A BREEDERS CAGED 31,000</div></div>
             <div class="stat-item"><div class="stat-text">CLASS B DEALERS CAGED 13,375</div></div>
@@ -364,7 +366,6 @@
         }
 
         function handleBoxLeave(el) {
-            // Only hide if the currently active box is the one we're leaving
             if (activeBox === el) {
                 activeBox = null;
                 document.querySelectorAll('.box').forEach(b => b.classList.remove('active'));
@@ -374,7 +375,6 @@
         }
 
         function handleMouseLeave(e) {
-            // Fallback: if mouse leaves body entirely (rare), hide
             if (!e.relatedTarget || !document.body.contains(e.relatedTarget)) {
                 if (activeBox) handleBoxLeave(activeBox);
             }
@@ -383,7 +383,6 @@
         window.addEventListener('resize', updateBeam);
         window.addEventListener('scroll', updateBeam);
 
-        // Touch devices fallback (tap outside)
         document.addEventListener('touchstart', (e) => {
             if (!e.target.closest('#hud') && !e.target.closest('.box')) {
                 if (activeBox) handleBoxLeave(activeBox);
