@@ -5,11 +5,9 @@
     <title>WATCHDOGGEM | TERMINAL</title>
     <style>
         :root {
-            /* MOSS GREEN COLOR SCHEME */
             --moss: #2ecc71;
             --forest: #27ae60;
-            --bg: #010a08;
-            --box-fill: rgba(46, 204, 113, 0.05);
+            --bg: #000000;
         }
 
         * { box-sizing: border-box; cursor: crosshair; }
@@ -23,14 +21,13 @@
 
         #search-container {
             display: flex;
-            background: rgba(46, 204, 113, 0.03);
-            border: 2px solid rgba(46, 204, 113, 0.3);
+            border: 2px solid var(--forest);
             padding: 15px;
             margin-bottom: 30px;
         }
         #filter-input {
             background: transparent; border: none; outline: none;
-            color: #fff; font-family: 'Impact', sans-serif;
+            color: var(--moss); font-family: 'Impact', sans-serif;
             font-size: 28px; width: 100%; letter-spacing: 2px;
         }
 
@@ -42,81 +39,71 @@
 
         .box {
             position: relative;
-            background: var(--box-fill);
-            border: 2px solid rgba(46, 204, 113, 0.3);
+            border: 2px solid var(--forest);
             height: 180px;
             display: flex;
             flex-direction: column;
+            justify-content: center;
+            align-items: center;
             transition: all 0.2s;
             text-align: center;
+            padding: 10px;
         }
-        .box:hover { border-color: var(--moss); background: rgba(46, 204, 113, 0.15); }
-        .locked { background: #000; border: 1px solid #0a150f; color: #000; }
+        .box:hover { background: rgba(46, 204, 113, 0.1); }
+        .locked { border: 1px solid #111; }
 
-        .box-top {
-            flex: 1.1; display: flex; justify-content: center; align-items: center;
-            font-size: 50px; border-bottom: 2px solid rgba(46, 204, 113, 0.2);
-            letter-spacing: -1px; color: #fff;
-        }
-        .box-bottom {
-            flex: 0.9; display: flex; justify-content: center; align-items: center;
-            font-size: 19px; line-height: 1.1; padding: 10px; text-transform: uppercase;
-        }
+        .box-text { font-size: 38px; line-height: 1; color: var(--moss); }
 
-        /* THE TRUTH HUD */
         #hud {
             position: fixed;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
-            width: 750px;
+            width: 850px;
             background: #000;
             border: 4px solid var(--forest);
-            padding: 40px;
+            padding: 30px;
             z-index: 1000;
             display: flex;
             flex-direction: column;
-            text-align: center;
             pointer-events: none;
-            transition: transform 0.2s ease-out;
-            box-shadow: 0 0 150px #000;
+            transition: transform 0.15s ease-out;
+            box-shadow: 0 0 100px rgba(46, 204, 113, 0.2);
         }
 
         .hud-header { 
-            font-size: 32px; color: #fff; 
-            margin-bottom: 25px; 
-            border-bottom: 2px solid var(--moss); 
+            font-size: 28px; color: var(--moss); 
+            margin-bottom: 20px; 
+            border-bottom: 2px solid var(--forest); 
             padding-bottom: 10px;
-            line-height: 1;
+            white-space: nowrap;
+            text-align: center;
         }
         
         .hud-stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 10px;
             margin-bottom: 20px;
         }
         .stat-module {
             border: 1px solid var(--forest);
-            padding: 15px;
+            padding: 20px;
             background: rgba(46, 204, 113, 0.05);
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            text-align: center;
         }
-        .stat-text { font-size: 26px; color: var(--moss); white-space: nowrap; }
-
-        .hud-blurb {
-            font-size: 18px; color: #bbb;
-            margin-bottom: 25px; text-align: left;
-            padding: 15px; border-left: 4px solid var(--forest);
-            background: rgba(255,255,255,0.02);
-            line-height: 1.4;
-        }
+        .stat-text { font-size: 24px; color: var(--moss); text-transform: uppercase; }
 
         .hud-footer {
-            font-size: 13px; letter-spacing: 2px;
-            color: #444; border-top: 1px solid #222;
-            padding-top: 15px; text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--forest);
+            border-top: 1px solid var(--forest);
+            padding-top: 15px;
+            letter-spacing: 1px;
         }
 
         #beam-svg {
@@ -130,42 +117,33 @@
 <body>
 
     <div id="search-container">
-        <input type="text" id="filter-input" placeholder="WATCHDOGGEM AUDIT TERMINAL..." onkeyup="filterGrid()">
+        <input type="text" id="filter-input" placeholder="SYSTEM AUDIT..." onkeyup="filterGrid()">
     </div>
 
     <svg id="beam-svg">
-        <defs>
-            <linearGradient id="beamGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" style="stop-color:var(--moss); stop-opacity:0.3" />
-                <stop offset="100%" style="stop-color:var(--moss); stop-opacity:0" />
-            </linearGradient>
-        </defs>
-        <polygon id="poly-top" fill="url(#beamGrad)" /><polygon id="poly-bottom" fill="url(#beamGrad)" />
-        <polygon id="poly-left" fill="url(#beamGrad)" /><polygon id="poly-right" fill="url(#beamGrad)" />
+        <polygon id="poly-top" fill="rgba(46, 204, 113, 0.15)" />
+        <polygon id="poly-bottom" fill="rgba(46, 204, 113, 0.15)" />
+        <polygon id="poly-left" fill="rgba(46, 204, 113, 0.15)" />
+        <polygon id="poly-right" fill="rgba(46, 204, 113, 0.15)" />
     </svg>
 
     <div id="hud">
         <div id="h-header" class="hud-header"></div>
-        
-        <div class="hud-stats-grid" id="h-stats">
-            </div>
-
-        <div id="h-blurb" class="hud-blurb"></div>
-
+        <div class="hud-stats-grid" id="h-stats"></div>
         <div class="hud-footer">
-            FDA REQUIRED &nbsp; | &nbsp; NIH FUNDED &nbsp; | &nbsp; USDA OVERSIGHT
+            <span id="h-source"></span>
+            <span>FDA REQUIRED | NIH FUNDED | USDA OVERSIGHT</span>
         </div>
     </div>
 
     <div class="grid" id="audit-grid">
         <div class="box" 
              data-head="104,801 NON-HUMAN PRIMATES IN RESEARCH EXPERIMENTS"
-             data-stats="100% EUTHANIZED, 20% CLINICAL SELF-HARM, >83% SOCIAL ISOLATION, >51% DISTRESSED PACING"
-             data-blurb="SUBJECTS ARE CONFINED TO STERILE CAGES 24/7. CLINICAL STEREOTYPY (ROCKING/PACING) IS THE PRIMARY MARKER OF PSYCHOLOGICAL COLLAPSE. DATA REVEALS SYSTEMIC FAILURE TO MEET SOCIAL HOUSING DEFAULTS UNDER EXPERIMENTAL EXEMPTIONS."
-             data-search="104801 NHP MONKEYS USDA NIH FDA DEATH PAIN" 
+             data-stats="100% EUTHANIZED, 20% CLINICAL SELF-HARM, 83% SOCIAL ISOLATION, 89% DISTRESSED PACING, RHESUS & CYNOMOLGUS, 24/7 CAGE SEQUESTRATION"
+             data-src="SOURCE: USDA APHIS 2023 / OLAW / JAAWS"
+             data-search="104801 NHP MONKEYS" 
              onmouseenter="showHud(this)" onmouseleave="hideHud()" onclick="this.remove()">
-            <div class="box-top">104,801</div>
-            <div class="box-bottom">NON-HUMAN PRIMATE TESTING</div>
+            <div class="box-text">104,801<br><small style="font-size:16px">PRIMATE TESTING</small></div>
         </div>
     </div>
 
@@ -179,12 +157,11 @@
 
         function showHud(el) {
             if(el.classList.contains('locked')) return;
-            
             document.getElementById('h-header').innerText = el.getAttribute('data-head');
-            document.getElementById('h-blurb').innerText = el.getAttribute('data-blurb');
+            document.getElementById('h-source').innerText = el.getAttribute('data-src');
             
             const statsContainer = document.getElementById('h-stats');
-            statsContainer.innerHTML = ''; // Clear old
+            statsContainer.innerHTML = '';
             const statsArray = el.getAttribute('data-stats').split(',');
             statsArray.forEach(stat => {
                 const div = document.createElement('div');
@@ -209,17 +186,13 @@
         function filterGrid() {
             let q = document.getElementById('filter-input').value.toUpperCase();
             let boxes = document.querySelectorAll('.box:not(.locked)');
-            for (let b of boxes) {
-                let txt = b.getAttribute('data-search') + b.innerText;
-                b.classList.toggle('hidden', !txt.toUpperCase().includes(q));
-            }
+            for (let b of boxes) { b.classList.toggle('hidden', !b.innerText.toUpperCase().includes(q)); }
         }
 
         const grid = document.getElementById('audit-grid');
         for(let i=2; i<=50; i++) {
             const b = document.createElement('div');
             b.className = 'box locked';
-            b.innerHTML = `<div class="box-top">000,000</div><div class="box-bottom">SECTOR LOCKED</div>`;
             grid.appendChild(b);
         }
     </script>
