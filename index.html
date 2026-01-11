@@ -69,17 +69,6 @@ header{
     min-width: 120px;
     max-width: 100%;
 }
-@media (max-width: 600px) {
-    #filter-input {
-        font-size: clamp(1.2rem, 4vw, 1.6rem);
-        padding: clamp(.6rem, 1.5vw, 1rem) clamp(.8rem, 2vw, 1.2rem);
-    }
-
-    .x-link {
-        width: clamp(50px, 10vw, 70px);
-        height: clamp(50px, 10vw, 70px);
-    }
-}
 
 #filter-input {
     width: 100%;
@@ -109,6 +98,33 @@ header{
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+/* CATEGORY FILTER */
+.category-bar{
+    display:flex;
+    justify-content:flex-start;
+    gap:1rem;
+    margin:1rem 0;
+}
+.category-tab{
+    padding:.5rem 1rem;
+    border:2px solid var(--accent-violet);
+    border-radius:6px;
+    cursor:pointer;
+    font-family:'Orbitron',sans-serif;
+    font-weight:900;
+    text-transform:uppercase;
+    text-shadow:0 0 8px var(--glow);
+    transition:.3s;
+    background:var(--panel-bg);
+}
+.category-tab.active{
+    background:var(--accent-violet-dim);
+    color:#05030f;
+}
+.category-tab.inactive{
+    opacity:.4;
 }
 
 /* GRID */
@@ -168,8 +184,6 @@ header{
     opacity:.75;
     margin-top:.2em;
 }
-
-.box.empty .box-content{opacity:.12}
 
 /* HUD */
 #hud{
@@ -238,7 +252,6 @@ header{
     text-transform:uppercase;
 }
 
-/* FOOTNOTES */
 .hud-footer{
     display:flex;
     justify-content:space-between;
@@ -250,15 +263,9 @@ header{
     flex-wrap:wrap;
 }
 
-.hud-footnote-left, .hud-footnote-right {
-    flex:1;
-}
-.hud-footnote-left {
-    text-align:left;
-}
-.hud-footnote-right {
-    text-align:right;
-}
+/* FOOTNOTES LEFT/RIGHT */
+.hud-footer-left{flex:1;text-align:left;}
+.hud-footer-right{flex:1;text-align:right;}
 
 @media (max-width: 600px){
     #hud{
@@ -315,6 +322,11 @@ header{
     </a>
 </header>
 
+<!-- CATEGORY FILTER -->
+<div class="category-bar" id="category-bar">
+    <div class="category-tab active" data-category="animal">Animal</div>
+</div>
+
 <div class="grid" id="grid">
     <!-- Panels will be generated dynamically -->
 </div>
@@ -329,8 +341,8 @@ header{
     <div class="hud-species"></div>
     <div class="hud-stats"></div>
     <div class="hud-footer">
-        <div class="hud-footnote-left"></div>
-        <div class="hud-footnote-right"></div>
+        <div class="hud-footer-left"></div>
+        <div class="hud-footer-right"></div>
     </div>
 </div>
 
@@ -341,8 +353,8 @@ header{
 const panels = [
   {
     id:"104801",
-    title:"NON-HUMAN PRIMATES",
-    subtitle:"IN RESEARCH",
+    title:"PRIMATES IN RESEARCH",
+    subtitle:"CATEGORY: ANIMAL",
     species:["RHESUS MACAQUES","CYNOMOLGUS MACAQUES"],
     stats:[
       {text:"100% FATAL ANESTHETIC OVERDOSE", ref:1},
@@ -352,17 +364,15 @@ const panels = [
       {text:"12% PAIN RELIEF WITHHELD", ref:1},
       {text:"100% CAGE SEQUESTRATION", ref:1},
       {text:"$800M+ U.S. DOMESTIC RESEARCH FUNDING", ref:2},
-      {text:"$300M+ TAXPAYER INFRASTRUCTURE SUPPORT", ref:1}
+      {text:"$300M+ TAXPAYER INFRASTRUCTURE SUPPORT", ref:2}
     ],
-    footnotes:{
-        1:"USDA APHIS 2024",
-        2:"NIH FY2024 Financials"
-    },
-    footer:"FDA REQUIRED • NIH FUNDED • USDA OVERSIGHT"
+    footerLeft:"USDA APHIS 2024",
+    footerRight:"FDA REQUIRED • NIH FUNDED • USDA OVERSIGHT",
+    categories:["animal"]
   },
-  { id:"EMPTY1", empty:true },
-  { id:"EMPTY2", empty:true },
-  { id:"EMPTY3", empty:true }
+  {id:"EMPTY1", empty:true, categories:[]},
+  {id:"EMPTY2", empty:true, categories:[]},
+  {id:"EMPTY3", empty:true, categories:[]}
 ];
 
 // ======================
@@ -370,29 +380,47 @@ const panels = [
 // ======================
 const grid = document.getElementById('grid');
 
-panels.forEach(p=>{
-    const box = document.createElement('div');
-    box.classList.add('box');
-    box.dataset.hasData = (!p.empty).toString();
-    
-    const content = document.createElement('div');
-    content.classList.add('box-content');
-    
-    if(p.empty){
-        box.classList.add('empty');
-        content.textContent = "EMPTY SLOT";
-    } else {
-        content.innerHTML = `<div class="splash-top">${p.id}</div>
-                             <div class="splash-mid">${p.title}</div>
-                             <div class="splash-bottom">${p.subtitle}</div>`;
+function renderGrid(filterCategory=null){
+    grid.innerHTML="";
+    panels.forEach(p=>{
+        if(filterCategory && (!p.categories || !p.categories.includes(filterCategory))) return;
+        const box = document.createElement('div');
+        box.classList.add('box');
+        box.dataset.hasData = (!p.empty).toString();
         
-        box.addEventListener('mouseenter',()=>showHud(box,p));
-        box.addEventListener('mouseleave',()=>handleBoxLeave(box));
-        box.addEventListener('touchstart',()=>showHud(box,p));
-    }
-    
-    box.appendChild(content);
-    grid.appendChild(box);
+        const content = document.createElement('div');
+        content.classList.add('box-content');
+        
+        if(p.empty){
+            box.classList.add('empty');
+            content.textContent = "EMPTY SLOT";
+        } else {
+            content.innerHTML = `<div class="splash-top">${p.id}</div>
+                                 <div class="splash-mid">${p.title}</div>
+                                 <div class="splash-bottom">${p.subtitle}</div>`;
+            
+            box.addEventListener('mouseenter',()=>showHud(box,p));
+            box.addEventListener('mouseleave',()=>handleBoxLeave(box));
+            box.addEventListener('touchstart',()=>showHud(box,p));
+        }
+        box.appendChild(content);
+        grid.appendChild(box);
+    });
+}
+
+renderGrid(); // initial render
+
+// ======================
+// CATEGORY FILTER
+// ======================
+const categoryTabs = document.querySelectorAll('.category-tab');
+categoryTabs.forEach(tab=>{
+    tab.addEventListener('click',()=>{
+        const cat = tab.dataset.category;
+        categoryTabs.forEach(t=>t.classList.remove('active'));
+        tab.classList.add('active');
+        renderGrid(cat);
+    });
 });
 
 // ======================
@@ -402,6 +430,7 @@ document.getElementById('filter-input').addEventListener('input', e=>{
     const val = e.target.value.toLowerCase();
     document.querySelectorAll('.box').forEach((box,i)=>{
         const p = panels[i];
+        if(!p) return;
         let text = "";
         if(!p.empty) text = (p.id+" "+p.title+" "+p.subtitle).toLowerCase();
         box.style.display = text.includes(val) ? "flex" : "none";
@@ -438,7 +467,6 @@ function showHud(el,panel){
     
     hud.classList.add('active');
     
-    // FIXED HUD HEADER
     hud.querySelector('.hud-header').textContent = "PRIMATES IN RESEARCH";
     hud.querySelector('.hud-species').textContent = panel.species.join(" | ");
     
@@ -451,15 +479,8 @@ function showHud(el,panel){
         statsDiv.appendChild(stat);
     });
     
-    // FOOTNOTES LEFT + RIGHT
-    const left = hud.querySelector('.hud-footnote-left');
-    const right = hud.querySelector('.hud-footnote-right');
-    
-    left.innerHTML = panel.footnotes ? Object.entries(panel.footnotes)
-        .filter(([k,v])=>k==1)
-        .map(([k,v])=>`<sup>${k}</sup> ${v}`).join("<br>") : "";
-    
-    right.textContent = panel.footer || "";
+    hud.querySelector('.hud-footer-left').textContent = panel.footerLeft;
+    hud.querySelector('.hud-footer-right').textContent = panel.footerRight;
     
     beamSvg.style.opacity='1';
     updateBeam();
