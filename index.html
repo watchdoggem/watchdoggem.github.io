@@ -5,19 +5,23 @@
     <title>WATCHDOGGEM | TERMINAL</title>
     <style>
         :root {
-            --bg: #2a3b25; /* Dark Moss Green */
-            --accent-purple: #b4a0d1; /* Muted Purple */
-            --border: rgba(180, 160, 209, 0.4);
-            --hud-bg: #1e2b1b;
+            /* HIGH-TECH COLOR PALETTE */
+            --bg-deep: #0a0f0a;
+            --surface: #162115;
+            --accent-neon: #d4c1ff; /* Electric Muted Lavender */
+            --accent-glow: rgba(212, 193, 255, 0.4);
+            --moss-dark: #2a3b25;
+            --border: rgba(212, 193, 255, 0.15);
         }
 
         * { box-sizing: border-box; cursor: crosshair; }
         
         body { 
-            background: var(--bg); 
+            background: var(--bg-deep); 
+            background-image: radial-gradient(circle at center, #1a2418 0%, #0a0f0a 100%);
             margin: 0; padding: 20px; 
             font-family: 'Impact', sans-serif; 
-            color: var(--accent-purple);
+            color: var(--accent-neon);
             overflow-x: hidden;
         }
 
@@ -26,19 +30,22 @@
             border: 1px solid var(--border);
             padding: 15px;
             margin-bottom: 30px;
-            background: rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
         }
 
         #filter-input {
             background: transparent; border: none; outline: none;
-            color: var(--accent-purple); font-family: 'Impact', sans-serif;
-            font-size: 24px; width: 100%; letter-spacing: 1px;
+            color: var(--accent-neon); font-family: 'Impact', sans-serif;
+            font-size: 24px; width: 100%; letter-spacing: 2px;
+            text-shadow: 0 0 8px var(--accent-glow);
         }
 
         .grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
+            gap: 20px;
         }
 
         .box {
@@ -49,103 +56,118 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: all 0.1s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-align: center;
             padding: 15px;
+            background: rgba(26, 36, 24, 0.4);
+        }
+        
+        .box:hover { 
+            border-color: var(--accent-neon); 
+            background: rgba(212, 193, 255, 0.05);
+            box-shadow: 0 0 20px rgba(212, 193, 255, 0.1);
+            transform: translateY(-2px);
         }
 
         .box-num { font-size: 62px; line-height: 0.8; letter-spacing: -2px; }
-        .box-label { font-size: 28px; line-height: 1; margin-top: 12px; }
+        .box-label { font-size: 28px; line-height: 1; margin-top: 12px; opacity: 0.8; }
 
+        /* REFINED HUD: Translucent & Professional */
         #hud {
             position: fixed;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
-            width: 950px; 
-            background: var(--hud-bg);
-            border: 2px solid var(--accent-purple);
-            padding: 35px;
+            width: 80vw; /* Smaller overall screen footprint */
+            max-width: 1000px;
+            background: rgba(10, 15, 10, 0.85); /* TRANSLUCENT */
+            backdrop-filter: blur(12px); /* FROSTED GLASS EFFECT */
+            border: 1px solid var(--accent-neon);
+            padding: 40px;
             z-index: 1000;
             display: flex;
             flex-direction: column;
             pointer-events: none;
-            transition: transform 0.1s ease-out;
+            transition: transform 0.2s ease-out, opacity 0.2s;
+            box-shadow: 0 0 60px rgba(0,0,0,0.8), inset 0 0 20px rgba(212, 193, 255, 0.05);
         }
 
-        /* Title: No wrapping */
         .hud-header { 
-            font-size: 30px; 
-            margin-bottom: 10px; 
+            font-size: 32px; 
+            margin-bottom: 12px; 
             text-align: center; 
             text-transform: uppercase;
-            white-space: nowrap; 
+            white-space: nowrap;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px var(--accent-glow);
         }
         
-        /* Subjects: Increased size, slightly smaller than title */
         .hud-species {
-            font-size: 24px; 
-            margin-bottom: 25px; 
-            letter-spacing: 1px;
+            font-size: 20px; 
+            margin-bottom: 30px; 
+            letter-spacing: 2px;
             text-align: center; 
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 15px;
-            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+            opacity: 0.9;
         }
         
         .hud-stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 25px;
+            gap: 12px;
+            margin-bottom: 30px;
         }
 
         .stat-module {
             border: 1px solid var(--border);
             padding: 20px;
-            background: rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 0.03);
             display: flex;
             justify-content: center;
             align-items: center;
             text-align: center;
-            min-height: 70px;
+            min-height: 85px;
+            transition: border 0.3s;
         }
 
         .stat-text { 
             font-size: 22px; 
             text-transform: uppercase; 
-            line-height: 1;
+            line-height: 1.1;
             word-wrap: break-word;
+            color: var(--accent-neon);
         }
 
         .hud-footer {
             display: flex;
             justify-content: space-between;
-            font-size: 14px;
+            font-size: 13px;
             border-top: 1px solid var(--border);
-            padding-top: 15px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            padding-top: 20px;
+            letter-spacing: 2px;
+            opacity: 0.6;
         }
 
+        /* SVG BEAM: Softened for the Splash effect */
         #beam-svg {
             position: fixed; top: 0; left: 0;
             width: 100vw; height: 100vh;
             pointer-events: none; z-index: 900;
-            opacity: 0;
+            opacity: 0; transition: opacity 0.2s;
         }
     </style>
 </head>
 <body>
 
     <div id="search-container">
-        <input type="text" id="filter-input" placeholder="WATCHDOGGEM SECURE AUDIT..." onkeyup="filterGrid()">
+        <input type="text" id="filter-input" placeholder="WATCHDOGGEM // SECURE_AUDIT_LOG" onkeyup="filterGrid()">
     </div>
 
     <svg id="beam-svg">
-        <polygon id="poly-top" fill="rgba(180, 160, 209, 0.1)" />
-        <polygon id="poly-bottom" fill="rgba(180, 160, 209, 0.1)" />
-        <polygon id="poly-left" fill="rgba(180, 160, 209, 0.1)" />
-        <polygon id="poly-right" fill="rgba(180, 160, 209, 0.1)" />
+        <polygon id="poly-top" fill="rgba(212, 193, 255, 0.03)" />
+        <polygon id="poly-bottom" fill="rgba(212, 193, 255, 0.03)" />
+        <polygon id="poly-left" fill="rgba(212, 193, 255, 0.03)" />
+        <polygon id="poly-right" fill="rgba(212, 193, 255, 0.03)" />
     </svg>
 
     <div id="hud">
@@ -154,14 +176,14 @@
         <div id="h-stats" class="hud-stats-grid"></div>
         <div class="hud-footer">
             <span id="h-source"></span>
-            <span>FDA REQUIRED | NIH FUNDED | USDA OVERSIGHT</span>
+            <span>FDA_REQ | NIH_FUND | USDA_OVERSIGHT</span>
         </div>
     </div>
 
     <div class="grid" id="audit-grid">
         <div class="box" 
-             data-head="104,801 NON-HUMAN PRIMATES IN RESEARCH EXPERIMENTS"
-             data-stats="100% FATAL ANESTHETIC OVERDOSE; 20% CLINICAL SELF-HARM; 83% SOCIAL ISOLATION; 89% DISTRESSED PACING; 12% NO PAIN RELIEF (COLUMN E); 100% CAGE SEQUESTRATION; 31,000 CAGED MONKEYS BY CLASS A BREEDERS; 13,375 CAGED MONKEYS BY CLASS B DEALERS; $800M+ U.S. DOMESTIC REVENUE; $300M+ TAXPAYER INFRASTRUCTURE"
+             data-head="104,801 NON-HUMAN PRIMATES IN RESEARCH"
+             data-stats="100% FATAL ANESTHETIC OVERDOSE; 20% CLINICAL SELF-HARM; 83% SOCIAL ISOLATION; 89% DISTRESSED PACING; 12% NO PAIN RELIEF (COLUMN E); 100% CAGE SEQUESTRATION; 31,000 CAGED BY CLASS A BREEDERS; 13,375 CAGED BY CLASS B DEALERS; $800M+ U.S. DOMESTIC REVENUE; $300M+ TAXPAYER INFRASTRUCTURE"
              data-src="SOURCE: USDA APHIS 2024"
              data-search="104801 NHP MONKEYS" 
              onmouseenter="showHud(this)" onmouseleave="hideHud()">
