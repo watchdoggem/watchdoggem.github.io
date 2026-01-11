@@ -21,8 +21,8 @@
     --design-width:1600px;
 }
 
+/* GLOBAL RESET */
 *{margin:0;padding:0;box-sizing:border-box;cursor:crosshair}
-
 body{
     background:var(--bg);
     background-image:
@@ -44,6 +44,7 @@ body{
     padding:clamp(.8rem,1vw,1.6rem);
 }
 
+/* HEADER */
 header{
     display:flex;
     flex-wrap:wrap;
@@ -78,15 +79,14 @@ header{
     font-size: clamp(.9rem,2.5vw,1.6rem);
     outline: none;
 }
-
 #filter-input::placeholder {
     color: rgba(199,158,255,.55);
 }
 
 .x-link {
     flex: 0 0 auto;
-    width: clamp(50px, 8vw, 70px);
-    height: clamp(50px, 8vw, 70px);
+    width: clamp(40px, 6vw, 70px);
+    height: clamp(40px, 6vw, 70px);
     overflow: hidden;
     border-radius: 6px;
     border: 2px solid var(--accent-violet);
@@ -94,16 +94,16 @@ header{
     justify-content: center;
     align-items: center;
 }
-
-.x-link img{
+.x-avatar {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
+/* GRID */
 .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(180px,1fr));
+    grid-template-columns:repeat(auto-fit, minmax(250px,1fr));
     gap:clamp(.55rem,.57vw,1.1rem);
 }
 
@@ -116,11 +116,10 @@ header{
     display:flex;
     justify-content:center;
     align-items:center;
-    padding:clamp(.8rem,1.2vw,1.8rem);
+    padding:clamp(1rem,2vw,3rem);
     transition:.3s;
     box-shadow:inset 0 0 20px rgba(199,158,255,.08);
 }
-
 .box:hover,.box.active{
     border-color:var(--accent-violet);
     box-shadow:0 0 32px var(--glow), inset 0 0 24px rgba(199,158,255,.15);
@@ -136,29 +135,25 @@ header{
     text-transform:uppercase;
     width:100%;
 }
-
 .box[data-has-data="true"] .box-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
 }
 
 .splash-top {
-    font-size: clamp(2rem,4vw,4rem);
-    line-height:1.1;
+    font-size: clamp(2rem, 5vw, 4rem);
+    line-height: 1;
 }
-
 .splash-mid {
-    font-size: clamp(1rem,2.2vw,2rem);
+    font-size: clamp(1rem, 3vw, 2rem);
     opacity:.85;
     margin-top:.35em;
 }
-
 .splash-bottom {
-    font-size: clamp(.9rem,1.8vw,1.6rem);
-    letter-spacing:.18em;
+    font-size: clamp(.9rem, 2.5vw, 1.8rem);
+    letter-spacing:.15em;
     opacity:.75;
     margin-top:.2em;
 }
@@ -171,8 +166,8 @@ header{
     top:50%;
     left:50%;
     transform:translate(-50%,-50%);
-    width:clamp(400px,55vw,900px);
-    max-height:85vh;
+    width:clamp(400px,55vw,1000px);
+    max-height:80vh;
     overflow-y:auto;
     background:rgba(5,3,15,var(--translucent));
     border:2px solid var(--accent-violet);
@@ -187,11 +182,11 @@ header{
     flex-direction:column;
 }
 
-#hud.active{opacity:1; pointer-events:auto;}
+#hud.active{opacity:1}
 
 .hud-header{
     font-family:'Orbitron',sans-serif;
-    font-size:clamp(1.6rem,1.67vw,3.2rem);
+    font-size:clamp(1.4rem,1.6vw,2.8rem);
     text-align:center;
     margin-bottom:.3rem;
     text-shadow:0 0 18px var(--glow);
@@ -199,7 +194,7 @@ header{
 
 .hud-species{
     text-align:center;
-    font-size:clamp(.85rem,.89vw,1.7rem);
+    font-size:clamp(.8rem,.9vw,1.6rem);
     opacity:.88;
     margin-bottom:.9rem;
     border-bottom:1px dashed var(--border);
@@ -216,18 +211,17 @@ header{
     display:flex;
     justify-content:center;
     align-items:center;
-    padding:clamp(.6rem,.63vw,1.2rem);
+    padding:clamp(.5rem,.55vw,1rem);
     border:2px solid var(--border);
     background:var(--panel-bg);
     text-align:center;
-    min-height:clamp(45px,4.7vw,90px);
+    min-height:clamp(40px,4vw,80px);
     border-radius:8px;
-    font-size:clamp(.75rem,.85vw,1.2rem);
 }
 
 .stat-text{
     font-family:'Orbitron',sans-serif;
-    font-size:clamp(.88rem,.91vw,1.5rem);
+    font-size:clamp(.75rem,.8vw,1.5rem);
     font-weight:900;
     text-shadow:0 0 10px var(--glow);
     text-transform:uppercase;
@@ -244,23 +238,20 @@ header{
     flex-wrap:wrap;
 }
 
-/* MOBILE HUD FIX */
-@media (max-width:768px){
+/* MOBILE FIXES */
+@media(max-width:600px){
+    .grid{
+        grid-template-columns:repeat(4,1fr); /* force 4 columns on mobile */
+        gap:clamp(.4rem,.5vw,.8rem);
+    }
     #hud{
-        inset:auto 5vw auto 5vw;
         width:90vw;
         max-height:50vh;
-        transform:none;
-        overflow-y:auto;
-        -webkit-overflow-scrolling:touch;
+        transform:translate(-50%, -50%);
+        padding:clamp(.6rem,.8vw,1.2rem);
     }
-    .hud-stats{grid-template-columns:2fr 2fr;}
-}
-
-/* MOBILE SPLASH */
-@media (max-width:768px){
-    .grid{grid-template-columns:repeat(2,1fr);}
-    .search-bar input, .x-link{height:50px; font-size:1.2rem;}
+    .hud-stats{grid-template-columns:1fr 1fr;}
+    .stat-item{font-size:clamp(.65rem,.7vw,1.1rem);}
 }
 
 /* BEAM */
@@ -293,11 +284,11 @@ header{
         <input type="text" id="filter-input" placeholder="SEARCH / FILTER..." autocomplete="off">
     </div>
     <a href="https://x.com/watchdoggem" target="_blank" class="x-link">
-        <img src="https://unavatar.io/x/watchdoggem" alt="X">
+        <img src="https://unavatar.io/x/watchdoggem" alt="X" class="x-avatar">
     </a>
 </header>
 
-<div class="grid" id="grid-container">
+<div class="grid" id="grid">
     <div class="box" data-has-data="true"
         onmouseenter="showHud(this)"
         onmouseleave="handleBoxLeave(this)"
@@ -309,7 +300,9 @@ header{
         </div>
     </div>
 
-    <div class="box empty"><div class="box-content">EMPTY SLOT</div></div>
+    <div class="box empty" onmouseenter="showHud(this,false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this,false)">
+        <div class="box-content">EMPTY SLOT</div>
+    </div>
     <div class="box empty"><div class="box-content">EMPTY SLOT</div></div>
     <div class="box empty"><div class="box-content">EMPTY SLOT</div></div>
 </div>
@@ -344,8 +337,19 @@ header{
 const hud=document.getElementById('hud');
 const beamSvg=document.getElementById('beam-svg');
 const beamPoly=document.getElementById('beam-poly');
+const grid=document.getElementById('grid');
 let activeBox=null,leaveTimeout=null;
 
+/* SEARCH FILTER */
+document.getElementById('filter-input').addEventListener('input', e=>{
+    const val = e.target.value.toLowerCase();
+    document.querySelectorAll('.box').forEach(box=>{
+        const text = box.textContent.toLowerCase();
+        box.style.display = text.includes(val)?'flex':'none';
+    });
+});
+
+/* HUD + BEAM */
 function updateBeam(){
     if(!activeBox) return;
     const b=activeBox.getBoundingClientRect();
@@ -393,23 +397,6 @@ document.addEventListener('touchstart',e=>{
     if(!e.target.closest('#hud')&&!e.target.closest('.box')){
         if(activeBox) handleBoxLeave(activeBox);
     }
-});
-
-// SEARCH BAR FILTER
-const filterInput = document.getElementById('filter-input');
-const gridContainer = document.getElementById('grid-container');
-
-filterInput.addEventListener('input', ()=>{
-    const term = filterInput.value.toLowerCase();
-    const boxes = gridContainer.querySelectorAll('.box');
-    boxes.forEach(box=>{
-        const text = box.textContent.toLowerCase();
-        if(text.includes(term)){
-            box.style.display='flex';
-        } else {
-            box.style.display='none';
-        }
-    });
 });
 </script>
 </body>
