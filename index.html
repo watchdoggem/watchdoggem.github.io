@@ -28,6 +28,22 @@
             overflow-x: hidden;
         }
 
+        /* TWITTER LINK - UPPER RIGHT */
+        .social-link {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+            color: var(--accent-neon);
+            text-decoration: none;
+            border: 1px solid var(--border);
+            padding: 10px 15px;
+            background: rgba(0,0,0,0.5);
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+        .social-link:hover { border-color: var(--accent-neon); }
+
         #search-container {
             display: flex;
             border: 1px solid var(--border);
@@ -44,7 +60,6 @@
             font-size: 24px; width: 100%; letter-spacing: 3px;
         }
 
-        .grid { display: block; }
         .box {
             border: 1px solid var(--border);
             height: 180px; width: 250px;
@@ -63,8 +78,8 @@
             top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
             width: 85vw; max-width: 1100px;
-            /* HUD OPACITY FIXED TO SOLID */
-            background: rgb(5, 8, 5); 
+            /* UPDATED: 85% OPAQUE */
+            background: rgba(5, 8, 5, 0.85);
             border: 1px solid var(--accent-neon);
             padding: 40px; z-index: 1000;
             display: flex; flex-direction: column;
@@ -76,22 +91,20 @@
         .hud-header { font-size: 42px; text-align: center; margin-bottom: 10px; }
         .hud-species { font-size: 22px; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 30px; }
         
-        .hud-stats-grid { 
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 12px; margin-bottom: 30px; 
-        }
-
+        .hud-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 30px; }
         .stat-module {
             border: 1px solid var(--border);
             padding: 18px;
-            background: rgba(212, 193, 255, 0.02);
+            /* FIXED: SOLID PURPLE TEXT */
+            background: rgba(212, 193, 255, 0.05);
             text-align: center; font-size: 24px; text-transform: uppercase;
+            color: var(--accent-neon);
         }
 
         .hud-footer {
             display: flex; justify-content: space-between;
-            font-size: 18px; border-top: 1px solid var(--border);
+            /* FIXED: BIGGER LEGIBLE FOOTNOTES */
+            font-size: 22px; border-top: 1px solid var(--border);
             padding-top: 20px; font-weight: bold;
         }
 
@@ -102,13 +115,15 @@
             opacity: 0;
         }
         .beam-path { 
-            fill: rgba(212, 193, 255, 0.05);
-            stroke: rgba(212, 193, 255, 0.2); 
+            fill: rgba(212, 193, 255, 0.08);
+            stroke: var(--accent-neon); 
             stroke-width: 1; 
         }
     </style>
 </head>
 <body onclick="hideHud()">
+
+    <a href="https://x.com/watchdoggem/" target="_blank" class="social-link" onclick="event.stopPropagation()">X / @WATCHDOGGEM</a>
 
     <div id="search-container">
         <input type="text" id="filter-input" placeholder="SEARCH / FILTER AUDIT LOG">
@@ -160,19 +175,9 @@
             
             const r = el.getBoundingClientRect(); 
             const h = hud.getBoundingClientRect();
-
-            // BEAM MATH FIXED: Connects 4 corners of box to 4 corners of HUD
-            const points = [
-                `${r.left},${r.top}`,       // Box TL
-                `${h.left},${h.top}`,       // HUD TL
-                `${h.right},${h.top}`,      // HUD TR
-                `${r.right},${r.top}`,      // Box TR
-                `${r.right},${r.bottom}`,   // Box BR
-                `${h.right},${h.bottom}`,   // HUD BR
-                `${h.left},${h.bottom}`,    // HUD BL
-                `${r.left},${r.bottom}`     // Box BL
-            ].join(' ');
-
+            
+            // Simplified Beam Math
+            const points = `${r.left},${r.top} ${h.left},${h.top} ${h.right},${h.top} ${r.right},${r.top} ${r.right},${r.bottom} ${h.right},${h.bottom} ${h.left},${h.bottom} ${r.left},${r.bottom}`;
             projection.setAttribute('points', points);
         }
 
