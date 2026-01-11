@@ -6,35 +6,24 @@
     <title>WATCHDOGGEM | NHP TERMINAL</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #05030f;
-            --accent-violet: #c79eff;
-            --accent-violet-dim: #a57eff;
-            --glow: rgba(199, 158, 255, 0.42);
-            --border: rgba(199, 158, 255, 0.32);
-            --panel-bg: rgba(199, 158, 255, 0.09);
-            --translucent: 0.85;
+            --accent: #c79eff;
+            --glow: rgba(199, 158, 255, 0.45);
+            --border: rgba(199, 158, 255, 0.35);
+            --panel: rgba(199, 158, 255, 0.10);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            cursor: crosshair;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; cursor:crosshair; }
 
         body {
             background: var(--bg);
-            background-image: 
-                radial-gradient(circle at 30% 20%, rgba(199,158,255,0.08) 0%, transparent 50%),
-                radial-gradient(circle at 70% 80%, rgba(167,126,255,0.06) 0%, transparent 60%);
-            color: var(--accent-violet);
-            font-family: 'VT323', monospace;
-            font-size: 22px;
+            color: var(--accent);
+            font-family: 'Orbitron', sans-serif;
             min-height: 100vh;
-            padding: 1.6rem;
+            padding: 1.5rem;
             overflow-x: hidden;
         }
 
@@ -43,249 +32,208 @@
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            gap: 1.4rem;
-            margin-bottom: 1.8rem;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 1rem;
+            gap: 1.2rem;
+            margin-bottom: 1.5rem;
         }
 
         .title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3.4rem;
+            font-size: 3.2rem;
             font-weight: 900;
-            letter-spacing: 7px;
+            letter-spacing: 6px;
             text-shadow: 0 0 16px var(--glow);
-            text-align: center;
         }
 
-        .search-bar {
-            flex: 1;
-            min-width: 260px;
-            max-width: 520px;
-        }
-
+        .search-bar { flex:1; max-width:480px; }
         #filter-input {
-            width: 100%;
-            padding: 0.85rem 1.2rem;
-            background: rgba(0,0,0,0.6);
-            border: 1px solid var(--border);
-            color: var(--accent-violet);
-            font-size: 1.6rem;
-            outline: none;
-            transition: all 0.25s;
+            width:100%;
+            padding:0.8rem;
+            background:rgba(0,0,0,0.6);
+            border:1px solid var(--border);
+            color:var(--accent);
+            font-size:1.5rem;
+            outline:none;
         }
-
-        #filter-input:focus {
-            border-color: var(--accent-violet);
-            box-shadow: 0 0 12px var(--glow);
-        }
+        #filter-input:focus { box-shadow:0 0 12px var(--glow); }
 
         .x-link {
-            width: 58px;
-            height: 58px;
-            border: 2px solid var(--accent-violet);
-            border-radius: 6px;
-            overflow: hidden;
-            transition: all 0.3s;
+            width:56px; height:56px;
+            border:2px solid var(--accent);
+            border-radius:6px;
+            overflow:hidden;
+            transition:0.3s;
         }
+        .x-link:hover { transform:scale(1.08); box-shadow:0 0 20px var(--glow); }
 
-        .x-link:hover {
-            transform: scale(1.08);
-            box-shadow: 0 0 20px var(--glow);
-        }
-
-        /* GRID BOXES - now full bubbly like HUD panels */
+        /* GRID */
         .grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 1.1rem;
-            max-width: 1600px;
-            margin: 0 auto;
+            gap:1rem;
+            max-width:1400px;
+            margin:0 auto;
         }
 
-        @media (max-width: 1200px) { .grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (max-width: 900px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 600px)  { .grid { grid-template-columns: 1fr; } }
+        @media (max-width:1100px) { .grid { grid-template-columns:repeat(3,1fr); } }
+        @media (max-width:800px)  { .grid { grid-template-columns:repeat(2,1fr); } }
+        @media (max-width:500px)  { .grid { grid-template-columns:1fr; } }
 
         .box {
-            aspect-ratio: 1 / 1;
-            border: 2px solid var(--border);
-            border-radius: 12px; /* bubbly rounded */
-            background: var(--panel-bg);
-            backdrop-filter: blur(8px);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 1.2rem;
-            transition: all 0.3s ease;
-            box-shadow: inset 0 0 20px rgba(199,158,255,0.08);
+            aspect-ratio: 1/1;
+            border:2px solid var(--border);
+            background:var(--panel);
+            border-radius:10px;
+            overflow:hidden;
+            transition:0.3s;
+            display:flex;
+            flex-direction:column;
         }
 
         .box:hover,
         .box.active {
-            border-color: var(--accent-violet);
-            box-shadow: 0 0 32px var(--glow), inset 0 0 24px rgba(199,158,255,0.15);
-            transform: translateY(-6px) scale(1.02);
+            border-color:var(--accent);
+            box-shadow:0 0 30px var(--glow);
+            transform:translateY(-5px);
         }
 
-        .box-content {
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            text-align: center;
-            text-shadow: 0 0 14px var(--glow);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            line-height: 1.05;
-            width: 100%;
+        .box-stack {
+            flex:1;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            text-align:center;
+            padding:0.8rem;
+            font-weight:900;
+            text-shadow:0 0 14px var(--glow);
+            letter-spacing:1px;
+            text-transform:uppercase;
+            font-size: clamp(1.8rem, 5vw, 3.6rem);
         }
 
-        .box-num {
-            font-size: 2.8rem;
-        }
+        .box-num   { background:rgba(0,0,0,0.15); border-bottom:1px solid var(--border); }
+        .box-label { background:rgba(0,0,0,0.08); }
 
-        .box-label {
-            font-size: 2.8rem;
-            margin-top: 0.3rem;
-            opacity: 0.92;
-        }
-
-        .box.empty .box-content { opacity: 0.12; } /* faint for empty */
-
-        /* HUD - smaller, translucent */
+        /* HUD - MUCH SMALLER */
         #hud {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.96);
-            width: 68vw;
-            max-width: 980px;
-            background: rgba(5, 3, 15, var(--translucent));
-            border: 2px solid var(--accent-violet);
-            border-image: linear-gradient(to right, transparent, var(--accent-violet), transparent) 1;
-            padding: 1.8rem;
-            box-shadow: 0 0 80px rgba(0,0,0,0.9);
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.35);
-            z-index: 1000;
-            border-radius: 8px;
+            position:fixed;
+            top:50%; left:50%;
+            transform:translate(-50%,-50%) scale(0.95);
+            width:55vw;
+            max-width:800px;
+            background:rgba(5,3,15,0.82);
+            border:2px solid var(--accent);
+            border-radius:8px;
+            padding:1.5rem;
+            box-shadow:0 0 70px rgba(0,0,0,0.9);
+            opacity:0;
+            pointer-events:none;
+            transition:all 0.35s;
+            z-index:1000;
         }
 
         #hud.active {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
-            pointer-events: auto;
+            opacity:1;
+            pointer-events:auto;
+            transform:translate(-50%,-50%) scale(1);
         }
 
         .hud-header {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3.4rem;
-            text-align: center;
-            margin-bottom: 0.5rem;
-            text-shadow: 0 0 18px var(--glow);
-            letter-spacing: 4px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            text-align:center;
+            margin-bottom:0.4rem;
+            text-shadow:0 0 16px var(--glow);
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
         }
 
         .hud-species {
-            text-align: center;
-            font-size: 1.7rem;
-            opacity: 0.88;
-            margin-bottom: 1.4rem;
-            border-bottom: 1px dashed var(--border);
-            padding-bottom: 0.8rem;
-            text-transform: uppercase;
+            text-align:center;
+            font-size:1.4rem;
+            opacity:0.9;
+            margin-bottom:1.2rem;
+            border-bottom:1px dashed var(--border);
+            padding-bottom:0.7rem;
+            white-space:nowrap;
         }
 
         .hud-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(5, auto);
-            gap: 0.9rem;
+            display:grid;
+            grid-template-columns:repeat(2,1fr);
+            gap:0.8rem;
         }
 
         .stat-item {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 1.3rem;
-            border: 2px solid var(--border);
-            background: var(--panel-bg);
-            text-align: center;
-            min-height: 95px;
-            border-radius: 8px;
-        }
-
-        .stat-item:hover {
-            box-shadow: 0 0 20px var(--glow);
-            border-color: var(--accent-violet-dim);
+            padding:1.1rem;
+            border:1px solid var(--border);
+            background:rgba(199,158,255,0.08);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            text-align:center;
+            min-height:80px;
+            border-radius:6px;
         }
 
         .stat-text {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 900;
-            text-shadow: 0 0 10px var(--glow);
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-            line-height: 1.1;
+            font-size: clamp(1.3rem, 2.5vw, 2.1rem);
+            font-weight:900;
+            text-shadow:0 0 8px var(--glow);
+            text-transform:uppercase;
+            line-height:1.1;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            width:100%;
         }
 
         .hud-footer {
-            display: flex;
-            justify-content: space-between;
-            font-size: 1.35rem;
-            opacity: 0.92;
-            margin-top: 1.6rem;
-            padding-top: 1rem;
-            border-top: 1px dashed var(--border);
+            display:flex;
+            justify-content:space-between;
+            font-size:1.1rem;
+            opacity:0.9;
+            margin-top:1.4rem;
+            padding-top:0.9rem;
+            border-top:1px dashed var(--border);
         }
 
-        /* BEAM */
+        /* Beam */
         #beam-svg {
-            position: fixed;
-            inset: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 900;
-            opacity: 0;
-            transition: opacity 0.6s;
+            position:fixed;
+            inset:0;
+            width:100vw;
+            height:100vh;
+            pointer-events:none;
+            z-index:900;
+            opacity:0;
+            transition:opacity 0.5s;
         }
-
         .beam {
-            fill: none;
-            stroke: var(--accent-violet);
-            stroke-width: 1.5;
-            opacity: 0.3;
-            filter: drop-shadow(0 0 10px var(--glow));
+            fill:none;
+            stroke:var(--accent);
+            stroke-width:1.4;
+            opacity:0.28;
         }
 
-        @media (max-width: 900px) {
-            #hud { width: 88vw; padding: 1.4rem; }
-            .hud-header { font-size: 2.6rem; }
-            .hud-stats { grid-template-columns: 1fr; }
+        @media (max-width:900px) {
+            #hud { width:82vw; padding:1.2rem; }
+            .hud-header { font-size:2.4rem; }
+            .hud-stats { grid-template-columns:1fr; }
         }
     </style>
 </head>
-<body onmouseleave="handleMouseLeave(event)">
+<body>
 
     <header>
         <div class="title">WATCHDOGGEM</div>
         <div class="search-bar">
-            <input type="text" id="filter-input" placeholder="QUERY NHP DATABASE..." autocomplete="off">
+            <input type="text" id="filter-input" placeholder="QUERY NHP DATABASE...">
         </div>
         <a href="https://x.com/watchdoggem" target="_blank" class="x-link">
             <img src="https://unavatar.io/x/watchdoggem" alt="X">
         </a>
     </header>
 
-    <svg id="beam-svg">
-        <polygon id="beam-poly" class="beam" points="0,0"/>
-    </svg>
+    <svg id="beam-svg"><polygon id="beam-poly" class="beam"/></svg>
 
     <div id="hud">
         <div class="hud-header">104,801 NON-HUMAN PRIMATES</div>
@@ -311,77 +259,50 @@
     </div>
 
     <div class="grid">
-        <div class="box" data-has-data="true" 
+        <!-- MAIN BOX with two stacked full sections -->
+        <div class="box active" 
              onmouseenter="showHud(this)" 
              onmouseleave="handleBoxLeave(this)"
              ontouchstart="showHud(this)">
-            <div class="box-content">
-                <div class="box-num">104,801</div>
-                <div class="box-label">NHP SUBJECTS</div>
-            </div>
+            <div class="box-num box-stack">104,801</div>
+            <div class="box-label box-stack">NHP SUBJECTS</div>
         </div>
 
-        <!-- Empty ones - same full bubbly style -->
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
-        <!-- Repeat the empty pattern 10 more times -->
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
+        <!-- Empty placeholders (you can copy this structure when populating) -->
+        <div class="box" onmouseenter="showHud(this,false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this,false)"></div>
+        <div class="box" onmouseenter="showHud(this,false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this,false)"></div>
+        <div class="box" onmouseenter="showHud(this,false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this,false)"></div>
+        <div class="box" onmouseenter="showHud(this,false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this,false)"></div>
+        <div class="box" onmouseenter="showHud(this,false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this,false)"></div>
+        <div class="box" onmouseenter="showHud(this,false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this,false)"></div>
+        <div class="box" onmouseenter="showHud(this,false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this,false)"></div>
+        <div class="box" onmouseenter="showHud(this,false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this,false)"></div>
+        <div class="box" onmouseenter="showHud(this,false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this,false)"></div>
+        <div class="box" onmouseenter="showHud(this,false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this,false)"></div>
+        <div class="box" onmouseenter="showHud(this,false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this,false)"></div>
+        <div class="box" onmouseenter="showHud(this,false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this,false)"></div>
     </div>
 
     <script>
         const hud = document.getElementById('hud');
         const beamSvg = document.getElementById('beam-svg');
         const beamPoly = document.getElementById('beam-poly');
-        let activeBox = null;
+        let active = null;
 
         function updateBeam() {
-            if (!activeBox) return;
-            const b = activeBox.getBoundingClientRect();
+            if (!active) return;
+            const b = active.getBoundingClientRect();
             const h = hud.getBoundingClientRect();
-            const points = [
-                b.left, b.top, h.left, h.top, h.right, h.top,
-                b.right, b.top, b.right, b.bottom, h.right, h.bottom,
-                h.left, h.bottom, b.left, b.bottom
-            ].join(',');
-            beamPoly.setAttribute('points', points);
+            beamPoly.setAttribute('points', [
+                b.left,b.top, h.left,h.top, h.right,h.top,
+                b.right,b.top, b.right,b.bottom, h.right,h.bottom,
+                h.left,h.bottom, b.left,b.bottom
+            ].join(','));
         }
 
-        function showHud(el, hasData = true) {
-            activeBox = el;
-            document.querySelectorAll('.box').forEach(b => b.classList.remove('active'));
+        function showHud(el, hasData=true) {
+            active = el;
+            document.querySelectorAll('.box').forEach(b=>b.classList.remove('active'));
             el.classList.add('active');
             hud.classList.add('active');
             beamSvg.style.opacity = '1';
@@ -389,26 +310,19 @@
         }
 
         function handleBoxLeave(el) {
-            if (activeBox === el) {
-                activeBox = null;
-                document.querySelectorAll('.box').forEach(b => b.classList.remove('active'));
+            if (active === el) {
+                active = null;
+                document.querySelectorAll('.box').forEach(b=>b.classList.remove('active'));
                 hud.classList.remove('active');
                 beamSvg.style.opacity = '0';
             }
         }
 
-        function handleMouseLeave(e) {
-            if (!e.relatedTarget || !document.body.contains(e.relatedTarget)) {
-                if (activeBox) handleBoxLeave(activeBox);
-            }
-        }
-
         window.addEventListener('resize', updateBeam);
         window.addEventListener('scroll', updateBeam);
-
-        document.addEventListener('touchstart', (e) => {
+        document.addEventListener('click', e=>{
             if (!e.target.closest('#hud') && !e.target.closest('.box')) {
-                if (activeBox) handleBoxLeave(activeBox);
+                if (active) handleBoxLeave(active);
             }
         });
     </script>
