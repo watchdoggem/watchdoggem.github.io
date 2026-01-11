@@ -16,7 +16,7 @@
             --border: rgba(199, 158, 255, 0.32);
             --panel-bg: rgba(199, 158, 255, 0.09);
             --translucent: 0.85;
-            --design-width: 1920px; /* Assume fullscreen design target */
+            --design-width: 1600px; /* Based on grid max-width for snap-fit */
         }
 
         * {
@@ -33,101 +33,18 @@
                 radial-gradient(circle at 70% 80%, rgba(167,126,255,0.06) 0%, transparent 60%);
             color: var(--accent-violet);
             font-family: 'VT323', monospace;
-            font-size: 22px;
             min-height: 100vh;
-            padding: 1.6rem;
             overflow-x: hidden;
+        }
+
+        #scaler {
+            --scale: calc(100vw / var(--design-width));
+            width: var(--design-width);
+            transform: scale(var(--scale));
             transform-origin: top left;
-        }
-
-        /* Scaling for smaller screens/windowed - proportional shrink */
-        @media (max-width: 1920px) {
-            body {
-                --scale: calc(100vw / var(--design-width));
-                transform: scale(var(--scale));
-                width: calc(var(--design-width) / var(--scale));
-                height: calc(100vh / var(--scale));
-                padding: calc(1.6rem * var(--scale));
-                font-size: calc(22px * var(--scale));
-            }
-
-            .title {
-                font-size: calc(3.4rem * var(--scale));
-                letter-spacing: calc(7px * var(--scale));
-            }
-
-            #filter-input {
-                padding: calc(0.85rem * var(--scale)) calc(1.2rem * var(--scale));
-                font-size: calc(1.6rem * var(--scale));
-            }
-
-            .x-link {
-                width: calc(58px * var(--scale));
-                height: calc(58px * var(--scale));
-            }
-
-            .grid {
-                gap: calc(1.1rem * var(--scale));
-            }
-
-            .box {
-                border-radius: calc(12px * var(--scale));
-                padding: calc(1.2rem * var(--scale));
-            }
-
-            .box-num, .box-label {
-                font-size: calc(2.8rem * var(--scale));
-            }
-
-            .box-label {
-                margin-top: calc(0.3rem * var(--scale));
-            }
-
-            #hud {
-                padding: calc(1.3rem * var(--scale));
-                border-radius: calc(8px * var(--scale));
-            }
-
-            .hud-header {
-                font-size: calc(3.2rem * var(--scale));
-                letter-spacing: calc(3px * var(--scale));
-                margin-bottom: calc(0.5rem * var(--scale));
-            }
-
-            .hud-species {
-                font-size: calc(1.7rem * var(--scale));
-                margin-bottom: calc(1.4rem * var(--scale));
-                padding-bottom: calc(0.8rem * var(--scale));
-            }
-
-            .hud-stats {
-                gap: calc(0.9rem * var(--scale));
-            }
-
-            .stat-item {
-                padding: calc(1.2rem * var(--scale));
-                min-height: calc(90px * var(--scale));
-                border-radius: calc(8px * var(--scale));
-            }
-
-            .stat-text {
-                font-size: calc(1.75rem * var(--scale));
-                letter-spacing: calc(1px * var(--scale));
-            }
-
-            .hud-footer {
-                font-size: calc(1.3rem * var(--scale));
-                margin-top: calc(1.5rem * var(--scale));
-                padding-top: calc(1rem * var(--scale));
-                gap: calc(0.8rem * var(--scale));
-            }
-        }
-
-        /* Mobile adjustments - keep 4 cols but scale makes them fit */
-        @media (max-width: 900px) {
-            .hud-header { font-size: calc(2.4rem * var(--scale)); letter-spacing: calc(2px * var(--scale)); }
-            .hud-stats { grid-template-columns: 1fr; }
-            .stat-text { font-size: calc(1.6rem * var(--scale)); }
+            margin: 0 auto; /* Centers when window > design width */
+            height: auto;
+            padding: clamp(0.8rem, 1vw, 1.6rem);
         }
 
         header {
@@ -135,30 +52,34 @@
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            gap: 1.4rem;
-            margin-bottom: 1.8rem;
+            gap: clamp(0.7rem, 0.9vw, 1.4rem);
+            margin-bottom: clamp(0.9rem, 1.1vw, 1.8rem);
             border-bottom: 1px solid var(--border);
-            padding-bottom: 1rem;
+            padding-bottom: clamp(0.5rem, 0.6vw, 1rem);
         }
 
         .title {
             font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.7rem, 2.1vw, 3.4rem);
             font-weight: 900;
+            letter-spacing: clamp(3.5px, 0.36vw, 7px);
             text-shadow: 0 0 16px var(--glow);
             text-align: center;
         }
 
         .search-bar {
             flex: 1;
-            min-width: 260px;
-            max-width: 520px;
+            min-width: clamp(130px, 13.5vw, 260px);
+            max-width: clamp(260px, 27vw, 520px);
         }
 
         #filter-input {
             width: 100%;
+            padding: clamp(0.4rem, 0.44vw, 0.85rem) clamp(0.6rem, 0.63vw, 1.2rem);
             background: rgba(0,0,0,0.6);
             border: 1px solid var(--border);
             color: var(--accent-violet);
+            font-size: clamp(0.8rem, 0.83vw, 1.6rem);
             outline: none;
             transition: all 0.25s;
         }
@@ -169,6 +90,8 @@
         }
 
         .x-link {
+            width: clamp(29px, 3vw, 58px);
+            height: clamp(29px, 3vw, 58px);
             border: 2px solid var(--accent-violet);
             border-radius: 6px;
             overflow: hidden;
@@ -182,9 +105,9 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* Keep 4 cols always, scale handles sizing */
-            gap: 1.1rem;
-            max-width: 1600px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: clamp(0.55rem, 0.57vw, 1.1rem);
+            max-width: 100%;
             margin: 0 auto;
         }
 
@@ -198,7 +121,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 1.2rem;
+            padding: clamp(0.6rem, 0.63vw, 1.2rem);
             transition: all 0.3s ease;
             box-shadow: inset 0 0 20px rgba(199,158,255,0.08);
         }
@@ -215,44 +138,43 @@
             font-weight: 900;
             text-align: center;
             text-shadow: 0 0 14px var(--glow);
-            letter-spacing: 2px;
+            letter-spacing: clamp(1px, 0.1vw, 2px);
             text-transform: uppercase;
-            line-height: 1.05;
+            line-height: 1.0;
             width: 100%;
         }
 
         .box-num {
-            font-size: 2.8rem;
+            font-size: clamp(1.8rem, 1.88vw, 3.6rem); /* Bumped to fill more */
         }
 
         .box-label {
-            font-size: 2.8rem;
-            margin-top: 0.3rem;
+            font-size: clamp(1.8rem, 1.88vw, 3.6rem);
+            margin-top: clamp(0.15rem, 0.16vw, 0.3rem);
             opacity: 0.92;
         }
 
         .box.empty .box-content { opacity: 0.12; }
 
-        /* HUD - allow mouse through */
+        /* HUD */
         #hud {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 80vw;
-            max-width: 950px;
+            width: clamp(400px, 50vw, 950px);
             max-height: 88vh;
             overflow-y: auto;
             background: rgba(5, 3, 15, var(--translucent));
             border: 2px solid var(--accent-violet);
             border-image: linear-gradient(to right, transparent, var(--accent-violet), transparent) 1;
-            padding: 1.3rem;
+            padding: clamp(0.65rem, 0.68vw, 1.3rem);
             box-shadow: 0 0 80px rgba(0,0,0,0.9);
             opacity: 0;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.35);
             z-index: 1000;
             border-radius: 8px;
-            pointer-events: none; /* Always allow mouse through */
+            pointer-events: none; /* Mouse through */
         }
 
         #hud.active {
@@ -261,43 +183,40 @@
 
         .hud-header {
             font-family: 'Orbitron', sans-serif;
-            font-size: 3.2rem;
+            font-size: clamp(1.6rem, 1.67vw, 3.2rem);
             text-align: center;
-            margin-bottom: 0.5rem;
+            margin-bottom: clamp(0.25rem, 0.26vw, 0.5rem);
             text-shadow: 0 0 18px var(--glow);
-            letter-spacing: 3px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            letter-spacing: clamp(1.5px, 0.16vw, 3px);
+            white-space: normal; /* Allow wrap if needed */
         }
 
         .hud-species {
             text-align: center;
-            font-size: 1.7rem;
+            font-size: clamp(0.85rem, 0.89vw, 1.7rem);
             opacity: 0.88;
-            margin-bottom: 1.4rem;
+            margin-bottom: clamp(0.7rem, 0.73vw, 1.4rem);
             border-bottom: 1px dashed var(--border);
-            padding-bottom: 0.8rem;
+            padding-bottom: clamp(0.4rem, 0.42vw, 0.8rem);
             text-transform: uppercase;
         }
 
         .hud-stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 0.9rem;
+            gap: clamp(0.45rem, 0.47vw, 0.9rem);
         }
 
         .stat-item {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 1.2rem;
+            padding: clamp(0.6rem, 0.63vw, 1.2rem);
             border: 2px solid var(--border);
             background: var(--panel-bg);
             text-align: center;
-            min-height: 90px;
+            min-height: clamp(45px, 4.7vw, 90px);
             border-radius: 8px;
-            overflow: hidden; /* Prevent text overflow */
         }
 
         .stat-item:hover {
@@ -307,28 +226,26 @@
 
         .stat-text {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.75rem;
+            font-size: clamp(0.88rem, 0.91vw, 1.75rem);
             font-weight: 900;
             text-shadow: 0 0 10px var(--glow);
-            letter-spacing: 1px;
+            letter-spacing: clamp(0.5px, 0.05vw, 1px);
             text-transform: uppercase;
-            line-height: 1.1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            line-height: 1.05;
+            white-space: normal; /* Allow wrap, no cutoff */
             width: 100%;
         }
 
         .hud-footer {
             display: flex;
             justify-content: space-between;
-            font-size: 1.3rem;
+            font-size: clamp(0.65rem, 0.68vw, 1.3rem);
             opacity: 0.92;
-            margin-top: 1.5rem;
-            padding-top: 1rem;
+            margin-top: clamp(0.75rem, 0.78vw, 1.5rem);
+            padding-top: clamp(0.5rem, 0.52vw, 1rem);
             border-top: 1px dashed var(--border);
             flex-wrap: wrap;
-            gap: 0.8rem;
+            gap: clamp(0.4rem, 0.42vw, 0.8rem);
         }
 
         /* BEAM */
@@ -341,8 +258,6 @@
             z-index: 900;
             opacity: 0;
             transition: opacity 0.6s;
-            transform-origin: top left;
-            transform: scale(var(--scale)); /* Scale beam too */
         }
 
         .beam {
@@ -352,19 +267,75 @@
             opacity: 0.3;
             filter: drop-shadow(0 0 10px var(--glow));
         }
+
+        @media (max-width: 900px) {
+            .hud-stats { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body onmouseleave="handleMouseLeave(event)">
 
-    <header>
-        <div class="title">WATCHDOGGEM</div>
-        <div class="search-bar">
-            <input type="text" id="filter-input" placeholder="QUERY NHP DATABASE..." autocomplete="off">
+    <div id="scaler">
+        <header>
+            <div class="title">WATCHDOGGEM</div>
+            <div class="search-bar">
+                <input type="text" id="filter-input" placeholder="QUERY NHP DATABASE..." autocomplete="off">
+            </div>
+            <a href="https://x.com/watchdoggem" target="_blank" class="x-link">
+                <img src="https://unavatar.io/x/watchdoggem" alt="X">
+            </a>
+        </header>
+
+        <div class="grid">
+            <div class="box" data-has-data="true" 
+                 onmouseenter="showHud(this)" 
+                 onmouseleave="handleBoxLeave(this)"
+                 ontouchstart="showHud(this)">
+                <div class="box-content">
+                    <div class="box-num">104,801</div>
+                    <div class="box-label">NHP SUBJECTS</div>
+                </div>
+            </div>
+
+            <!-- Empty ones -->
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
+            <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+                <div class="box-content">EMPTY SLOT</div>
+            </div>
         </div>
-        <a href="https://x.com/watchdoggem" target="_blank" class="x-link">
-            <img src="https://unavatar.io/x/watchdoggem" alt="X">
-        </a>
-    </header>
+    </div>
 
     <svg id="beam-svg">
         <polygon id="beam-poly" class="beam" points="0,0"/>
@@ -393,57 +364,6 @@
         </div>
     </div>
 
-    <div class="grid">
-        <div class="box" data-has-data="true" 
-             onmouseenter="showHud(this)" 
-             onmouseleave="handleBoxLeave(this)"
-             ontouchstart="showHud(this)">
-            <div class="box-content">
-                <div class="box-num">104,801</div>
-                <div class="box-label">NHP SUBJECTS</div>
-            </div>
-        </div>
-
-        <!-- Empty ones - same full bubbly style -->
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
-        <!-- Repeat the empty pattern 10 more times -->
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
-        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
-            <div class="box-content">EMPTY SLOT</div>
-        </div>
-    </div>
-
     <script>
         const hud = document.getElementById('hud');
         const beamSvg = document.getElementById('beam-svg');
@@ -453,18 +373,18 @@
 
         function updateBeam() {
             if (!activeBox) return;
-            const scale = window.innerWidth / 1920; // Match CSS scale
             const b = activeBox.getBoundingClientRect();
             const h = hud.getBoundingClientRect();
             const points = [
-                b.left / scale, b.top / scale, h.left / scale, h.top / scale, h.right / scale, h.top / scale,
-                b.right / scale, b.top / scale, b.right / scale, b.bottom / scale, h.right / scale, h.bottom / scale,
-                h.left / scale, h.bottom / scale, b.left / scale, b.bottom / scale
+                b.left, b.top, h.left, h.top, h.right, h.top,
+                b.right, b.top, b.right, b.bottom, h.right, h.bottom,
+                h.left, h.bottom, b.left, b.bottom
             ].join(',');
             beamPoly.setAttribute('points', points);
         }
 
         function showHud(el, hasData = true) {
+            if (!hasData) return; // Only show for box 1
             if (leaveTimeout) clearTimeout(leaveTimeout);
             if (activeBox === el) return;
 
@@ -485,7 +405,7 @@
                     hud.classList.remove('active');
                     beamSvg.style.opacity = '0';
                 }
-            }, 80);
+            }, 100); // Slightly longer buffer for smoother hovers
         }
 
         function handleMouseLeave(e) {
@@ -494,9 +414,7 @@
             }
         }
 
-        window.addEventListener('resize', () => {
-            updateBeam();
-        });
+        window.addEventListener('resize', updateBeam);
         window.addEventListener('scroll', updateBeam);
 
         document.addEventListener('touchstart', (e) => {
