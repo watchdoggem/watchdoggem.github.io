@@ -547,4 +547,15 @@ window.addEventListener('resize',updateBeam);
 window.addEventListener('scroll',updateBeam);
 
 document.addEventListener('touchstart',e=>{
-    if(!
+    if(!e.target.closest('#hud') && !e.target.closest('.box')){
+        if(activeBox) handleBoxLeave(activeBox);
+    }
+});
+
+// ======================
+// INITIAL RENDER
+// ======================
+renderGrid();
+</script>
+</body>
+</html>
