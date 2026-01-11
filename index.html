@@ -28,7 +28,7 @@
             overflow-x: hidden;
         }
 
-        /* HEADER & TWITTER LINK */
+        /* HEADER & SEARCH RESTORED [cite: 90, 91] */
         #header-row {
             display: flex;
             align-items: center;
@@ -52,6 +52,7 @@
             font-size: 24px; width: 100%; letter-spacing: 3px;
         }
 
+        /* TWITTER AVATAR RESTORED */
         .twitter-link {
             width: 60px; height: 60px;
             border: 1px solid var(--accent-neon);
@@ -63,7 +64,7 @@
         .twitter-link:hover { transform: scale(1.1); box-shadow: 0 0 15px var(--accent-glow); }
         .twitter-link img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* GRID: 5 COLUMNS DESKTOP / 2 COLUMNS PHONE */
+        /* 5-COLUMN GRID [cite: 9, 94, 95] */
         .grid { 
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -86,7 +87,7 @@
         .box-label { font-size: 18px; margin-top: 8px; opacity: 0.6; }
         .box.empty { background: rgba(212, 193, 255, 0.02); }
 
-        /* HUD - FIXED CENTER */
+        /* THE HUD - FIXED FOR PHONE [cite: 100-104] */
         #hud {
             position: fixed;
             top: 50%; left: 50%;
@@ -97,21 +98,23 @@
             padding: 30px; z-index: 1000;
             display: flex; flex-direction: column;
             pointer-events: none;
-            transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.2);
             box-shadow: 0 0 100px rgba(0,0,0,0.9);
         }
 
         .hud-header { font-size: 36px; text-align: center; margin-bottom: 5px; }
         .hud-species { font-size: 18px; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 25px; }
+        
         .hud-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 25px; }
         .stat-module {
             border: 1px solid var(--border); padding: 15px;
             background: rgba(212, 193, 255, 0.02);
             text-align: center; font-size: 20px; text-transform: uppercase;
         }
+
         .hud-footer { display: flex; justify-content: space-between; font-size: 14px; border-top: 1px solid var(--border); padding-top: 20px; }
 
-        /* BEAM MATH FIX */
+        /* THE BEAMS [cite: 115, 117] */
         #beam-svg {
             position: fixed; top: 0; left: 0;
             width: 100vw; height: 100vh;
@@ -132,26 +135,26 @@
             <input type="text" id="filter-input" placeholder="SEARCH / FILTER AUDIT LOG">
         </div>
         <a href="https://twitter.com/watchdoggem" class="twitter-link" target="_blank">
-            <img src="https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png" alt="X">
+            <img src="https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png" alt="Twitter">
         </a>
     </div>
 
     <svg id="beam-svg"><polygon id="poly-projection" class="beam-path" /></svg>
 
     <div id="hud">
-        <div class="hud-header">104,801 NON-HUMAN PRIMATES IN RESEARCH [cite: 74]</div>
-        <div class="hud-species">SUBJECTS: RHESUS MACAQUES | CYNOMOLGUS [cite: 74]</div>
+        <div class="hud-header">104,801 NON-HUMAN PRIMATES IN RESEARCH</div>
+        <div class="hud-species">SUBJECTS: RHESUS MACAQUES | CYNOMOLGUS</div>
         <div class="hud-stats-grid">
-            <div class="stat-module">100% FATAL ANESTHETIC OVERDOSE [cite: 74]</div>
-            <div class="stat-module">20% CLINICAL SELF-HARM [cite: 74]</div>
-            <div class="stat-module">83% SOCIAL ISOLATION [cite: 74]</div>
-            <div class="stat-module">89% DISTRESSED PACING [cite: 74]</div>
-            <div class="stat-module">12% NO PAIN RELIEF (COLUMN E) [cite: 74]</div>
-            <div class="stat-module">100% CAGE SEQUESTRATION [cite: 75]</div>
-            <div class="stat-module">31,000 CAGED BY CLASS A BREEDERS [cite: 75]</div>
-            <div class="stat-module">13,375 CAGED BY CLASS B DEALERS [cite: 75]</div>
-            <div class="stat-module">$800M+ U.S. DOMESTIC REVENUE [cite: 75]</div>
-            <div class="stat-module">$300M+ TAXPAYER INFRASTRUCTURE [cite: 75]</div>
+            <div class="stat-module">100% FATAL ANESTHETIC OVERDOSE</div>
+            <div class="stat-module">20% CLINICAL SELF-HARM</div>
+            <div class="stat-module">83% SOCIAL ISOLATION</div>
+            <div class="stat-module">89% DISTRESSED PACING</div>
+            <div class="stat-module">12% NO PAIN RELIEF (COLUMN E)</div>
+            <div class="stat-module">100% CAGE SEQUESTRATION</div>
+            <div class="stat-module">31,000 CAGED BY CLASS A BREEDERS</div>
+            <div class="stat-module">13,375 CAGED BY CLASS B DEALERS</div>
+            <div class="stat-module">$800M+ U.S. DOMESTIC REVENUE</div>
+            <div class="stat-module">$300M+ TAXPAYER INFRASTRUCTURE</div>
         </div>
         <div class="hud-footer">
             <span>SOURCE: USDA APHIS 2024 / NIH FINANCIALS [cite: 76]</span>
@@ -171,9 +174,10 @@
         const hud = document.getElementById('hud');
         const beamSvg = document.getElementById('beam-svg');
         const projection = document.getElementById('poly-projection');
+        let activeBox = null;
 
-        // Create empty boxes for the grid
-        for (let i = 2; i <= 30; i++) {
+        // Populate empty grid
+        for (let i = 2; i <= 40; i++) {
             const emptyBox = document.createElement('div');
             emptyBox.className = 'box empty';
             emptyBox.onmouseenter = (e) => showHud(e.currentTarget);
@@ -181,19 +185,25 @@
             grid.appendChild(emptyBox);
         }
 
-        function showHud(el) {
-            hud.style.transform = "translate(-50%, -50%) scale(1)";
-            beamSvg.style.opacity = "1";
-            
-            // MATH LOCK: This ensures corners snap even in windowed mode or on mobile
-            const r = el.getBoundingClientRect(); 
+        function updateBeams() {
+            if (!activeBox) return;
+            const r = activeBox.getBoundingClientRect(); 
             const h = hud.getBoundingClientRect();
-
+            // Absolute 8-point polygon lock [cite: 80, 125]
             const points = `${r.left},${r.top} ${h.left},${h.top} ${h.right},${h.top} ${r.right},${r.top} ${r.right},${r.bottom} ${h.right},${h.bottom} ${h.left},${h.bottom} ${r.left},${r.bottom}`;
             projection.setAttribute('points', points);
+            requestAnimationFrame(updateBeams);
+        }
+
+        function showHud(el) {
+            activeBox = el;
+            hud.style.transform = "translate(-50%, -50%) scale(1)";
+            beamSvg.style.opacity = "1";
+            updateBeams(); // Start the live coordinate lock
         }
 
         function hideHud() { 
+            activeBox = null;
             hud.style.transform = "translate(-50%, -50%) scale(0)";
             beamSvg.style.opacity = "0"; 
         }
