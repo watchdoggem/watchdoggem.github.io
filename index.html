@@ -71,7 +71,7 @@ header{
 }
 @media (max-width: 600px) {
     #filter-input {
-        font-size: clamp(1.2rem, 4vw, 1.6rem); /* bigger for mobile, keeps style */
+        font-size: clamp(1.2rem, 4vw, 1.6rem); /* bigger for mobile */
         padding: clamp(.6rem, 1.5vw, 1rem) clamp(.8rem, 2vw, 1.2rem);
     }
 
@@ -252,22 +252,22 @@ header{
     
 @media (max-width: 600px){
     #hud{
-        inset:10vh 3vw auto 3vw; /* push down from top a bit */
+        inset:10vh 3vw auto 3vw;
         width:auto;
-        max-height:80vh; /* give room for the bottom boxes */
+        max-height:80vh;
         transform:none;
         overflow-y:auto;
         -webkit-overflow-scrolling:touch;
-        padding: clamp(.5rem,1vw,1rem); /* optional: slightly smaller padding */
+        padding: clamp(.5rem,1vw,1rem);
     }
 
     .hud-stats {
-        grid-template-columns: repeat(2, 1fr); /* keep 2 columns */
-        gap: clamp(.35rem, .8vw, .6rem); /* optional: slightly smaller spacing */
+        grid-template-columns: repeat(2, 1fr);
+        gap: clamp(.35rem, .8vw, .6rem);
     }
 
     .stat-text {
-        font-size: clamp(.7rem, 2.5vw, 1.2rem); /* slightly smaller so all fit */
+        font-size: clamp(.7rem, 2.5vw, 1.2rem);
     }
 }
 
@@ -306,22 +306,7 @@ header{
 </header>
 
 <div class="grid" id="grid">
-    <div class="box" data-has-data="true"
-        onmouseenter="showHud(this)"
-        onmouseleave="handleBoxLeave(this)"
-        ontouchstart="showHud(this)">
-        <div class="box-content">
-            <div class="splash-top">104801</div>
-            <div class="splash-mid">NON-HUMAN PRIMATES</div>
-            <div class="splash-bottom">IN RESEARCH</div>
-        </div>
-    </div>
-
-    <div class="box empty" onmouseenter="showHud(this,false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this,false)">
-        <div class="box-content">EMPTY SLOT</div>
-    </div>
-    <div class="box empty"><div class="box-content">EMPTY SLOT</div></div>
-    <div class="box empty"><div class="box-content">EMPTY SLOT</div></div>
+    <!-- Panels will be generated dynamically -->
 </div>
 </div>
 
@@ -330,44 +315,99 @@ header{
 </svg>
 
 <div id="hud">
-    <div class="hud-header">104801 PRIMATES IN RESEARCH</div>
-    <div class="hud-species">RHESUS MACAQUES | CYNOMOLGUS MACAQUES</div>
-
-<div class="hud-stats">
-    <div class="stat-item"><div class="stat-text">100% FATAL ANESTHETIC OVERDOSE<sup>1</sup></div></div>
-    <div class="stat-item"><div class="stat-text">20% CLINICAL SELF-HARM<sup>1</sup></div></div>
-    <div class="stat-item"><div class="stat-text">83% SOCIAL ISOLATION<sup>1</sup></div></div>
-    <div class="stat-item"><div class="stat-text">89% DISTRESSED PACING<sup>1</sup></div></div>
-    <div class="stat-item"><div class="stat-text">12% PAIN RELIEF WITHHELD<sup>1</sup></div></div>
-    <div class="stat-item"><div class="stat-text">100% CAGE SEQUESTRATION<sup>1</sup></div></div>
-    <div class="stat-item"><div class="stat-text">$800M+ U.S. DOMESTIC RESEARCH FUNDING<sup>2</sup></div></div>
-    <div class="stat-item"><div class="stat-text">$300M+ TAXPAYER INFRASTRUCTURE SUPPORT<sup>1</sup></div></div>
-</div>
-
-<div class="hud-footer">
-    <span><sup>1</sup> USDA APHIS 2024 • <sup>2</sup> NIH FY2024 Financials</span>
-     <span>FDA REQUIRED • NIH FUNDED • USDA OVERSIGHT</span>
-</div>
-
+    <div class="hud-header"></div>
+    <div class="hud-species"></div>
+    <div class="hud-stats"></div>
+    <div class="hud-footer"></div>
 </div>
 
 <script>
-const hud=document.getElementById('hud');
-const beamSvg=document.getElementById('beam-svg');
-const beamPoly=document.getElementById('beam-poly');
-const grid=document.getElementById('grid');
-let activeBox=null,leaveTimeout=null;
+// ======================
+// PANEL DATA
+// ======================
+const panels = [
+  {
+    id:"104801",
+    title:"NON-HUMAN PRIMATES",
+    subtitle:"IN RESEARCH",
+    species:["RHESUS MACAQUES","CYNOMOLGUS MACAQUES"],
+    stats:[
+      {text:"100% FATAL ANESTHETIC OVERDOSE", ref:1},
+      {text:"20% CLINICAL SELF-HARM", ref:1},
+      {text:"83% SOCIAL ISOLATION", ref:1},
+      {text:"89% DISTRESSED PACING", ref:1},
+      {text:"12% PAIN RELIEF WITHHELD", ref:1},
+      {text:"100% CAGE SEQUESTRATION", ref:1},
+      {text:"$800M+ U.S. DOMESTIC RESEARCH FUNDING", ref:2},
+      {text:"$300M+ TAXPAYER INFRASTRUCTURE SUPPORT", ref:1}
+    ],
+    footer:"FDA REQUIRED • NIH FUNDED • USDA OVERSIGHT"
+  },
+  {
+    id:"EMPTY1",
+    empty:true
+  },
+  {
+    id:"EMPTY2",
+    empty:true
+  },
+  {
+    id:"EMPTY3",
+    empty:true
+  }
+];
 
-/* SEARCH FILTER */
+// ======================
+// GRID GENERATION
+// ======================
+const grid = document.getElementById('grid');
+
+panels.forEach(p=>{
+    const box = document.createElement('div');
+    box.classList.add('box');
+    box.dataset.hasData = (!p.empty).toString();
+    
+    const content = document.createElement('div');
+    content.classList.add('box-content');
+    
+    if(p.empty){
+        box.classList.add('empty');
+        content.textContent = "EMPTY SLOT";
+    } else {
+        content.innerHTML = `<div class="splash-top">${p.id}</div>
+                             <div class="splash-mid">${p.title}</div>
+                             <div class="splash-bottom">${p.subtitle}</div>`;
+        
+        box.addEventListener('mouseenter',()=>showHud(box,p));
+        box.addEventListener('mouseleave',()=>handleBoxLeave(box));
+        box.addEventListener('touchstart',()=>showHud(box,p));
+    }
+    
+    box.appendChild(content);
+    grid.appendChild(box);
+});
+
+// ======================
+// SEARCH FILTER
+// ======================
 document.getElementById('filter-input').addEventListener('input', e=>{
     const val = e.target.value.toLowerCase();
-    document.querySelectorAll('.box').forEach(box=>{
-        const text = box.textContent.toLowerCase();
-        box.style.display = text.includes(val)?'flex':'none';
+    document.querySelectorAll('.box').forEach((box,i)=>{
+        const p = panels[i];
+        let text = "";
+        if(!p.empty) text = (p.id+" "+p.title+" "+p.subtitle).toLowerCase();
+        box.style.display = text.includes(val) ? "flex" : "none";
     });
 });
 
-/* HUD + BEAM */
+// ======================
+// HUD + BEAM
+// ======================
+const hud=document.getElementById('hud');
+const beamSvg=document.getElementById('beam-svg');
+const beamPoly=document.getElementById('beam-poly');
+let activeBox=null,leaveTimeout=null;
+
 function updateBeam(){
     if(!activeBox) return;
     const b=activeBox.getBoundingClientRect();
@@ -380,14 +420,30 @@ function updateBeam(){
     beamPoly.setAttribute('points',pts);
 }
 
-function showHud(el,hasData=true){
-    if(!hasData) return;
+function showHud(el,panel){
+    if(panel.empty) return;
     if(leaveTimeout) clearTimeout(leaveTimeout);
     if(activeBox===el) return;
     activeBox=el;
     document.querySelectorAll('.box').forEach(b=>b.classList.remove('active'));
     el.classList.add('active');
+    
     hud.classList.add('active');
+    
+    hud.querySelector('.hud-header').textContent = `${panel.id} ${panel.title}`;
+    hud.querySelector('.hud-species').textContent = panel.species.join(" | ");
+    
+    const statsDiv = hud.querySelector('.hud-stats');
+    statsDiv.innerHTML="";
+    panel.stats.forEach(s=>{
+        const stat = document.createElement('div');
+        stat.classList.add('stat-item');
+        stat.innerHTML=`<div class="stat-text">${s.text}<sup>${s.ref}</sup></div>`;
+        statsDiv.appendChild(stat);
+    });
+    
+    hud.querySelector('.hud-footer').textContent = panel.footer;
+    
     beamSvg.style.opacity='1';
     updateBeam();
 }
