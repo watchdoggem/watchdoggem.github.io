@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WATCHDOGGEM | TERMINAL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WATCHDOGGEM | SYSTEM GRID</title>
     <style>
         :root {
             --bg-deep: #060a06;
@@ -12,148 +12,162 @@
             --border: rgba(212, 193, 255, 0.15);
         }
 
-        * { box-sizing: border-box; cursor: crosshair; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; cursor: crosshair; }
         
         body { 
-            background: var(--bg-deep); 
+            background: var(--bg-deep);
             background-image: 
                 radial-gradient(circle at 50% 50%, #101a10 0%, #060a06 100%),
-                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
-                linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            background-size: 100% 100%, 100% 4px, 100% 100%;
-            margin: 0; padding: 10px; 
+                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 100%, 100% 4px;
+            margin: 0; padding: 40px; 
             font-family: 'Impact', sans-serif; 
             color: var(--accent-neon);
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
-        #search-container {
-            display: flex; border: 1px solid var(--border);
-            padding: 10px; margin-bottom: 20px;
-            background: rgba(0, 0, 0, 0.4);
-            width: 100%; max-width: 600px;
-            backdrop-filter: blur(5px);
-        }
-
-        #filter-input {
-            background: transparent; border: none; outline: none;
-            color: var(--accent-neon); font-family: 'Impact', sans-serif;
-            font-size: 18px; width: 100%; letter-spacing: 2px;
+        /* 5-COLUMN GRID */
+        .grid { 
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .box {
             border: 1px solid var(--border);
-            height: 140px; width: 200px;
+            height: 120px;
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
-            background: rgba(26, 46, 26, 0.4);
-            position: relative; z-index: 1001;
-            margin: 20px;
+            background: rgba(212, 193, 255, 0.03);
+            transition: all 0.2s ease;
         }
-        .box-num { font-size: 45px; line-height: 0.8; }
-        .box-label { font-size: 20px; margin-top: 8px; opacity: 0.6; }
 
+        .box:hover { 
+            border-color: var(--accent-neon);
+            background: rgba(212, 193, 255, 0.1);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .box-num { font-size: 28px; }
+        .box-label { font-size: 12px; opacity: 0.6; letter-spacing: 1px; }
+
+        /* THE HUD BOX */
         #hud {
-            position: fixed; top: 50%; left: 50%;
+            position: fixed;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
-            width: 95vw; max-width: 1100px;
-            max-height: 85vh; overflow-y: auto;
-            background: rgba(5, 8, 5, 0.98); 
-            border: 1px solid var(--accent-neon);
-            padding: 20px; z-index: 1000;
+            width: 80vw; max-width: 900px;
+            background: rgba(5, 8, 5, 0.95);
+            border: 2px solid var(--accent-neon);
+            padding: 30px; z-index: 1000;
             display: flex; flex-direction: column;
-            transition: transform 0.1s ease-out;
-            pointer-events: none;
+            pointer-events: none; /* Allows hovering "through" it */
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+            box-shadow: 0 0 50px rgba(0,0,0,1);
         }
 
-        .hud-header { font-size: clamp(24px, 5vw, 42px); text-align: center; margin-bottom: 5px; }
-        .hud-species { font-size: clamp(14px, 3vw, 22px); text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 20px; }
+        .hud-title { font-size: 36px; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .hud-subjects { font-size: 18px; text-align: center; margin: 15px 0; color: #aaa; }
         
-        .hud-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px; margin-bottom: 20px; }
+        /* 10 INFO BOXES */
+        .hud-stats-grid { 
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 10px; 
+            margin: 20px 0; 
+        }
         .stat-module {
-            border: 1px solid var(--border); padding: 15px;
-            background: rgba(212, 193, 255, 0.02);
-            text-align: center; font-size: clamp(16px, 2.5vw, 24px);
+            border: 1px solid var(--border);
+            padding: 12px;
+            background: rgba(212, 193, 255, 0.05);
+            text-align: center; font-size: 16px;
         }
 
         .hud-footer {
-            display: flex; justify-content: space-between;
-            font-size: clamp(12px, 2vw, 18px); border-top: 1px solid var(--border);
-            padding-top: 15px; font-weight: bold; flex-wrap: wrap; gap: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px; border-top: 1px solid var(--border);
+            padding-top: 15px; opacity: 0.8;
         }
 
+        /* PROJECTION BEAM */
         #beam-svg {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            pointer-events: none; z-index: 500; opacity: 0;
+            position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 900;
+            opacity: 0;
         }
-        .beam-path { fill: rgba(212, 193, 255, 0.08); stroke: rgba(212, 193, 255, 0.15); }
-
-        @media (max-width: 600px) {
-            .box { width: 160px; height: 110px; margin: 10px auto; }
-            .box-num { font-size: 35px; }
-            .hud-stats-grid { grid-template-columns: 1fr; }
-        }
+        .beam-path { fill: rgba(212, 193, 255, 0.07); stroke: var(--accent-glow); stroke-width: 0.5; }
     </style>
 </head>
-<body onclick="hideHud()">
-
-    <div id="search-container">
-        <input type="text" id="filter-input" placeholder="SEARCH / FILTER">
-    </div>
+<body>
 
     <svg id="beam-svg"><polygon id="poly-projection" class="beam-path" /></svg>
 
     <div id="hud">
-        <div class="hud-header">104,801 NON-HUMAN PRIMATES IN RESEARCH</div>
-        <div class="hud-species">SUBJECTS: RHESUS MACAQUES | CYNOMOLGUS</div>
+        <div id="h-title" class="hud-title">TITLE</div>
+        <div id="h-subjects" class="hud-subjects">SUBJECTS: LOADING...</div>
+        
         <div class="hud-stats-grid">
-            <div class="stat-module">100% FATAL ANESTHETIC OVERDOSE</div>
-            <div class="stat-module">20% CLINICAL SELF-HARM</div>
-            <div class="stat-module">83% SOCIAL ISOLATION</div>
-            <div class="stat-module">89% DISTRESSED PACING</div>
-            <div class="stat-module">12% NO PAIN RELIEF (COLUMN E)</div>
-            <div class="stat-module">100% CAGE SEQUESTRATION</div>
-            <div class="stat-module">31,000 CAGED BY CLASS A BREEDERS</div>
-            <div class="stat-module">13,375 CAGED BY CLASS B DEALERS</div>
-            <div class="stat-module">$800M+ U.S. DOMESTIC REVENUE</div>
-            <div class="stat-module">$300M+ TAXPAYER INFRASTRUCTURE</div>
+            <div class="stat-module">INFO BOX 1</div>
+            <div class="stat-module">INFO BOX 2</div>
+            <div class="stat-module">INFO BOX 3</div>
+            <div class="stat-module">INFO BOX 4</div>
+            <div class="stat-module">INFO BOX 5</div>
+            <div class="stat-module">INFO BOX 6</div>
+            <div class="stat-module">INFO BOX 7</div>
+            <div class="stat-module">INFO BOX 8</div>
+            <div class="stat-module">INFO BOX 9</div>
+            <div class="stat-module">INFO BOX 10</div>
         </div>
+
         <div class="hud-footer">
-            <span>SOURCE: USDA APHIS 2024</span>
-            <span>FDA REQUIRED | NIH FUNDED</span>
+            <span id="h-source">SOURCE: DATA_REF_01</span>
+            <span id="h-agency">AGENCY: FEDERAL_AUDIT</span>
         </div>
     </div>
 
-    <div class="box" onmouseenter="showHud(this)" onmouseleave="hideHud()" ontouchstart="event.stopPropagation(); showHud(this)">
-        <div class="box-num">104,801</div>
-        <div class="box-label">NHP TESTING</div>
-    </div>
+    <div class="grid" id="main-grid"></div>
 
     <script>
+        const grid = document.getElementById('main-grid');
         const hud = document.getElementById('hud');
         const beamSvg = document.getElementById('beam-svg');
         const projection = document.getElementById('poly-projection');
 
-        function showHud(el) {
+        // Create 60 boxes
+        for (let i = 1; i <= 60; i++) {
+            const box = document.createElement('div');
+            box.className = 'box';
+            box.innerHTML = `<div class="box-num">ID-${100 + i}</div><div class="box-label">NODE STATUS</div>`;
+            
+            box.onmouseenter = (e) => showHud(e.currentTarget, i);
+            box.onmouseleave = hideHud;
+            
+            grid.appendChild(box);
+        }
+
+        function showHud(el, index) {
+            // Update HUD content based on which box is hovered
+            document.getElementById('h-title').innerText = `DATASET #${index}`;
+            document.getElementById('h-subjects').innerText = `SUBJECTS: ALPHA / BETA / DELTA GROUP`;
+            document.getElementById('h-source').innerText = `SOURCE: LOG_REF_${index * 7}`;
+            document.getElementById('h-agency').innerText = `AGENCY: UNIT_${index}`;
+
             hud.style.transform = "translate(-50%, -50%) scale(1)";
             beamSvg.style.opacity = "1";
             
+            // Connect the box to the HUD
             const r = el.getBoundingClientRect(); 
-            const h = hud.getBoundingClientRect(); 
-
-            // NO-CROSS MATH: Logic to connect corners without inversion
-            // Direct Top-to-Top and Bottom-to-Bottom mapping
-            const points = `
-                ${r.right},${r.top} ${h.left},${h.top} 
-                ${h.left},${h.bottom} ${r.right},${r.bottom}
-            `;
-            // Using a simpler 4-point connection to ensure no X-cross on mobile or desktop
-            projection.setAttribute('points', `${r.right},${r.top} ${h.left},${h.top} ${h.left},${h.bottom} ${r.right},${r.bottom}`);
+            const h = hud.getBoundingClientRect();
+            const points = `${r.left},${r.top} ${h.left},${h.top} ${h.right},${h.top} ${r.right},${r.top} ${r.right},${r.bottom} ${h.right},${h.bottom} ${h.left},${h.bottom} ${r.left},${r.bottom}`;
+            projection.setAttribute('points', points);
         }
 
         function hideHud() { 
-            hud.style.transform = "translate(-50%, -50%) scale(0)"; 
+            hud.style.transform = "translate(-50%, -50%) scale(0)";
             beamSvg.style.opacity = "0"; 
         }
     </script>
