@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>watchdoggem demo 12 panels</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>watchdoggem</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=VT323&display=swap" rel="stylesheet">
@@ -19,6 +20,8 @@
     --translucent:.85;
     --design-width:1600px;
 }
+
+/* GLOBAL RESET */
 *{margin:0;padding:0;box-sizing:border-box;cursor:crosshair}
 body{
     background:var(--bg);
@@ -30,6 +33,7 @@ body{
     min-height:100vh;
     overflow-x:hidden;
 }
+
 #scaler{
     --scale:calc(100vw / var(--design-width));
     width:var(--design-width);
@@ -39,40 +43,51 @@ body{
     left:50%;
     padding:clamp(.8rem,1vw,1.6rem);
 }
+
+/* HEADER */
 header{
     display:flex;
+    flex-wrap:wrap;
     justify-content:space-between;
     align-items:center;
-    position:relative;
-    margin-bottom:clamp(.9rem,1.1vw,1.8rem);
+    gap:clamp(.7rem,.9vw,1.4rem);
+    margin-bottom:clamp(2rem,3vw,3.5rem); /* increased to avoid overlap */
     border-bottom:1px solid var(--border);
     padding-bottom:clamp(.5rem,.6vw,1rem);
 }
+
 .title{
     font-family:'Orbitron',sans-serif;
     font-size:clamp(1.7rem,2.1vw,3.4rem);
     font-weight:900;
     letter-spacing:clamp(3.5px,.36vw,7px);
     text-shadow:0 0 16px var(--glow);
-    flex:0 0 auto;
 }
-.x-link{
-    position:absolute;
-    left:50%;
-    transform:translateX(-50%);
-    top:0;
-    width:clamp(50px,10vw,80px);
-    height:clamp(50px,10vw,80px);
-    border-radius:10px;
-    border:2px solid var(--accent-violet);
+
+.x-link {
+    flex: 0 0 auto;
+    width: clamp(50px, 10vw, 80px);
+    height: clamp(50px, 10vw, 80px);
+    overflow: hidden;
+    border-radius: 10px;
+    border: 2px solid var(--accent-violet);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.x-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* CATEGORY BAR */
+#category-bar{
     display:flex;
-    justify-content:center;
-    align-items:center;
-    overflow:hidden;
+    justify-content:flex-start;
+    margin-bottom:1rem;
 }
-.x-avatar{width:100%;height:100%;object-fit:cover;}
-#category-bar{display:flex;justify-content:flex-end;gap:.5rem;}
-.category-button{
+.category-button {
     background:var(--panel-bg);
     border:2px solid var(--border);
     border-radius:12px;
@@ -82,8 +97,18 @@ header{
     font-weight:700;
     transition:.3s;
 }
-.category-button.active{border-color:var(--accent-violet);box-shadow:0 0 16px var(--glow);}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(.55rem,.57vw,1.1rem);}
+.category-button.active {
+    border-color:var(--accent-violet);
+    box-shadow:0 0 16px var(--glow);
+}
+
+/* GRID */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr); /* 3 rows x 4 columns for 12 panels */
+    gap:clamp(.55rem,.57vw,1.1rem);
+}
+
 .box{
     aspect-ratio:1/1;
     border:2px solid var(--border);
@@ -103,6 +128,7 @@ header{
     box-shadow:0 0 32px var(--glow), inset 0 0 24px rgba(199,158,255,.15);
     transform:translateY(-6px) scale(1.02);
 }
+
 .box-content{
     font-family:'Orbitron',sans-serif;
     font-weight:900;
@@ -111,21 +137,34 @@ header{
     letter-spacing:clamp(1px,.1vw,2px);
     text-transform:uppercase;
     width:100%;
-    height:100%;
-    position:relative;
+}
+.box[data-has-data="true"] .box-content {
     display:flex;
     flex-direction:column;
     justify-content:center;
     align-items:center;
 }
-.splash-top{font-size:clamp(2rem,5vw,4rem);line-height:1;}
-.splash-mid{font-size:clamp(1rem,3vw,2rem);opacity:.85;margin-top:.35em;}
-.splash-bottom{font-size:clamp(.9rem,2.5vw,1.8rem);letter-spacing:.15em;opacity:.75;margin-top:.2em;}
-.splash-category-button{
+
+.splash-top {
+    font-size: clamp(2rem, 5vw, 4rem);
+    line-height: 1;
+}
+.splash-mid {
+    font-size: clamp(1rem, 3vw, 2rem);
+    opacity:.85;
+    margin-top:.35em;
+}
+.splash-bottom {
+    font-size: clamp(.9rem, 2.5vw, 1.8rem);
+    letter-spacing:.15em;
+    opacity:.75;
+    margin-top:.2em;
+}
+.splash-category-button {
     position:absolute;
-    bottom:12px;
-    right:12px;
-    padding:.5rem 1rem;
+    bottom:10px;
+    right:10px;
+    padding:.3rem .75rem;
     border-radius:12px;
     border:2px solid var(--border);
     background:var(--panel-bg);
@@ -134,10 +173,15 @@ header{
     text-transform:uppercase;
     cursor:pointer;
     transition:.3s;
-    box-shadow: inset 0 0 6px rgba(199,158,255,.1);
 }
-.splash-category-button:hover{border-color:var(--accent-violet);box-shadow:0 0 12px var(--glow), inset 0 0 6px rgba(199,158,255,.15);}
-.splash-category-button.active{border-color:var(--accent-violet);box-shadow:0 0 16px var(--glow);}
+.splash-category-button.active {
+    border-color:var(--accent-violet);
+    box-shadow:0 0 12px var(--glow);
+}
+
+.box.empty .box-content{opacity:0} /* completely blank */
+
+/* HUD */
 #hud{
     position:fixed;
     top:50%;
@@ -146,7 +190,7 @@ header{
     width:clamp(400px,55vw,1000px);
     max-height:80vh;
     overflow-y:auto;
-    background:rgba(5,3,15,.85);
+    background:rgba(5,3,15,var(--translucent));
     border:2px solid var(--accent-violet);
     padding:clamp(.8rem,1.2vw,2rem);
     box-shadow:0 0 80px rgba(0,0,0,.9);
@@ -158,119 +202,210 @@ header{
     display:flex;
     flex-direction:column;
 }
-#hud.active{opacity:1;}
-.hud-header{font-family:'Orbitron',sans-serif;font-size:clamp(1.4rem,1.6vw,2.8rem);text-align:center;margin-bottom:.3rem;text-shadow:0 0 18px var(--glow);}
-.hud-species{text-align:center;font-size:clamp(.8rem,.9vw,1.6rem);opacity:.88;margin-bottom:.9rem;border-bottom:1px dashed var(--border);padding-bottom:.5rem;}
-.hud-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(.45rem,.47vw,.9rem);}
-.stat-item{display:flex;justify-content:center;align-items:center;padding:clamp(.5rem,.55vw,1rem);border:2px solid var(--border);background:var(--panel-bg);text-align:center;min-height:clamp(40px,4vw,80px);border-radius:8px;}
-.stat-text{font-family:'Orbitron',sans-serif;font-size:clamp(.75rem,.8vw,1.5rem);font-weight:900;text-shadow:0 0 10px var(--glow);text-transform:uppercase;}
-.hud-footer{display:flex;justify-content:space-between;font-size:clamp(.65rem,.68vw,1.3rem);opacity:.92;margin-top:1rem;padding-top:.6rem;border-top:1px dashed var(--border);flex-wrap:wrap;}
-.hud-footer div{margin:.25rem 0;}
-.hud-citations{font-weight:700;}
-.hud-agencies{opacity:.85;font-size:clamp(.65rem,.7vw,1rem);}
-#beam-svg{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:900;opacity:0;transition:opacity .6s;}
-.beam{fill:none;stroke:var(--accent-violet);stroke-width:1.5;opacity:.3;filter:drop-shadow(0 0 10px var(--glow));}
+#hud.active{opacity:1}
+
+.hud-header{
+    font-family:'Orbitron',sans-serif;
+    font-size:clamp(1.4rem,1.6vw,2.8rem);
+    text-align:center;
+    margin-bottom:.3rem;
+    text-shadow:0 0 18px var(--glow);
+}
+.hud-species{
+    text-align:center;
+    font-size:clamp(.8rem,.9vw,1.6rem);
+    opacity:.88;
+    margin-bottom:.9rem;
+    border-bottom:1px dashed var(--border);
+    padding-bottom:.5rem;
+}
+.hud-stats{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:clamp(.45rem,.47vw,.9rem);
+}
+.stat-item{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:clamp(.5rem,.55vw,1rem);
+    border:2px solid var(--border);
+    background:var(--panel-bg);
+    text-align:center;
+    min-height:clamp(40px,4vw,80px);
+    border-radius:8px;
+}
+.stat-text{
+    font-family:'Orbitron',sans-serif;
+    font-size:clamp(.75rem,.8vw,1.5rem);
+    font-weight:900;
+    text-shadow:0 0 10px var(--glow);
+    text-transform:uppercase;
+}
+.hud-footer{
+    display:flex;
+    justify-content:space-between;
+    font-size:clamp(.65rem,.68vw,1.3rem);
+    opacity:.92;
+    margin-top:1rem;
+    padding-top:.6rem;
+    border-top:1px dashed var(--border);
+    flex-wrap:wrap;
+}
+.hud-footer-section{
+    display:flex;
+    flex-direction:column;
+    gap:.3rem;
+}
+.hud-footer-section-title{
+    font-weight:900;
+    font-size:clamp(.65rem,.68vw,1rem);
+    text-transform:uppercase;
+    opacity:.8;
+}
+
+/* BEAM */
+#beam-svg{
+    position:fixed;
+    inset:0;
+    width:100vw;
+    height:100vh;
+    pointer-events:none;
+    z-index:900;
+    opacity:0;
+    transition:opacity .6s;
+}
+.beam{
+    fill:none;
+    stroke:var(--accent-violet);
+    stroke-width:1.5;
+    opacity:.3;
+    filter:drop-shadow(0 0 10px var(--glow));
+}
 </style>
 </head>
+
 <body>
 <div id="scaler">
+
 <header>
     <div class="title">WATCHDOGGEM</div>
     <a href="https://x.com/watchdoggem" target="_blank" class="x-link">
         <img src="https://unavatar.io/x/watchdoggem" alt="X" class="x-avatar">
     </a>
-    <div id="category-bar">
-        <div class="category-button" data-category="animal">Animal</div>
-        <div class="category-button" data-category="children">Children</div>
-        <div class="category-button" data-category="petroleum">Petroleum</div>
-        <div class="category-button" data-category="abortion">Abortion</div>
-    </div>
 </header>
 
-<div class="grid" id="grid"></div>
+<div id="category-bar">
+    <div class="category-button" data-category="animal">Animal</div>
 </div>
 
-<svg id="beam-svg"><polygon id="beam-poly" class="beam" points="0,0"/></svg>
+<div class="grid" id="grid">
+    <!-- Panels generated here -->
+</div>
+</div>
+
+<svg id="beam-svg">
+    <polygon id="beam-poly" class="beam" points="0,0"/>
+</svg>
 
 <div id="hud">
     <div class="hud-header"></div>
     <div class="hud-species"></div>
     <div class="hud-stats"></div>
-    <div class="hud-footer"></div>
+    <div class="hud-footer">
+        <div id="hud-citations" class="hud-footer-section">
+            <div class="hud-footer-section-title">Citations</div>
+        </div>
+        <div id="hud-agencies" class="hud-footer-section">
+            <div class="hud-footer-section-title">Agencies</div>
+        </div>
+    </div>
 </div>
 
 <script>
-// GENERATE 12 PANELS
-const categoriesList=["animal","children","petroleum","abortion"];
-const panels=[];
-for(let i=0;i<12;i++){
-    panels.push({
-        id:`PANEL-${i+1}`,
-        title:`Demo Panel ${i+1}`,
-        subtitle:"",
-        species:[],
-        categories:[categoriesList[i%4]],
-        stats:[],
-        footer:{citations:[],agencies:[]}
-    });
-}
+// PANEL DATA
+const panels = [
+  {
+    id:"104801",
+    title:"PRIMATES IN RESEARCH",
+    subtitle:"",
+    species:["RHESUS MACAQUES","CYNOMOLGUS MACAQUES"],
+    categories:["animal"],
+    stats:[
+      {text:"100% FATAL ANESTHETIC OVERDOSE", ref:1},
+      {text:"20% CLINICAL SELF-HARM", ref:1},
+      {text:"83% SOCIAL ISOLATION", ref:1},
+      {text:"89% DISTRESSED PACING", ref:1},
+      {text:"12% PAIN RELIEF WITHHELD", ref:1},
+      {text:"100% CAGE SEQUESTRATION", ref:1},
+      {text:"$800M+ U.S. DOMESTIC RESEARCH FUNDING", ref:2},
+      {text:"$300M+ TAXPAYER INFRASTRUCTURE SUPPORT", ref:1}
+    ],
+    footerCitations:["Citation 1","Citation 2","Citation 3"],
+    footerAgencies:["FDA","NIH","USDA"]
+  },
+  {empty:true},{empty:true},{empty:true},{empty:true},{empty:true},{empty:true},{empty:true},{empty:true},{empty:true},{empty:true},{empty:true}
+];
 
-let activeCategories=new Set();
-const grid=document.getElementById('grid');
+let activeCategories = new Set();
+const grid = document.getElementById('grid');
 
-// RENDER GRID
-function renderGrid(){
-    grid.innerHTML="";
+// GRID RENDER
+function renderGrid() {
+    grid.innerHTML = "";
     panels.forEach((p)=>{
-        const box=document.createElement('div');
+        const box = document.createElement('div');
         box.classList.add('box');
-        box.dataset.hasData="true";
+        box.dataset.hasData = (!p.empty).toString();
 
-        const content=document.createElement('div');
+        const content = document.createElement('div');
         content.classList.add('box-content');
-        content.innerHTML=`<div class="splash-top">${p.id}</div>
-                           <div class="splash-mid">${p.title}</div>
-                           <div class="splash-bottom">${p.subtitle}</div>`;
 
-        // Splash category button
-        if(p.categories){
-            p.categories.forEach(cat=>{
-                const catBtn=document.createElement('div');
-                catBtn.textContent=cat.toUpperCase();
-                catBtn.classList.add('splash-category-button');
-                if(activeCategories.has(cat)) catBtn.classList.add('active');
-                catBtn.addEventListener('click',e=>{
-                    e.stopPropagation();
-                    if(activeCategories.has(cat)) activeCategories.delete(cat);
-                    else activeCategories.add(cat);
-                    renderGrid();
+        if(p.empty){
+            box.classList.add('empty');
+            content.innerHTML = ""; // completely blank
+        } else {
+            content.innerHTML = `<div class="splash-top">${p.id}</div>
+                                 <div class="splash-mid">${p.title}</div>
+                                 <div class="splash-bottom">${p.subtitle}</div>`;
+
+            // panel category button (bottom-right)
+            if(p.categories && p.categories.length){
+                p.categories.forEach(cat=>{
+                    const catBtn = document.createElement('div');
+                    catBtn.textContent = cat.toUpperCase();
+                    catBtn.classList.add('splash-category-button');
+                    if(activeCategories.has(cat)) catBtn.classList.add('active');
+                    content.appendChild(catBtn);
                 });
-                content.appendChild(catBtn);
-            });
-        }
+            }
 
-        box.addEventListener('mouseenter',()=>showHud(box,p));
-        box.addEventListener('mouseleave',()=>handleBoxLeave(box));
-        box.addEventListener('touchstart',()=>showHud(box,p));
+            box.addEventListener('mouseenter',()=>showHud(box,p));
+            box.addEventListener('mouseleave',()=>handleBoxLeave(box));
+            box.addEventListener('touchstart',()=>showHud(box,p));
+        }
 
         box.appendChild(content);
         grid.appendChild(box);
     });
+
     applyFilters();
 }
 
+// CATEGORY FILTER
 function applyFilters(){
     document.querySelectorAll('.box').forEach((box,i)=>{
-        const p=panels[i];
-        const match=activeCategories.size===0||p.categories.some(c=>activeCategories.has(c));
-        box.style.display=match?"flex":"none";
+        const p = panels[i];
+        if(p.empty) { box.style.display="flex"; return; } // empty boxes are ignored
+        const categoryMatch = activeCategories.size===0 || p.categories.some(c=>activeCategories.has(c));
+        box.style.display = categoryMatch ? "flex" : "none";
     });
 }
 
-// TOP CATEGORY BUTTONS
+// TOP CATEGORY BUTTON HANDLER
 document.querySelectorAll('.category-button').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-        const cat=btn.dataset.category;
+    btn.addEventListener('click', ()=>{
+        const cat = btn.dataset.category;
         if(activeCategories.has(cat)) activeCategories.delete(cat);
         else activeCategories.add(cat);
         btn.classList.toggle('active');
@@ -288,13 +423,16 @@ function updateBeam(){
     if(!activeBox) return;
     const b=activeBox.getBoundingClientRect();
     const h=hud.getBoundingClientRect();
-    const pts=[b.left,b.top,h.left,h.top,h.right,h.top,
-               b.right,b.top,b.right,b.bottom,h.right,h.bottom,
-               h.left,h.bottom,b.left,b.bottom].join(',');
+    const pts=[
+        b.left,b.top,h.left,h.top,h.right,h.top,
+        b.right,b.top,b.right,b.bottom,h.right,h.bottom,
+        h.left,h.bottom,b.left,b.bottom
+    ].join(',');
     beamPoly.setAttribute('points',pts);
 }
 
 function showHud(el,panel){
+    if(panel.empty) return;
     if(leaveTimeout) clearTimeout(leaveTimeout);
     if(activeBox===el) return;
     activeBox=el;
@@ -302,33 +440,37 @@ function showHud(el,panel){
     el.classList.add('active');
 
     hud.classList.add('active');
-    hud.querySelector('.hud-header').textContent=panel.title;
-    hud.querySelector('.hud-species').textContent=panel.species.join(" | ");
+    hud.querySelector('.hud-header').textContent = panel.title;
+    hud.querySelector('.hud-species').textContent = panel.species.join(" | ");
 
-    const statsDiv=hud.querySelector('.hud-stats');
+    const statsDiv = hud.querySelector('.hud-stats');
     statsDiv.innerHTML="";
     panel.stats.forEach(s=>{
-        const stat=document.createElement('div');
+        const stat = document.createElement('div');
         stat.classList.add('stat-item');
         stat.innerHTML=`<div class="stat-text">${s.text}<sup>${s.ref}</sup></div>`;
         statsDiv.appendChild(stat);
     });
 
-    const footerDiv=hud.querySelector('.hud-footer');
-    footerDiv.innerHTML="";
-    if(panel.footer){
-        if(panel.footer.citations.length){
-            const citDiv=document.createElement('div');
-            citDiv.classList.add('hud-citations');
-            citDiv.textContent=panel.footer.citations.join(" • ");
-            footerDiv.appendChild(citDiv);
-        }
-        if(panel.footer.agencies.length){
-            const agDiv=document.createElement('div');
-            agDiv.classList.add('hud-agencies');
-            agDiv.textContent=panel.footer.agencies.join(" • ");
-            footerDiv.appendChild(agDiv);
-        }
+    // Footer structured
+    const citationsDiv = document.getElementById('hud-citations');
+    citationsDiv.innerHTML='<div class="hud-footer-section-title">Citations</div>';
+    if(panel.footerCitations){
+        panel.footerCitations.forEach(c=>{ 
+            const div = document.createElement('div'); 
+            div.textContent=c; 
+            citationsDiv.appendChild(div);
+        });
+    }
+
+    const agenciesDiv = document.getElementById('hud-agencies');
+    agenciesDiv.innerHTML='<div class="hud-footer-section-title">Agencies</div>';
+    if(panel.footerAgencies){
+        panel.footerAgencies.forEach(a=>{
+            const div=document.createElement('div');
+            div.textContent=a;
+            agenciesDiv.appendChild(div);
+        });
     }
 
     beamSvg.style.opacity='1';
@@ -347,13 +489,14 @@ function handleBoxLeave(el){
 
 window.addEventListener('resize',updateBeam);
 window.addEventListener('scroll',updateBeam);
-document.addEventListener('touchstart',e=>{
-    if(!e.target.closest('#hud')&&!e.target.closest('.box')){
+
+document.addEventListener('touchstart', e => {
+    if(!e.target.closest('#hud') && !e.target.closest('.box')){
         if(activeBox) handleBoxLeave(activeBox);
     }
 });
 
-// INITIAL RENDER
+// INITIAL GRID RENDER
 renderGrid();
 </script>
 </body>
