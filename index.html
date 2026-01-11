@@ -15,7 +15,7 @@
         * { box-sizing: border-box; cursor: crosshair; }
         
         body { 
-            background: var(--bg-deep); 
+            background: var(--bg-deep);
             background-image: 
                 radial-gradient(circle at 50% 50%, #101a10 0%, #060a06 100%),
                 linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
@@ -29,7 +29,8 @@
         }
 
         #search-container {
-            display: flex; border: 1px solid var(--border);
+            display: flex;
+            border: 1px solid var(--border);
             padding: 15px; margin-bottom: 30px;
             background: rgba(0, 0, 0, 0.4);
             width: calc(100% - 100px);
@@ -37,12 +38,12 @@
         }
 
         #filter-input {
-            background: transparent; border: none; outline: none;
+            background: transparent;
+            border: none; outline: none;
             color: var(--accent-neon); font-family: 'Impact', sans-serif;
             font-size: 24px; width: 100%; letter-spacing: 3px;
         }
 
-        /* MAIN SCREEN - THE SINGLE TRIGGER BOX */
         .grid { display: block; }
         .box {
             border: 1px solid var(--border);
@@ -51,31 +52,39 @@
             justify-content: center; align-items: center;
             background: linear-gradient(145deg, rgba(26, 46, 26, 0.4), rgba(10, 15, 10, 0.6));
             transition: border 0.3s;
+            cursor: pointer;
         }
         .box:hover { border-color: var(--accent-neon); }
         .box-num { font-size: 62px; line-height: 0.8; }
         .box-label { font-size: 28px; margin-top: 12px; opacity: 0.6; }
 
-        /* THE HUD - CONTAINS THE 10 INTERNAL DATA BOXES */
         #hud {
-            position: fixed; top: 50%; left: 50%;
+            position: fixed;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
             width: 85vw; max-width: 1100px;
-            background: rgba(5, 8, 5, 0.98); 
+            /* HUD OPACITY FIXED TO SOLID */
+            background: rgb(5, 8, 5); 
             border: 1px solid var(--accent-neon);
             padding: 40px; z-index: 1000;
             display: flex; flex-direction: column;
             transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 0 100px rgba(0,0,0,0.9);
+            pointer-events: none;
         }
 
         .hud-header { font-size: 42px; text-align: center; margin-bottom: 10px; }
         .hud-species { font-size: 22px; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 30px; }
         
-        /* 10 DATA MODULES INSIDE HUD */
-        .hud-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 30px; }
+        .hud-stats-grid { 
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 12px; margin-bottom: 30px; 
+        }
+
         .stat-module {
-            border: 1px solid var(--border); padding: 18px;
+            border: 1px solid var(--border);
+            padding: 18px;
             background: rgba(212, 193, 255, 0.02);
             text-align: center; font-size: 24px; text-transform: uppercase;
         }
@@ -93,7 +102,7 @@
             opacity: 0;
         }
         .beam-path { 
-            fill: rgba(212, 193, 255, 0.05); 
+            fill: rgba(212, 193, 255, 0.05);
             stroke: rgba(212, 193, 255, 0.2); 
             stroke-width: 1; 
         }
@@ -133,7 +142,7 @@
     </div>
 
     <div class="grid">
-        <div class="box" onmouseenter="showHud(this)" onmouseleave="hideHud()">
+        <div class="box" onmouseenter="showHud(this)" onmouseleave="hideHud()" onclick="event.stopPropagation(); showHud(this)">
             <div class="box-num">104,801</div>
             <div class="box-label">NHP TESTING</div>
         </div>
@@ -146,17 +155,30 @@
 
         function showHud(el) {
             hud.style.transform = "translate(-50%, -50%) scale(1)";
+            hud.style.pointerEvents = "auto";
             beamSvg.style.opacity = "1";
             
             const r = el.getBoundingClientRect(); 
-            const h = hud.getBoundingClientRect(); 
+            const h = hud.getBoundingClientRect();
 
-            const points = `${r.left},${r.top} ${h.left},${h.top} ${h.right},${h.top} ${r.right},${r.top} ${r.right},${r.bottom} ${h.right},${h.bottom} ${h.left},${h.bottom} ${r.left},${r.bottom}`;
+            // BEAM MATH FIXED: Connects 4 corners of box to 4 corners of HUD
+            const points = [
+                `${r.left},${r.top}`,       // Box TL
+                `${h.left},${h.top}`,       // HUD TL
+                `${h.right},${h.top}`,      // HUD TR
+                `${r.right},${r.top}`,      // Box TR
+                `${r.right},${r.bottom}`,   // Box BR
+                `${h.right},${h.bottom}`,   // HUD BR
+                `${h.left},${h.bottom}`,    // HUD BL
+                `${r.left},${r.bottom}`     // Box BL
+            ].join(' ');
+
             projection.setAttribute('points', points);
         }
 
         function hideHud() { 
-            hud.style.transform = "translate(-50%, -50%) scale(0)"; 
+            hud.style.transform = "translate(-50%, -50%) scale(0)";
+            hud.style.pointerEvents = "none";
             beamSvg.style.opacity = "0"; 
         }
     </script>
