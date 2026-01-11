@@ -1,435 +1,316 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>watchdoggem</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WATCHDOGGEM</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=VT323&display=swap" rel="stylesheet">
 
 <style>
-:root {
-    --bg:#05030f;
-    --accent-violet:#c79eff;
-    --accent-violet-dim:#a57eff;
-    --glow:rgba(199,158,255,.42);
-    --border:rgba(199,158,255,.32);
-    --panel-bg:rgba(199,158,255,.09);
-    --translucent:.85;
-    --design-width:1600px;
+:root{
+  --bg:#05030f;
+  --violet:#c79eff;
+  --violet-dim:#a57eff;
+  --glow:rgba(199,158,255,.45);
+  --border:rgba(199,158,255,.35);
+  --panel:rgba(199,158,255,.10);
 }
 
-/* GLOBAL RESET */
-*{margin:0;padding:0;box-sizing:border-box;cursor:crosshair}
+*{box-sizing:border-box;margin:0;padding:0}
 body{
-    background:var(--bg);
-    background-image:
-        radial-gradient(circle at 30% 20%, rgba(199,158,255,.08), transparent 50%),
-        radial-gradient(circle at 70% 80%, rgba(167,126,255,.06), transparent 60%);
-    color:var(--accent-violet);
-    font-family:'VT323',monospace;
-    min-height:100vh;
-    overflow-x:hidden;
+  background:var(--bg);
+  color:var(--violet);
+  font-family:'VT323', monospace;
+  min-height:100vh;
 }
 
-#scaler{
-    --scale:calc(100vw / var(--design-width));
-    width:var(--design-width);
-    transform:translateX(-50%) scale(var(--scale));
-    transform-origin:top center;
-    position:relative;
-    left:50%;
-    padding:clamp(.8rem,1vw,1.6rem);
-}
-
-/* HEADER */
 header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-    margin-bottom:1rem;
-    padding-bottom:.8rem;
-    border-bottom:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:1rem 1.25rem;
+  border-bottom:1px solid var(--border);
 }
 
 .header-left{
-    display:flex;
-    align-items:center;
-    gap:1rem;
+  display:flex;
+  align-items:center;
+  gap:.8rem;
 }
 
-.header-left .title{
-    font-family:'Orbitron',sans-serif;
-    font-size:clamp(1.7rem,2.1vw,3.4rem);
-    font-weight:900;
-    letter-spacing:clamp(3.5px,.36vw,7px);
-    text-shadow:0 0 16px var(--glow);
+.title{
+  font-family:'Orbitron', sans-serif;
+  font-weight:900;
+  letter-spacing:.3em;
+  font-size:1.4rem;
 }
 
-.header-left .x-link{
-    width:clamp(50px,8vw,80px);
-    height:clamp(50px,8vw,80px);
-    border-radius:10px;
-    border:2px solid var(--accent-violet);
-    display:flex;
-    justify-content:center;
-    align-items:center;
+.x-link{
+  width:44px;height:44px;
+  border-radius:8px;
+  overflow:hidden;
+  border:2px solid var(--border);
 }
-
-.header-left .x-avatar{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
+.x-link img{width:100%;height:100%;object-fit:cover}
 
 .header-right{
-    display:flex;
-    align-items:center;
-    gap:1rem;
+  border:1px solid var(--border);
+  padding:.4rem .6rem;
+  border-radius:10px;
+  display:flex;
+  gap:.4rem;
 }
 
-/* CATEGORY BUTTON */
-.category-button{
-    background:var(--panel-bg);
-    border:2px solid var(--border);
-    border-radius:12px;
-    padding:.5rem 1rem;
-    cursor:pointer;
-    font-family:'Orbitron',sans-serif;
-    font-weight:700;
-    text-transform:uppercase;
-    transition:.3s;
+.cat-btn{
+  border:1px solid var(--border);
+  padding:.35rem .8rem;
+  border-radius:999px;
+  background:var(--panel);
+  cursor:pointer;
+  font-family:'Orbitron',sans-serif;
+  font-size:.7rem;
+  text-transform:uppercase;
 }
-.category-button.active{
-    border-color:var(--accent-violet);
-    box-shadow:0 0 12px var(--glow);
+.cat-btn.active{
+  box-shadow:0 0 12px var(--glow);
+  border-color:var(--violet);
 }
 
-/* GRID */
 .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(250px,1fr));
-    gap:clamp(.55rem,.57vw,1.1rem);
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:1rem;
+  padding:1.25rem;
 }
 
 .box{
-    aspect-ratio:1/1;
-    border:2px solid var(--border);
-    border-radius:12px;
-    background:var(--panel-bg);
-    backdrop-filter:blur(8px);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:clamp(1rem,2vw,3rem);
-    transition:.3s;
-    box-shadow:inset 0 0 20px rgba(199,158,255,.08);
-    position:relative;
+  aspect-ratio:1/1;
+  border:2px solid var(--border);
+  border-radius:14px;
+  background:var(--panel);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  cursor:pointer;
+  transition:.25s;
 }
-.box:hover,.box.active{
-    border-color:var(--accent-violet);
-    box-shadow:0 0 32px var(--glow), inset 0 0 24px rgba(199,158,255,.15);
-    transform:translateY(-6px) scale(1.02);
-}
+.box:hover{transform:translateY(-4px);box-shadow:0 0 20px var(--glow)}
+.box.hidden{display:none}
 
 .box-content{
-    font-family:'Orbitron',sans-serif;
-    font-weight:900;
-    text-align:center;
-    text-shadow:0 0 14px var(--glow);
-    letter-spacing:clamp(1px,.1vw,2px);
-    text-transform:uppercase;
-    width:100%;
+  text-align:center;
+  font-family:'Orbitron',sans-serif;
+  font-weight:900;
+  text-transform:uppercase;
 }
 
-.splash-top{font-size:clamp(2rem,5vw,4rem);}
-.splash-mid{font-size:clamp(1rem,3vw,2rem);opacity:.85;margin-top:.35em;}
-.splash-bottom{font-size:clamp(.9rem,2.5vw,1.8rem);letter-spacing:.15em;opacity:.75;margin-top:.2em;}
+.splash-top{font-size:1.8rem}
+.splash-mid{font-size:.95rem;opacity:.9;margin-top:.3rem}
 
-/* Panel category button */
-.splash-category-button{
-    position:absolute;
-    bottom:1rem;
-    right:1rem;
-    padding:.3rem .8rem;
-    border-radius:12px;
-    border:2px solid var(--border);
-    background:var(--panel-bg);
-    font-family:'Orbitron',sans-serif;
-    font-size:clamp(.65rem,.7vw,1rem);
-    text-transform:uppercase;
-    cursor:pointer;
-    transition:.3s;
-}
-.splash-category-button.active{
-    border-color:var(--accent-violet);
-    box-shadow:0 0 12px var(--glow);
+.splash-cat{
+  position:absolute;
+  right:.6rem;
+  bottom:.6rem;
+  font-size:.6rem;
+  padding:.25rem .6rem;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:var(--panel);
 }
 
-.box.empty .box-content{opacity:.12}
+.box-wrap{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
 
-/* HUD */
+.empty{opacity:.12;cursor:default}
+
 #hud{
-    position:fixed;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    width:clamp(400px,55vw,1000px);
-    max-height:80vh;
-    overflow-y:auto;
-    background:rgba(5,3,15,var(--translucent));
-    border:2px solid var(--accent-violet);
-    padding:clamp(.8rem,1.2vw,2rem);
-    box-shadow:0 0 80px rgba(0,0,0,.9);
-    opacity:0;
-    transition:.4s cubic-bezier(.175,.885,.32,1.35);
-    z-index:1000;
-    border-radius:8px;
-    pointer-events:none;
-    display:flex;
-    flex-direction:column;
+  position:fixed;
+  inset:50% auto auto 50%;
+  transform:translate(-50%,-50%);
+  width:min(900px,92vw);
+  max-height:85vh;
+  background:rgba(5,3,15,.9);
+  border:2px solid var(--violet);
+  border-radius:12px;
+  padding:1rem 1.2rem;
+  display:none;
+  flex-direction:column;
+  z-index:1000;
 }
-#hud.active{opacity:1;}
-.hud-header{font-family:'Orbitron',sans-serif;font-size:clamp(1.4rem,1.6vw,2.8rem);text-align:center;margin-bottom:.3rem;text-shadow:0 0 18px var(--glow);}
-.hud-species{text-align:center;font-size:clamp(.8rem,.9vw,1.6rem);opacity:.88;margin-bottom:.9rem;border-bottom:1px dashed var(--border);padding-bottom:.5rem;}
-.hud-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(.45rem,.47vw,.9rem);}
-.stat-item{display:flex;justify-content:center;align-items:center;padding:clamp(.5rem,.55vw,1rem);border:2px solid var(--border);background:var(--panel-bg);text-align:center;min-height:clamp(40px,4vw,80px);border-radius:8px;}
-.stat-text{font-family:'Orbitron',sans-serif;font-size:clamp(.75rem,.8vw,1.5rem);font-weight:900;text-shadow:0 0 10px var(--glow);text-transform:uppercase;}
-.hud-footer{display:flex;justify-content:space-between;font-size:clamp(.65rem,.68vw,1.3rem);opacity:.92;margin-top:1rem;padding-top:.6rem;border-top:1px dashed var(--border);flex-wrap:wrap;}
 
-/* BEAM */
-#beam-svg{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:900;opacity:0;transition:opacity .6s;}
-.beam{fill:none;stroke:var(--accent-violet);stroke-width:1.5;opacity:.3;filter:drop-shadow(0 0 10px var(--glow));}
+#hud.active{display:flex}
+
+.hud-title{
+  text-align:center;
+  font-family:'Orbitron',sans-serif;
+  font-size:1.4rem;
+  margin-bottom:.4rem;
+}
+
+.hud-species{
+  text-align:center;
+  font-size:.8rem;
+  opacity:.85;
+  border-bottom:1px dashed var(--border);
+  padding-bottom:.4rem;
+  margin-bottom:.6rem;
+}
+
+.hud-stats{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:.4rem;
+}
+
+.stat{
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:.4rem;
+  text-align:center;
+  font-family:'Orbitron',sans-serif;
+  font-size:.7rem;
+}
+
+.hud-footer{
+  margin-top:.6rem;
+  padding-top:.6rem;
+  border-top:1px dashed var(--border);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:.6rem;
+}
+
+.footer-col{
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:.4rem;
+  max-height:120px;
+  overflow:auto;
+}
+
+.footer-col h4{
+  font-family:'Orbitron',sans-serif;
+  font-size:.6rem;
+  margin-bottom:.25rem;
+  text-transform:uppercase;
+}
+
+.footer-col div{font-size:.65rem;opacity:.9}
+
+@media(max-width:600px){
+  .hud-stats{grid-template-columns:1fr}
+  .hud-footer{grid-template-columns:1fr}
+}
 </style>
 </head>
 
 <body>
-<div id="scaler">
 
 <header>
-    <div class="header-left">
-        <div class="title">WATCHDOGGEM</div>
-        <a href="https://x.com/watchdoggem" target="_blank" class="x-link">
-            <img src="https://unavatar.io/x/watchdoggem" alt="X" class="x-avatar">
-        </a>
-    </div>
-    <div class="header-right">
-        <div class="category-button" data-category="animal">Animal</div>
-    </div>
+  <div class="header-left">
+    <div class="title">WATCHDOGGEM</div>
+    <a class="x-link" href="https://x.com/watchdoggem" target="_blank">
+      <img src="https://unavatar.io/x/watchdoggem">
+    </a>
+  </div>
+  <div class="header-right">
+    <div id="cat-animal" class="cat-btn">Animal</div>
+  </div>
 </header>
 
-<div class="grid" id="grid">
-</div>
-</div>
-
-<svg id="beam-svg">
-    <polygon id="beam-poly" class="beam" points="0,0"/>
-</svg>
+<div class="grid" id="grid"></div>
 
 <div id="hud">
-    <div class="hud-header"></div>
-    <div class="hud-species"></div>
-    <div class="hud-stats"></div>
-    <div class="hud-footer"></div>
+  <div class="hud-title">PRIMATES IN RESEARCH</div>
+  <div class="hud-species"></div>
+  <div class="hud-stats"></div>
+  <div class="hud-footer">
+    <div class="footer-col" id="citations">
+      <h4>Citations</h4>
+    </div>
+    <div class="footer-col" id="agencies">
+      <h4>Agencies</h4>
+    </div>
+  </div>
 </div>
 
 <script>
-// ======================
-// PANEL DATA
-// ======================
-const panels = [
+let animalOn=false;
+
+const panels=[
   {
     id:"104801",
     title:"PRIMATES IN RESEARCH",
-    subtitle:"",
     species:["RHESUS MACAQUES","CYNOMOLGUS MACAQUES"],
-    categories:["animal"],
+    category:"animal",
     stats:[
-      {text:"100% FATAL ANESTHETIC OVERDOSE", ref:1},
-      {text:"20% CLINICAL SELF-HARM", ref:1},
-      {text:"83% SOCIAL ISOLATION", ref:1},
-      {text:"89% DISTRESSED PACING", ref:1},
-      {text:"12% PAIN RELIEF WITHHELD", ref:1},
-      {text:"100% CAGE SEQUESTRATION", ref:1},
-      {text:"$800M+ U.S. DOMESTIC RESEARCH FUNDING", ref:2},
-      {text:"$300M+ TAXPAYER INFRASTRUCTURE SUPPORT", ref:1}
+      "100% FATAL ANESTHETIC OVERDOSE",
+      "20% CLINICAL SELF-HARM",
+      "83% SOCIAL ISOLATION",
+      "89% DISTRESSED PACING",
+      "12% PAIN RELIEF WITHHELD",
+      "100% CAGE SEQUESTRATION"
     ],
-    citations:[
-      "1: NIH Animal Research Report",
-      "2: US Research Funding Audit"
-    ],
-    footer:"FDA REQUIRED • NIH FUNDED • USDA OVERSIGHT"
+    citations:["NIH OLAW REPORT","USDA ANNUAL DATA"],
+    agencies:["NIH","FDA","USDA"]
   },
-  {id:"EMPTY1", empty:true},
-  {id:"EMPTY2", empty:true},
-  {id:"EMPTY3", empty:true}
+  {empty:true},{empty:true},{empty:true}
 ];
 
-let activeCategories = new Set();
-
-// ======================
-// GRID RENDER
-// ======================
-const grid = document.getElementById('grid');
-
-function renderGrid(){
-    grid.innerHTML="";
-    panels.forEach(p=>{
-        const box = document.createElement('div');
-        box.classList.add('box');
-        box.dataset.hasData = (!p.empty).toString();
-
-        const content = document.createElement('div');
-        content.classList.add('box-content');
-
-        if(p.empty){
-            box.classList.add('empty');
-            content.textContent="EMPTY SLOT";
-        } else {
-            content.innerHTML = `<div class="splash-top">${p.id}</div>
-                                 <div class="splash-mid">${p.title}</div>
-                                 <div class="splash-bottom">${p.subtitle}</div>`;
-
-            // splash button at bottom-right
-            if(p.categories && p.categories.length){
-                p.categories.forEach(cat=>{
-                    const catBtn = document.createElement('div');
-                    catBtn.textContent = cat.toUpperCase();
-                    catBtn.classList.add('splash-category-button');
-                    if(activeCategories.has(cat)) catBtn.classList.add('active');
-                    catBtn.addEventListener('click', ()=>{
-                        if(activeCategories.has(cat)) activeCategories.delete(cat);
-                        else activeCategories.add(cat);
-                        applyFilters();
-                        catBtn.classList.toggle('active');
-                        topCategoryButtonSync(cat);
-                    });
-                    box.appendChild(catBtn);
-                });
-            }
-
-            box.addEventListener('mouseenter',()=>showHud(box,p));
-            box.addEventListener('mouseleave',()=>handleBoxLeave(box));
-            box.addEventListener('touchstart',()=>showHud(box,p));
-        }
-
-        box.appendChild(content);
-        grid.appendChild(box);
-    });
-    applyFilters();
-}
-
-// ======================
-// CATEGORY BUTTON (TOP-RIGHT)
-// ======================
-const topCatBtn = document.querySelector('.category-button');
-topCatBtn.addEventListener('click',()=>{
-    const cat = topCatBtn.dataset.category;
-    if(activeCategories.has(cat)) activeCategories.delete(cat);
-    else activeCategories.add(cat);
-    topCatBtn.classList.toggle('active');
-    renderGrid(); // ensure active state synced with bottom-right splash
-});
-
-// Sync bottom-right button visual when top button toggled
-function topCategoryButtonSync(cat){
-    if(topCatBtn.dataset.category===cat){
-        topCatBtn.classList.toggle('active', activeCategories.has(cat));
-    }
-}
-
-// ======================
-// FILTER APPLICATION
-// ======================
-function applyFilters(){
-    document.querySelectorAll('.box').forEach((box,i)=>{
-        const p = panels[i];
-        if(p.empty) return;
-        const categoryMatch = activeCategories.size===0 || p.categories.some(c=>activeCategories.has(c));
-        box.style.display = categoryMatch ? "flex":"none";
-        // sync bottom-right button
-        box.querySelectorAll('.splash-category-button').forEach(btn=>{
-            btn.classList.toggle('active', activeCategories.has(btn.textContent.toLowerCase()));
-        });
-    });
-}
-
-// ======================
-// HUD + BEAM
-// ======================
+const grid=document.getElementById('grid');
 const hud=document.getElementById('hud');
-const beamSvg=document.getElementById('beam-svg');
-const beamPoly=document.getElementById('beam-poly');
-let activeBox=null,leaveTimeout=null;
 
-function updateBeam(){
-    if(!activeBox) return;
-    const b=activeBox.getBoundingClientRect();
-    const h=hud.getBoundingClientRect();
-    const pts=[
-        b.left,b.top,h.left,h.top,h.right,h.top,
-        b.right,b.top,b.right,b.bottom,h.right,h.bottom,
-        h.left,h.bottom,b.left,b.bottom
-    ].join(',');
-    beamPoly.setAttribute('points',pts);
+function render(){
+  grid.innerHTML="";
+  panels.forEach(p=>{
+    if(animalOn && (!p.category || p.category!=="animal")) return;
+    const box=document.createElement('div');
+    box.className='box';
+    if(p.empty){box.classList.add('empty');box.innerHTML='<div class="box-content">EMPTY SLOT</div>';grid.appendChild(box);return;}
+    const wrap=document.createElement('div');
+    wrap.className='box-wrap';
+    wrap.innerHTML=`<div class="box-content">
+      <div class="splash-top">${p.id}</div>
+      <div class="splash-mid">${p.title}</div>
+    </div>
+    <div class="splash-cat">ANIMAL</div>`;
+    box.appendChild(wrap);
+    box.onclick=()=>openHud(p);
+    wrap.querySelector('.splash-cat').onclick=(e)=>{e.stopPropagation();toggleAnimal();}
+    grid.appendChild(box);
+  });
 }
 
-function showHud(el,panel){
-    if(panel.empty) return;
-    if(leaveTimeout) clearTimeout(leaveTimeout);
-    if(activeBox===el) return;
-    activeBox=el;
-    document.querySelectorAll('.box').forEach(b=>b.classList.remove('active'));
-    el.classList.add('active');
-
-    hud.classList.add('active');
-
-    hud.querySelector('.hud-header').textContent = panel.title;
-    hud.querySelector('.hud-species').textContent = panel.species.join(" | ");
-
-    const statsDiv = hud.querySelector('.hud-stats');
-    statsDiv.innerHTML="";
-    panel.stats.forEach(s=>{
-        const stat = document.createElement('div');
-        stat.classList.add('stat-item');
-        stat.innerHTML=`<div class="stat-text">${s.text}<sup>${s.ref}</sup></div>`;
-        statsDiv.appendChild(stat);
-    });
-
-    // HUD footer with citations
-    hud.querySelector('.hud-footer').innerHTML = panel.citations.map(c=>c).join(" • ") + " • " + panel.footer;
-
-    beamSvg.style.opacity='1';
-    updateBeam();
+function toggleAnimal(){
+  animalOn=!animalOn;
+  document.getElementById('cat-animal').classList.toggle('active',animalOn);
+  render();
 }
 
-function handleBoxLeave(el){
-    if(activeBox!==el) return;
-    leaveTimeout=setTimeout(()=>{
-        activeBox=null;
-        document.querySelectorAll('.box').forEach(b=>b.classList.remove('active'));
-        hud.classList.remove('active');
-        beamSvg.style.opacity='0';
-    },100);
+document.getElementById('cat-animal').onclick=toggleAnimal;
+
+function openHud(p){
+  hud.classList.add('active');
+  hud.querySelector('.hud-species').textContent=p.species.join(" | ");
+  const stats=hud.querySelector('.hud-stats');
+  stats.innerHTML="";
+  p.stats.forEach(s=>stats.innerHTML+=`<div class="stat">${s}</div>`);
+  const cit=document.getElementById('citations');
+  cit.innerHTML="<h4>Citations</h4>";
+  p.citations.forEach(c=>cit.innerHTML+=`<div>${c}</div>`);
+  const ag=document.getElementById('agencies');
+  ag.innerHTML="<h4>Agencies</h4>";
+  p.agencies.forEach(a=>ag.innerHTML+=`<div>${a}</div>`);
 }
 
-window.addEventListener('resize',updateBeam);
-window.addEventListener('scroll',updateBeam);
-
-// Touch outside HUD closes
-document.addEventListener('touchstart', e=>{
-    if(!e.target.closest('#hud')&&!e.target.closest('.box')){
-        if(activeBox) handleBoxLeave(activeBox);
-    }
+document.addEventListener('click',e=>{
+  if(hud.classList.contains('active') && !hud.contains(e.target)) hud.classList.remove('active');
 });
 
-// ======================
-// INITIAL RENDER
-// ======================
-renderGrid();
+render();
 </script>
+
 </body>
 </html>
