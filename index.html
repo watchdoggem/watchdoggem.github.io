@@ -92,7 +92,7 @@
             align-items: center;
             text-align: center;
         }
-        .stat-text { font-size: 20px; text-transform: uppercase; line-height: 1.1; }
+        .stat-text { font-size: 19px; text-transform: uppercase; line-height: 1.1; white-space: nowrap; }
 
         .hud-footer {
             display: flex;
@@ -128,7 +128,7 @@
     <div id="hud">
         <div id="h-header" class="hud-header"></div>
         <div class="hud-species">SUBJECTS: RHESUS MACAQUES | CYNOMOLGUS</div>
-        <div class="hud-stats-grid" id="h-stats"></div>
+        <div id="h-stats" class="hud-stats-grid"></div>
         <div class="hud-footer">
             <span id="h-source"></span>
             <span>FDA REQUIRED | NIH FUNDED | USDA OVERSIGHT</span>
@@ -138,10 +138,10 @@
     <div class="grid" id="audit-grid">
         <div class="box" 
              data-head="104,801 NON-HUMAN PRIMATES IN RESEARCH EXPERIMENTS"
-             data-stats="100% FATAL ANESTHETIC OVERDOSE, 20% CLINICAL SELF-HARM, 83% SOCIAL ISOLATION, 89% DISTRESSED PACING, 12% NO PAIN RELIEF (COLUMN E), 100% CAGE SEQUESTRATION, 31,000 CAGED MONKEYS BY CLASS A BREEDERS, 13,375 CAGED MONKEYS BY CLASS B DEALERS"
+             data-stats="100% FATAL ANESTHETIC OVERDOSE, 20% CLINICAL SELF-HARM, 83% SOCIAL ISOLATION, 89% DISTRESSED PACING, 12% NO PAIN RELIEF (COLUMN E), 100% CAGE SEQUESTRATION, 31,000 MONKEYS HELD BY CLASS A BREEDERS, 13,375 MONKEYS HELD BY CLASS B DEALERS"
              data-src="SOURCE: USDA FY2024 ANNUAL SUMMARY"
              data-search="104801 NHP MONKEYS" 
-             onmouseenter="showHud(this)" onmouseleave="hideHud()" onclick="this.remove()">
+             onmouseenter="showHud(this)" onmouseleave="hideHud()">
             <div class="box-num">104,801</div>
             <div class="box-label">NHP TESTING</div>
         </div>
@@ -162,12 +162,14 @@
             const statsContainer = document.getElementById('h-stats');
             statsContainer.innerHTML = '';
             const statsArray = el.getAttribute('data-stats').split(',');
+            
             statsArray.slice(0, 8).forEach(stat => {
                 const div = document.createElement('div');
                 div.className = 'stat-module';
                 div.innerHTML = `<span class="stat-text">${stat.trim()}</span>`;
                 statsContainer.appendChild(div);
             });
+
             hud.style.transform = "translate(-50%, -50%) scale(1)";
             beamSvg.style.opacity = "1";
             const r = el.getBoundingClientRect();
