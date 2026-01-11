@@ -30,82 +30,100 @@
 
         /* HEADER & SEARCH */
         #header-row {
-            display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+            display: flex;
+            align-items: center; gap: 12px; margin-bottom: 20px;
         }
 
         #search-container {
-            flex-grow: 1; display: flex; border: 1px solid var(--border);
+            flex-grow: 1;
+            display: flex; border: 1px solid var(--border);
             padding: 12px; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px);
         }
 
         #filter-input {
-            background: transparent; border: none; outline: none;
+            background: transparent;
+            border: none; outline: none;
             color: var(--accent-neon); font-family: 'Impact', sans-serif;
             font-size: 20px; width: 100%; letter-spacing: 2px;
         }
 
-        /* TWITTER AVATAR FIX */
         .twitter-link {
-            width: 50px; height: 50px; border: 1px solid var(--accent-neon);
+            width: 50px;
+            height: 50px; border: 1px solid var(--accent-neon);
             display: flex; align-items: center; justify-content: center;
             background: #000; transition: transform 0.2s;
+            overflow: hidden;
         }
         .twitter-link:hover { transform: scale(1.05); box-shadow: 0 0 10px var(--accent-glow); }
         .twitter-link img { width: 100%; height: 100%; object-fit: cover; }
 
         /* UNIFORM GRID */
         .grid { 
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); gap: 10px;
             max-width: 1400px; margin: 0 auto;
         }
         @media (min-width: 1000px) { .grid { grid-template-columns: repeat(5, 1fr); gap: 15px; } }
 
         .box {
-            border: 1px solid var(--border); height: 130px;
+            border: 1px solid var(--border);
+            height: 130px;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             background: linear-gradient(145deg, rgba(26, 46, 26, 0.4), rgba(10, 15, 10, 0.6));
             transition: all 0.2s;
         }
         .box:hover { border-color: var(--accent-neon); background: rgba(212, 193, 255, 0.05); }
         
-        /* CONSISTENT FONT SCHEME */
         .box-num { font-size: 32px; color: var(--accent-neon); }
         .box-label { font-size: 16px; opacity: 0.7; color: var(--accent-neon); text-transform: uppercase; }
 
-        /* THE HUD - SCALES FOR PHONE */
+        /* HUD - HYBRID OF B1 & B5 */
         #hud {
-            position: fixed; top: 50%; left: 50%;
+            position: fixed;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
-            width: 94vw; max-width: 1000px;
-            background: rgba(4, 6, 4, 0.98); border: 1px solid var(--accent-neon);
-            padding: 20px; z-index: 1000; display: flex; flex-direction: column;
-            pointer-events: none; transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+            width: 94vw; max-width: 1100px;
+            background: rgba(4, 6, 4, 0.98);
+            border: 1px solid var(--accent-neon);
+            padding: 30px; z-index: 1000; display: flex; flex-direction: column;
+            pointer-events: none;
+            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.2);
             box-shadow: 0 0 80px rgba(0,0,0,1);
         }
 
-        .hud-header { font-size: 24px; text-align: center; }
-        .hud-species { font-size: 14px; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 15px; opacity: 0.8; }
+        .hud-header { font-size: 28px; text-align: center; }
+        .hud-species { font-size: 16px; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 20px; opacity: 0.8; }
         
-        .hud-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .hud-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
         .stat-module {
-            border: 1px solid var(--border); padding: 10px;
-            background: rgba(212, 193, 255, 0.02); text-align: center; font-size: 14px;
+            border: 1px solid var(--border);
+            padding: 15px;
+            background: rgba(212, 193, 255, 0.02); text-align: center; font-size: 16px;
+            text-transform: uppercase;
+        }
+
+        .hud-footer {
+            display: flex; justify-content: space-between;
+            font-size: 14px; border-top: 1px solid var(--border);
+            padding-top: 15px; margin-top: 20px; opacity: 0.6;
         }
 
         @media (min-width: 800px) {
-            .hud-header { font-size: 36px; }
-            .stat-module { font-size: 18px; padding: 15px; }
-            .hud-species { font-size: 18px; }
+            .hud-header { font-size: 42px; }
+            .stat-module { font-size: 22px; padding: 18px; }
+            .hud-species { font-size: 22px; }
+            .hud-footer { font-size: 18px; }
         }
 
-        #hud-empty { text-align: center; padding: 60px; font-size: 28px; opacity: 0.2; letter-spacing: 5px; }
+        #hud-empty { text-align: center; padding: 100px; font-size: 28px; opacity: 0.2; letter-spacing: 5px; }
 
         /* BEAMS */
         #beam-svg {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
             pointer-events: none; z-index: 900; opacity: 0;
         }
-        .beam-path { fill: rgba(212, 193, 255, 0.04); stroke: var(--accent-neon); stroke-width: 0.8; opacity: 0.5; }
+        .beam-path { fill: rgba(212, 193, 255, 0.05); stroke: var(--accent-neon); stroke-width: 0.8; opacity: 0.5; }
     </style>
 </head>
 <body onclick="hideHud()">
@@ -114,8 +132,8 @@
         <div id="search-container">
             <input type="text" id="filter-input" placeholder="SEARCH SYSTEM...">
         </div>
-        <a href="https://twitter.com/watchdoggem" class="twitter-link" target="_blank">
-            <img src="https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png" alt="X">
+        <a href="https://x.com/watchdoggem/" class="twitter-link" target="_blank">
+            <img src="https://pbs.twimg.com/profile_images/1865231730071220224/L2tYgB-F_400x400.jpg" alt="WATCHDOGGEM">
         </a>
     </div>
 
@@ -125,6 +143,7 @@
         <div id="hud-data">
             <div class="hud-header">104,801 NON-HUMAN PRIMATES IN RESEARCH</div>
             <div class="hud-species">SUBJECTS: RHESUS MACAQUES | CYNOMOLGUS</div>
+            
             <div class="hud-stats-grid">
                 <div class="stat-module">100% FATAL ANESTHETIC OVERDOSE</div>
                 <div class="stat-module">20% CLINICAL SELF-HARM</div>
@@ -136,6 +155,11 @@
                 <div class="stat-module">13,375 CAGED BY CLASS B DEALERS</div>
                 <div class="stat-module">$800M+ U.S. DOMESTIC REVENUE</div>
                 <div class="stat-module">$300M+ TAXPAYER INFRASTRUCTURE</div>
+            </div>
+
+            <div class="hud-footer">
+                <span>SOURCE: USDA APHIS 2024 / NIH FINANCIALS</span>
+                <span>FDA REQUIRED | NIH FUNDED | USDA OVERSIGHT</span>
             </div>
         </div>
         <div id="hud-empty" style="display:none;">NO DATA RECORDED</div>
@@ -155,7 +179,7 @@
         const projection = document.getElementById('poly-projection');
         let activeBox = null;
 
-        // Populate empty nodes with consistent styling
+        // Populate empty nodes 2-30
         for (let i = 2; i <= 30; i++) {
             const b = document.createElement('div');
             b.className = 'box';
