@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WATCHDOGGEM | TERMINAL</title>
     <style>
         :root {
@@ -12,7 +12,7 @@
             --border: rgba(212, 193, 255, 0.15);
         }
 
-        * { box-sizing: border-box; cursor: crosshair; }
+        * { box-sizing: border-box; cursor: crosshair; -webkit-tap-highlight-color: transparent; }
         
         body { 
             background: var(--bg-deep); 
@@ -21,7 +21,7 @@
                 linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
                 linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
             background-size: 100% 100%, 100% 4px, 100% 100%;
-            margin: 0; padding: 20px; 
+            margin: 0; padding: 10px; 
             font-family: 'Impact', sans-serif; 
             color: var(--accent-neon);
             min-height: 100vh;
@@ -30,73 +30,76 @@
 
         #search-container {
             display: flex; border: 1px solid var(--border);
-            padding: 15px; margin-bottom: 30px;
+            padding: 10px; margin-bottom: 20px;
             background: rgba(0, 0, 0, 0.4);
-            width: 90%;
+            width: 100%; max-width: 600px;
             backdrop-filter: blur(5px);
         }
 
         #filter-input {
             background: transparent; border: none; outline: none;
             color: var(--accent-neon); font-family: 'Impact', sans-serif;
-            font-size: 24px; width: 100%; letter-spacing: 3px;
+            font-size: 18px; width: 100%; letter-spacing: 2px;
         }
 
-        /* MAIN TRIGGER BOX */
         .box {
             border: 1px solid var(--border);
-            height: 150px; width: 220px;
+            height: 140px; width: 200px;
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
             background: rgba(26, 46, 26, 0.4);
             position: relative; z-index: 1001;
+            margin: 20px;
         }
-        .box-num { font-size: 50px; line-height: 0.8; }
-        .box-label { font-size: 22px; margin-top: 10px; opacity: 0.6; }
+        .box-num { font-size: 45px; line-height: 0.8; }
+        .box-label { font-size: 20px; margin-top: 8px; opacity: 0.6; }
 
-        /* HUD - FIXED FOR MOBILE & TABLET */
         #hud {
             position: fixed; top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
             width: 95vw; max-width: 1100px;
-            max-height: 90vh; overflow-y: auto;
+            max-height: 85vh; overflow-y: auto;
             background: rgba(5, 8, 5, 0.98); 
             border: 1px solid var(--accent-neon);
-            padding: 30px; z-index: 1000;
+            padding: 20px; z-index: 1000;
             display: flex; flex-direction: column;
-            transition: transform 0.15s ease-out;
+            transition: transform 0.1s ease-out;
             pointer-events: none;
         }
 
-        .hud-header { font-size: 36px; text-align: center; margin-bottom: 5px; }
-        .hud-species { font-size: 18px; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 20px; }
+        .hud-header { font-size: clamp(24px, 5vw, 42px); text-align: center; margin-bottom: 5px; }
+        .hud-species { font-size: clamp(14px, 3vw, 22px); text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 20px; }
         
-        .hud-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; margin-bottom: 20px; }
+        .hud-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px; margin-bottom: 20px; }
         .stat-module {
             border: 1px solid var(--border); padding: 15px;
             background: rgba(212, 193, 255, 0.02);
-            text-align: center; font-size: 20px;
+            text-align: center; font-size: clamp(16px, 2.5vw, 24px);
         }
 
         .hud-footer {
             display: flex; justify-content: space-between;
-            flex-wrap: wrap; font-size: 16px; border-top: 1px solid var(--border);
-            padding-top: 15px; font-weight: bold; gap: 10px;
+            font-size: clamp(12px, 2vw, 18px); border-top: 1px solid var(--border);
+            padding-top: 15px; font-weight: bold; flex-wrap: wrap; gap: 10px;
         }
 
         #beam-svg {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none; z-index: 500;
-            opacity: 0;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 500; opacity: 0;
         }
-        .beam-path { fill: rgba(212, 193, 255, 0.1); stroke: rgba(212, 193, 255, 0.2); }
+        .beam-path { fill: rgba(212, 193, 255, 0.08); stroke: rgba(212, 193, 255, 0.15); }
+
+        @media (max-width: 600px) {
+            .box { width: 160px; height: 110px; margin: 10px auto; }
+            .box-num { font-size: 35px; }
+            .hud-stats-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body onclick="hideHud()">
 
     <div id="search-container">
-        <input type="text" id="filter-input" placeholder="SEARCH / FILTER AUDIT LOG">
+        <input type="text" id="filter-input" placeholder="SEARCH / FILTER">
     </div>
 
     <svg id="beam-svg"><polygon id="poly-projection" class="beam-path" /></svg>
@@ -117,12 +120,12 @@
             <div class="stat-module">$300M+ TAXPAYER INFRASTRUCTURE</div>
         </div>
         <div class="hud-footer">
-            <span>SOURCE: USDA APHIS 2024 / NIH FINANCIALS</span>
-            <span>FDA REQUIRED | NIH FUNDED | USDA OVERSIGHT</span>
+            <span>SOURCE: USDA APHIS 2024</span>
+            <span>FDA REQUIRED | NIH FUNDED</span>
         </div>
     </div>
 
-    <div class="box" onmouseenter="showHud(this)" onmouseleave="hideHud()" ontouchstart="showHud(this)">
+    <div class="box" onmouseenter="showHud(this)" onmouseleave="hideHud()" ontouchstart="event.stopPropagation(); showHud(this)">
         <div class="box-num">104,801</div>
         <div class="box-label">NHP TESTING</div>
     </div>
@@ -139,15 +142,14 @@
             const r = el.getBoundingClientRect(); 
             const h = hud.getBoundingClientRect(); 
 
-            // CLOCKWISE PATH: Box-TL -> HUD-TL -> HUD-TR -> Box-TR -> Box-BR -> HUD-BR -> HUD-BL -> Box-BL
-            const pts = [
-                `${r.left},${r.top}`, `${h.left},${h.top}`, 
-                `${h.right},${h.top}`, `${r.right},${r.top}`,
-                `${r.right},${r.bottom}`, `${h.right},${h.bottom}`,
-                `${h.left},${h.bottom}`, `${r.left},${r.bottom}`
-            ].join(' ');
-            
-            projection.setAttribute('points', pts);
+            // NO-CROSS MATH: Logic to connect corners without inversion
+            // Direct Top-to-Top and Bottom-to-Bottom mapping
+            const points = `
+                ${r.right},${r.top} ${h.left},${h.top} 
+                ${h.left},${h.bottom} ${r.right},${r.bottom}
+            `;
+            // Using a simpler 4-point connection to ensure no X-cross on mobile or desktop
+            projection.setAttribute('points', `${r.right},${r.top} ${h.left},${h.top} ${h.left},${h.bottom} ${r.right},${r.bottom}`);
         }
 
         function hideHud() { 
