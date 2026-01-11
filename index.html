@@ -35,12 +35,9 @@ body{
 }
 
 #scaler{
-    --scale:calc(100vw / var(--design-width));
-    width:var(--design-width);
-    transform:translateX(-50%) scale(var(--scale));
-    transform-origin:top center;
-    position:relative;
-    left:50%;
+    width:100%;
+    max-width:var(--design-width);
+    margin:0 auto;
     padding:clamp(.8rem,1vw,1.6rem);
 }
 
@@ -63,26 +60,52 @@ header{
     text-shadow:0 0 16px var(--glow);
 }
 
+/* SEARCH + AVATAR */
 .search-bar {
-    flex: 1 1 auto; /* allow to grow/shrink */
-    min-width: 120px;
-    max-width: 100%; /* stretch to available space */
+    flex:1 1 auto;
+    display:flex;
+    align-items:center;
+    gap:.5rem;
 }
 
 #filter-input {
-    width: 100%;
-    font-size: clamp(0.9rem, 2.5vw, 1.6rem); /* bigger min font for mobile */
+    flex:1;
+    padding:.5rem 1rem;
+    background: rgba(5,3,15,0.85);
+    border:1px solid var(--border);
+    border-radius:6px;
+    color:var(--accent-violet);
+    font-size:clamp(0.9rem,2.5vw,1.6rem);
+    outline:none;
+}
+
+#filter-input::placeholder {
+    color: rgba(199,158,255,.55);
 }
 
 .x-link {
-    flex: 0 0 auto;
-    width: clamp(40px, 6vw, 70px); /* bigger, flexible */
-    height: clamp(40px, 6vw, 70px);
+    flex:0 0 auto;
+    width:50px;
+    height:50px;
+    border-radius:6px;
+    overflow:hidden;
+    border:2px solid var(--accent-violet);
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }
 
+.x-link img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+/* GRID & BOXES */
 .grid{
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(auto-fit, minmax(200px,1fr));
     gap:clamp(.55rem,.57vw,1.1rem);
 }
 
@@ -117,32 +140,37 @@ header{
 }
 
 .box[data-has-data="true"] .box-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
 }
 
 .splash-top {
-    font-size: clamp(2.5rem, 6vw, 5rem); /* bigger relative to viewport */
-    line-height: 1;
+    font-size: clamp(3rem, 5vw, 5rem);
+    line-height:1;
 }
-
 .splash-mid {
-    font-size: clamp(1.2rem, 3.5vw, 2.2rem);
-    opacity: .85;
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    opacity:.85;
     margin-top:.35em;
 }
-
 .splash-bottom {
-    font-size: clamp(1rem, 3vw, 2rem);
+    font-size: clamp(1.2rem, 2.5vw, 2rem);
     letter-spacing:.18em;
     opacity:.75;
     margin-top:.2em;
 }
 
+/* Mobile override */
+@media (max-width:600px){
+    .splash-top { font-size:4rem; line-height:1.1; }
+    .splash-mid { font-size:2rem; }
+    .splash-bottom { font-size:1.6rem; letter-spacing:.12em; }
+}
 
+/* Empty boxes */
 .box.empty .box-content{opacity:.12}
 
 /* HUD */
@@ -223,7 +251,6 @@ header{
     flex-wrap:wrap;
 }
 
-/* MOBILE HUD FIX */
 @media (max-width:600px){
     #hud{
         inset:4vh 3vw auto 3vw;
@@ -264,10 +291,10 @@ header{
     <div class="title">WATCHDOGGEM</div>
     <div class="search-bar">
         <input type="text" id="filter-input" placeholder="SEARCH / FILTER..." autocomplete="off">
+        <a href="https://x.com/watchdoggem" target="_blank" class="x-link">
+            <img src="https://unavatar.io/x/watchdoggem" alt="X">
+        </a>
     </div>
-    <a href="https://x.com/watchdoggem" target="_blank" class="x-link">
-        <img src="https://unavatar.io/x/watchdoggem" alt="X">
-    </a>
 </header>
 
 <div class="grid">
