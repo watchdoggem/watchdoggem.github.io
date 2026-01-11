@@ -58,46 +58,47 @@
         .box-num { font-size: 62px; line-height: 0.8; letter-spacing: -2px; }
         .box-label { font-size: 28px; line-height: 1; margin-top: 12px; opacity: 0.8; }
 
+        /* SOLID HUD - HIGH VISIBILITY */
         #hud {
             position: fixed; top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
-            width: 80vw; max-width: 1000px;
-            background: rgba(10, 15, 10, 0.95); /* Solid & Sharp */
+            width: 85vw; max-width: 1100px;
+            background: rgba(10, 15, 10, 0.98); 
             border: 1px solid var(--accent-neon);
             padding: 40px; z-index: 1000;
             display: flex; flex-direction: column;
-            pointer-events: none; transition: transform 0.2s ease-out;
-            box-shadow: 0 0 80px rgba(0,0,0,1);
+            pointer-events: none; transition: transform 0.15s ease-out;
+            box-shadow: 0 0 100px rgba(0,0,0,1);
         }
 
-        .hud-header { font-size: 32px; margin-bottom: 12px; text-align: center; text-transform: uppercase; }
-        .hud-species { font-size: 22px; margin-bottom: 30px; letter-spacing: 2px; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
-        .hud-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 30px; }
+        .hud-header { font-size: 36px; margin-bottom: 10px; text-align: center; text-transform: uppercase; letter-spacing: 1px; }
+        .hud-species { font-size: 22px; margin-bottom: 25px; letter-spacing: 2px; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; opacity: 0.9; }
+        .hud-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px; }
 
         .stat-module {
-            border: 1px solid var(--border); padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border); padding: 18px;
+            background: rgba(255, 255, 255, 0.04);
             display: flex; justify-content: center; align-items: center;
-            text-align: center; min-height: 85px;
+            text-align: center; min-height: 90px;
         }
 
-        .stat-text { font-size: 22px; text-transform: uppercase; line-height: 1.1; }
+        .stat-text { font-size: 24px; text-transform: uppercase; line-height: 1.1; }
 
         .hud-footer {
             display: flex; justify-content: space-between;
-            font-size: 15px; border-top: 1px solid var(--border);
-            padding-top: 20px; letter-spacing: 2px;
+            font-size: 16px; border-top: 1px solid var(--border);
+            padding-top: 20px; letter-spacing: 1.5px;
         }
 
         #beam-svg {
             position: fixed; top: 0; left: 0;
             width: 100vw; height: 100vh;
             pointer-events: none; z-index: 900;
-            opacity: 0; transition: opacity 0.2s;
+            opacity: 0; transition: opacity 0.1s;
         }
         
-        /* Light rays connecting corners */
-        .beam-line { fill: rgba(212, 193, 255, 0.08); stroke: rgba(212, 193, 255, 0.15); stroke-width: 1; }
+        /* The projection lines based on your drawing */
+        .beam-poly { fill: rgba(212, 193, 255, 0.07); stroke: rgba(212, 193, 255, 0.2); stroke-width: 1.5; }
     </style>
 </head>
 <body onclick="hideHud()">
@@ -111,7 +112,11 @@
     </div>
 
     <svg id="beam-svg">
-        <polygon id="p1" class="beam-line" /> <polygon id="p2" class="beam-line" /> <polygon id="p3" class="beam-line" /> <polygon id="p4" class="beam-line" /> </svg>
+        <polygon id="beam-t" class="beam-poly" /> 
+        <polygon id="beam-b" class="beam-poly" /> 
+        <polygon id="beam-l" class="beam-poly" /> 
+        <polygon id="beam-r" class="beam-poly" /> 
+    </svg>
 
     <div id="hud">
         <div id="h-header" class="hud-header"></div>
@@ -138,9 +143,9 @@
     <script>
         const hud = document.getElementById('hud');
         const beamSvg = document.getElementById('beam-svg');
-        const p = {
-            t: document.getElementById('p1'), b: document.getElementById('p2'),
-            l: document.getElementById('p3'), r: document.getElementById('p4')
+        const b = {
+            t: document.getElementById('beam-t'), b: document.getElementById('beam-b'),
+            l: document.getElementById('beam-l'), r: document.getElementById('beam-r')
         };
 
         function showHud(el, e) {
@@ -160,18 +165,23 @@
             hud.style.transform = "translate(-50%, -50%) scale(1)";
             beamSvg.style.opacity = "1";
             
-            const r = el.getBoundingClientRect();
-            const h = hud.getBoundingClientRect();
+            const r = el.getBoundingClientRect(); // Small Box
+            const h = hud.getBoundingClientRect(); // Large HUD
 
-            // Corner-to-Corner mapping
-            p.t.setAttribute('points', `${r.left},${r.top} ${r.right},${r.top} ${h.right},${h.top} ${h.left},${h.top}`);
-            p.b.setAttribute('points', `${r.left},${r.bottom} ${r.right},${r.bottom} ${h.right},${h.bottom} ${h.left},${h.bottom}`);
-            p.l.setAttribute('points', `${r.left},${r.top} ${r.left},${r.bottom} ${h.left},${h.bottom} ${h.left},${h.top}`);
-            p.r.setAttribute('points', `${r.right},${r.top} ${r.right},${r.bottom} ${h.right},${h.bottom} ${h.right},${h.top}`);
+            // EXACT PROJECTION MATH (Box Corner -> HUD Corner)
+            b.t.setAttribute('points', `${r.left},${r.top} ${r.right},${r.top} ${h.right},${h.top} ${h.left},${h.top}`);
+            b.b.setAttribute('points', `${r.left},${r.bottom} ${r.right},${r.bottom} ${h.right},${h.bottom} ${h.left},${h.bottom}`);
+            b.l.setAttribute('points', `${r.left},${r.top} ${r.left},${r.bottom} ${h.left},${h.bottom} ${h.left},${h.top}`);
+            b.r.setAttribute('points', `${r.right},${r.top} ${r.right},${r.bottom} ${h.right},${h.bottom} ${h.right},${h.top}`);
         }
 
-        function hideHud() { hud.style.transform = "translate(-50%, -50%) scale(0)"; beamSvg.style.opacity = "0"; }
+        function hideHud() { 
+            hud.style.transform = "translate(-50%, -50%) scale(0)"; 
+            beamSvg.style.opacity = "0"; 
+        }
+
         window.addEventListener('keydown', (e) => { if(e.key === "Escape") hideHud(); });
+
         function filterGrid() {
             let q = document.getElementById('filter-input').value.toUpperCase();
             document.querySelectorAll('.box').forEach(b => {
