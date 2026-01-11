@@ -94,7 +94,6 @@
             box-shadow: 0 0 20px var(--glow);
         }
 
-        /* GRID - 4 columns until mobile, then lock 2-col */
         .grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -151,18 +150,20 @@
 
         .box.empty .box-content { opacity: 0.12; }
 
-        /* HUD - fixed popup issues, made slightly smaller */
+        /* HUD - tighter, more responsive sizing */
         #hud {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 64vw;
-            max-width: 920px;
+            width: 80vw;
+            max-width: 950px;
+            max-height: 88vh;
+            overflow-y: auto;
             background: rgba(5, 3, 15, var(--translucent));
             border: 2px solid var(--accent-violet);
             border-image: linear-gradient(to right, transparent, var(--accent-violet), transparent) 1;
-            padding: 1.5rem;
+            padding: 1.3rem;
             box-shadow: 0 0 80px rgba(0,0,0,0.9);
             opacity: 0;
             pointer-events: none;
@@ -178,14 +179,14 @@
 
         .hud-header {
             font-family: 'Orbitron', sans-serif;
-            font-size: 3.4rem;
+            font-size: 3.2rem;
             text-align: center;
             margin-bottom: 0.5rem;
             text-shadow: 0 0 18px var(--glow);
-            letter-spacing: 4px;
-            white-space: normal;
-            overflow-wrap: break-word;
-            line-height: 1.15;
+            letter-spacing: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .hud-species {
@@ -201,7 +202,6 @@
         .hud-stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(5, auto);
             gap: 0.9rem;
         }
 
@@ -209,11 +209,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 1.3rem;
+            padding: 1.2rem;
             border: 2px solid var(--border);
             background: var(--panel-bg);
             text-align: center;
-            min-height: 95px;
+            min-height: 90px;
             border-radius: 8px;
         }
 
@@ -224,10 +224,10 @@
 
         .stat-text {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
+            font-size: 1.75rem;
             font-weight: 900;
             text-shadow: 0 0 10px var(--glow);
-            letter-spacing: 1.2px;
+            letter-spacing: 1px;
             text-transform: uppercase;
             line-height: 1.1;
         }
@@ -235,11 +235,13 @@
         .hud-footer {
             display: flex;
             justify-content: space-between;
-            font-size: 1.35rem;
+            font-size: 1.3rem;
             opacity: 0.92;
-            margin-top: 1.6rem;
+            margin-top: 1.5rem;
             padding-top: 1rem;
             border-top: 1px dashed var(--border);
+            flex-wrap: wrap;
+            gap: 0.8rem;
         }
 
         /* BEAM */
@@ -263,9 +265,10 @@
         }
 
         @media (max-width: 900px) {
-            #hud { width: 88vw; padding: 1.4rem; }
-            .hud-header { font-size: 2.6rem; }
+            #hud { width: 90vw; max-width: none; padding: 1.2rem; }
+            .hud-header { font-size: 2.4rem; letter-spacing: 2px; }
             .hud-stats { grid-template-columns: 1fr; }
+            .stat-text { font-size: 1.6rem; }
         }
     </style>
 </head>
@@ -319,11 +322,14 @@
             </div>
         </div>
 
-        <!-- Empty slots (shortened for brevity - add back as many as you need) -->
+        <!-- Add your empty boxes here - example with 2 for brevity -->
         <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
             <div class="box-content">EMPTY SLOT</div>
         </div>
-        <!-- ... repeat empty boxes ... -->
+        <div class="box empty" onmouseenter="showHud(this, false)" onmouseleave="handleBoxLeave(this)" ontouchstart="showHud(this, false)">
+            <div class="box-content">EMPTY SLOT</div>
+        </div>
+        <!-- ... add the rest as needed ... -->
     </div>
 
     <script>
@@ -331,6 +337,7 @@
         const beamSvg = document.getElementById('beam-svg');
         const beamPoly = document.getElementById('beam-poly');
         let activeBox = null;
+        let leaveTimeout = null;
 
         function updateBeam() {
             if (!activeBox) return;
@@ -345,6 +352,9 @@
         }
 
         function showHud(el, hasData = true) {
+            if (leaveTimeout) clearTimeout(leaveTimeout);
+            if (activeBox === el) return;
+
             activeBox = el;
             document.querySelectorAll('.box').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
@@ -354,12 +364,15 @@
         }
 
         function handleBoxLeave(el) {
-            if (activeBox === el) {
-                activeBox = null;
-                document.querySelectorAll('.box').forEach(b => b.classList.remove('active'));
-                hud.classList.remove('active');
-                beamSvg.style.opacity = '0';
-            }
+            if (activeBox !== el) return;
+            leaveTimeout = setTimeout(() => {
+                if (activeBox === el) {
+                    activeBox = null;
+                    document.querySelectorAll('.box').forEach(b => b.classList.remove('active'));
+                    hud.classList.remove('active');
+                    beamSvg.style.opacity = '0';
+                }
+            }, 80); // small buffer to prevent flicker on fast mouse moves
         }
 
         function handleMouseLeave(e) {
