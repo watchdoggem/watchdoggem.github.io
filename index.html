@@ -8,6 +8,7 @@
         :root {
             --bg-deep: #0a0f0a;
             --accent-neon: #d4c1ff; 
+            --accent-glow: rgba(212, 193, 255, 0.4);
             --border: rgba(212, 193, 255, 0.15);
         }
 
@@ -23,13 +24,20 @@
             min-height: 100vh;
         }
 
-        /* Adjusted Grid for multiple boxes */
-        .grid { 
-            display: grid; 
-            grid-template-columns: repeat(2, 250px); /* Stacked on left side */
-            gap: 20px; 
-            margin-top: 50px; 
+        #search-container {
+            display: flex; border: 1px solid var(--border);
+            padding: 15px; margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.03);
+            width: 400px;
         }
+
+        #filter-input {
+            background: transparent; border: none; outline: none;
+            color: var(--accent-neon); font-family: 'Impact', sans-serif;
+            font-size: 24px; width: 100%; letter-spacing: 2px;
+        }
+
+        .grid { display: grid; grid-template-columns: repeat(2, 280px); gap: 20px; }
 
         .box {
             position: relative; border: 1px solid var(--border);
@@ -39,24 +47,33 @@
             z-index: 10;
         }
         
-        .box-num { font-size: 52px; line-height: 0.8; }
-        .box-label { font-size: 22px; line-height: 1; margin-top: 12px; }
+        .box-num { font-size: 62px; line-height: 0.8; letter-spacing: -2px; }
+        .box-label { font-size: 28px; line-height: 1; margin-top: 12px; opacity: 0.8; }
 
         #hud {
-            position: fixed; 
-            top: 50%; left: 65%; /* Keeping it to the right of your boxes */
+            position: fixed; top: 50%; left: 65%;
             transform: translate(-50%, -50%) scale(0);
-            width: 60vw; max-width: 900px;
+            width: 60vw; max-width: 1000px;
             background: rgba(10, 15, 10, 0.98); 
             border: 1px solid var(--accent-neon);
             padding: 40px; z-index: 1000;
             display: flex; flex-direction: column;
             pointer-events: none; transition: transform 0.1s ease-out;
+            box-shadow: 0 0 100px rgba(0,0,0,1);
         }
 
-        .hud-header { font-size: 32px; margin-bottom: 12px; text-align: center; text-transform: uppercase; }
-        .hud-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .stat-module { border: 1px solid var(--border); padding: 15px; text-align: center; background: rgba(255,255,255,0.02); }
+        .hud-header { font-size: 36px; margin-bottom: 12px; text-align: center; text-transform: uppercase; }
+        .hud-species { font-size: 22px; margin-bottom: 30px; letter-spacing: 2px; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
+        .hud-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 30px; }
+
+        .stat-module {
+            border: 1px solid var(--border); padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            display: flex; justify-content: center; align-items: center;
+            text-align: center; min-height: 85px;
+        }
+
+        .stat-text { font-size: 22px; text-transform: uppercase; line-height: 1.1; }
 
         #beam-svg {
             position: fixed; top: 0; left: 0;
@@ -66,13 +83,17 @@
         }
         
         .beam-flare { 
-            fill: rgba(212, 193, 255, 0.08); 
+            fill: rgba(212, 193, 255, 0.1); 
             stroke: rgba(212, 193, 255, 0.4); 
-            stroke-width: 1.5; 
+            stroke-width: 2; 
         }
     </style>
 </head>
 <body onclick="hideHud()">
+
+    <div id="search-container">
+        <input type="text" id="filter-input" placeholder="AUDIT LOG">
+    </div>
 
     <svg id="beam-svg">
         <polygon id="flare-shape" class="beam-flare" /> 
@@ -80,6 +101,7 @@
 
     <div id="hud">
         <div id="h-header" class="hud-header"></div>
+        <div class="hud-species">SUBJECTS: RHESUS MACAQUES | CYNOMOLGUS</div>
         <div id="h-stats" class="hud-stats-grid"></div>
     </div>
 
@@ -94,7 +116,7 @@
 
         <div class="box" 
              data-head="U.S. DOMESTIC REVENUE & INFRASTRUCTURE"
-             data-stats="$800M+ ANNUAL REVENUE; $300M+ TAXPAYER FUNDED; 31,000 CLASS A BREEDERS; 13,375 CLASS B DEALERS; NIH FINANCIAL OVERLAY; USDA OVERSIGHT LOGS"
+             data-stats="$800M+ ANNUAL REVENUE; $300M+ TAXPAYER FUNDED; 31,000 CLASS A BREEDERS; 13,375 CLASS B DEALERS; NIH FINANCIAL OVERLAY; USDA OVERSIGHT LOGICALS"
              onmouseenter="showHud(this)" onmouseleave="hideHud()">
             <div class="box-num">$1.1B</div>
             <div class="box-label">MARKET VALUE</div>
@@ -107,6 +129,7 @@
         const flare = document.getElementById('flare-shape');
 
         function showHud(el) {
+            // Update Text content
             document.getElementById('h-header').innerText = el.getAttribute('data-head');
             const statsContainer = document.getElementById('h-stats');
             statsContainer.innerHTML = '';
@@ -117,24 +140,29 @@
                 statsContainer.appendChild(div);
             });
 
+            // 1. MUST SHOW HUD FIRST so getBoundingClientRect() sees it at full size
             hud.style.transform = "translate(-50%, -50%) scale(1)";
             beamSvg.style.opacity = "1";
             
-            const r = el.getBoundingClientRect(); 
-            const h = hud.getBoundingClientRect(); 
+            // 2. Wrap in requestAnimationFrame to ensure the browser has rendered the HUD position
+            requestAnimationFrame(() => {
+                const r = el.getBoundingClientRect(); // Trigger Box corners
+                const h = hud.getBoundingClientRect(); // HUD corners
 
-            // Dynamic logic: works for any 'r' (the box being hovered)
-            const points = `
-                ${r.left},${r.top} 
-                ${h.left},${h.top} 
-                ${h.right},${h.top} 
-                ${r.right},${r.top} 
-                ${r.right},${r.bottom} 
-                ${h.right},${h.bottom} 
-                ${h.left},${h.bottom} 
-                ${r.left},${r.bottom}
-            `;
-            flare.setAttribute('points', points);
+                // 3. Connect corners exactly as drawn (No twisting, no offset errors)
+                // Order: Box-TL, HUD-TL, HUD-TR, Box-TR, Box-BR, HUD-BR, HUD-BL, Box-BL
+                const points = `
+                    ${r.left},${r.top} 
+                    ${h.left},${h.top} 
+                    ${h.right},${h.top} 
+                    ${r.right},${r.top} 
+                    ${r.right},${r.bottom} 
+                    ${h.right},${h.bottom} 
+                    ${h.left},${h.bottom} 
+                    ${r.left},${r.bottom}
+                `;
+                flare.setAttribute('points', points);
+            });
         }
 
         function hideHud() { 
