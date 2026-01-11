@@ -21,7 +21,6 @@
     --design-width:1600px;
 }
 
-/* GLOBAL RESET */
 *{margin:0;padding:0;box-sizing:border-box;cursor:crosshair}
 
 body{
@@ -35,7 +34,6 @@ body{
     overflow-x:hidden;
 }
 
-/* SCALER */
 #scaler{
     --scale:calc(100vw / var(--design-width));
     width:var(--design-width);
@@ -46,7 +44,6 @@ body{
     padding:clamp(.8rem,1vw,1.6rem);
 }
 
-/* HEADER */
 header{
     display:flex;
     flex-wrap:wrap;
@@ -78,7 +75,7 @@ header{
     background: rgba(5,3,15,0.8);
     border: 1px solid var(--border);
     color: var(--accent-violet);
-    font-size: clamp(0.9rem,2.2vw,1.6rem);
+    font-size: clamp(.9rem,2.5vw,1.6rem);
     outline: none;
 }
 
@@ -98,17 +95,23 @@ header{
     align-items: center;
 }
 
-.x-link img {
-    width:100%;
-    height:100%;
-    object-fit:cover;
+.x-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-/* GRID & BOXES */
 .grid{
     display:grid;
     grid-template-columns:repeat(4,1fr);
     gap:clamp(.55rem,.57vw,1.1rem);
+}
+
+@media (max-width: 800px){
+    .grid { grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 480px){
+    .grid { grid-template-columns: repeat(1,1fr); }
 }
 
 .box{
@@ -149,34 +152,19 @@ header{
     text-align: center;
 }
 
-/* SPLASH TEXT */
-.splash-top {
-    font-size: clamp(2rem,5vw,5rem);
-    line-height: 1;
-}
-
-.splash-mid {
-    font-size: clamp(1rem,3vw,2.2rem);
-    opacity: .85;
-    margin-top:.35em;
-}
-
-.splash-bottom {
-    font-size: clamp(.9rem,2.5vw,2rem);
-    letter-spacing:.18em;
-    opacity:.75;
-    margin-top:.2em;
-}
+.splash-top { font-size: clamp(2.5rem, 6vw, 4.2rem); line-height: 1; }
+.splash-mid { font-size: clamp(1.2rem, 3vw, 2rem); opacity:.85; margin-top:.35em; }
+.splash-bottom { font-size: clamp(1rem, 2.5vw, 1.8rem); letter-spacing:.18em; opacity:.75; margin-top:.2em; }
 
 .box.empty .box-content{opacity:.12}
 
-/* HUD POPUP */
+/* HUD */
 #hud{
     position:fixed;
     top:50%;
     left:50%;
     transform:translate(-50%,-50%);
-    width:clamp(400px,55vw,1000px);
+    width:clamp(400px,60vw,950px);
     max-height:85vh;
     overflow-y:auto;
     background:rgba(5,3,15,var(--translucent));
@@ -196,7 +184,7 @@ header{
 
 .hud-header{
     font-family:'Orbitron',sans-serif;
-    font-size:clamp(1.6rem,1.67vw,3.5rem);
+    font-size:clamp(1.6rem,1.67vw,3.4rem);
     text-align:center;
     margin-bottom:.3rem;
     text-shadow:0 0 18px var(--glow);
@@ -204,7 +192,7 @@ header{
 
 .hud-species{
     text-align:center;
-    font-size:clamp(.85rem,.89vw,1.8rem);
+    font-size:clamp(.85rem,.89vw,1.7rem);
     opacity:.88;
     margin-bottom:.9rem;
     border-bottom:1px dashed var(--border);
@@ -215,6 +203,18 @@ header{
     display:grid;
     grid-template-columns:repeat(2,1fr);
     gap:clamp(.45rem,.47vw,.9rem);
+}
+
+@media (max-width: 600px){
+    #hud{
+        width:85vw;
+        max-height:80vh;
+        inset:10vh auto auto 7.5vw;
+        transform:none;
+        overflow-y:auto;
+    }
+    .hud-stats{grid-template-columns:1fr 1fr;}
+    .stat-text{font-size:clamp(.7rem,2vw,1rem);}
 }
 
 .stat-item{
@@ -248,27 +248,6 @@ header{
     flex-wrap:wrap;
 }
 
-/* MOBILE SPECIFIC */
-@media (max-width:600px){
-    .grid{
-        grid-template-columns:repeat(4,1fr);
-    }
-
-    .splash-top { font-size: clamp(2rem,6vw,4.5rem); line-height:1; }
-    .splash-mid { font-size: clamp(1rem,4vw,2rem); }
-    .splash-bottom { font-size: clamp(.9rem,3.5vw,1.9rem); }
-
-    #hud{
-        width:75vw;
-        max-height:75vh;
-        inset:auto;
-        top:50%;
-        left:50%;
-        transform:translate(-50%,-50%);
-    }
-    .hud-stats{grid-template-columns:1fr}
-}
-
 /* BEAM */
 #beam-svg{
     position:fixed;
@@ -299,12 +278,12 @@ header{
         <input type="text" id="filter-input" placeholder="SEARCH / FILTER..." autocomplete="off">
     </div>
     <a href="https://x.com/watchdoggem" target="_blank" class="x-link">
-        <img src="https://unavatar.io/x/watchdoggem" alt="X">
+        <img src="https://unavatar.io/x/watchdoggem" alt="X" class="x-avatar">
     </a>
 </header>
 
-<div class="grid">
-    <div class="box" data-has-data="true"
+<div class="grid" id="tile-grid">
+    <div class="box" data-has-data="true" data-keywords="NHP,non,non-human,nonhuman,primate"
         onmouseenter="showHud(this)"
         onmouseleave="handleBoxLeave(this)"
         ontouchstart="showHud(this)">
@@ -352,6 +331,7 @@ header{
 const hud=document.getElementById('hud');
 const beamSvg=document.getElementById('beam-svg');
 const beamPoly=document.getElementById('beam-poly');
+const grid=document.getElementById('tile-grid');
 let activeBox=null,leaveTimeout=null;
 
 function updateBeam(){
@@ -394,8 +374,21 @@ function handleMouseLeave(e){
     }
 }
 
+function filterTiles(e){
+    const value = e.target.value.toLowerCase();
+    document.querySelectorAll('.box').forEach(box=>{
+        const keywords = box.dataset.keywords?.toLowerCase() || "";
+        if(value && !keywords.includes(value)){
+            box.style.display='none';
+        } else {
+            box.style.display='';
+        }
+    });
+}
+
 window.addEventListener('resize',updateBeam);
 window.addEventListener('scroll',updateBeam);
+document.getElementById('filter-input').addEventListener('input',filterTiles);
 
 document.addEventListener('touchstart',e=>{
     if(!e.target.closest('#hud')&&!e.target.closest('.box')){
