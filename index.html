@@ -279,6 +279,26 @@ header{
     opacity:.3;
     filter:drop-shadow(0 0 10px var(--glow));
 }
+
+/* MOBILE FIXES */
+@media (max-width: 600px){
+    #hud {
+        width: 90vw;
+        padding: 1rem;
+    }
+    .hud-stats {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+    .stat-item {
+        min-height: auto;
+    }
+    .hud-footer {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+    }
+}
 </style>
 </head>
 
@@ -371,7 +391,8 @@ function renderGrid() {
             if(p.categories && p.categories.length){
                 p.categories.forEach(cat=>{
                     const catBtn = document.createElement('div');
-                    catBtn.textContent = cat.toUpperCase();
+                    const displayName = cat === 'animal' ? 'Animal Harm' : cat;
+                    catBtn.textContent = displayName.toUpperCase();
                     catBtn.classList.add('splash-category-button');
                     if(activeCategories.has(cat)) catBtn.classList.add('active');
                     content.appendChild(catBtn);
