@@ -281,20 +281,20 @@ header{
 }
 
 /* MOBILE FIXES */
-@media (max-width: 800px){
+@media (max-width: 600px){
     #hud {
-        width: min(90vw, 500px); /* shrink on small, cap on bigger */
+        width: 90vw;
         padding: 1rem;
     }
     .hud-stats {
-        grid-template-columns: 1fr; /* stack stats vertically on small screens */
+        grid-template-columns: 1fr;
         gap: 0.5rem;
     }
     .stat-item {
         min-height: auto;
     }
     .hud-footer {
-        flex-direction: column; /* wrap footer items */
+        flex-direction: column;
         gap: 0.5rem;
         align-items: flex-start;
     }
@@ -384,9 +384,10 @@ function renderGrid() {
             box.classList.add('empty');
             content.textContent = "EMPTY SLOT";
         } else {
-            content.innerHTML = `<div class="splash-top">${p.id}</div>
-                                 <div class="splash-mid">${p.title}</div>
-                                 <div class="splash-bottom">${p.subtitle}</div>`;
+            // 🔹 SURGICAL CHANGE ONLY: splash text replaced
+            content.innerHTML = `<div class="splash-top">104K</div>
+                                 <div class="splash-mid">RESEARCH</div>
+                                 <div class="splash-bottom">PRIMATES</div>`;
 
             if(p.categories && p.categories.length){
                 p.categories.forEach(cat=>{
