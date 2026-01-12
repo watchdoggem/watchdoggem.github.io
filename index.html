@@ -160,6 +160,24 @@ header{
     opacity:.75;
     margin-top:.2em;
 }
+/* MOBILE-SPECIFIC SPLASH TEXT OVERRIDE */
+@media (max-width: 600px) {
+    .splash-top {
+        font-size: clamp(4rem, 12vw, 8rem); 
+        line-height: 1;
+    }
+    .splash-mid {
+        font-size: clamp(4rem, 12vw, 8rem);
+        margin-top: 1em;
+    }
+    .splash-bottom {
+        font-size: clamp(4rem, 12vw, 8rem); 
+        margin-top: 1em;
+    }
+}
+
+
+    
 .splash-category-button {
     position:absolute;
     bottom:10px;
