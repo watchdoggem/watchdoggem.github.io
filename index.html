@@ -384,10 +384,9 @@ function renderGrid() {
             box.classList.add('empty');
             content.textContent = "EMPTY SLOT";
         } else {
-            // 🔹 SURGICAL CHANGE ONLY: splash text replaced
-            content.innerHTML = `<div class="splash-top">104K</div>
-                                 <div class="splash-mid">RESEARCH</div>
-                                 <div class="splash-bottom">PRIMATES</div>`;
+            content.innerHTML = `<div class="splash-top">${p.id}</div>
+                                 <div class="splash-mid">${p.title}</div>
+                                 <div class="splash-bottom">${p.subtitle}</div>`;
 
             if(p.categories && p.categories.length){
                 p.categories.forEach(cat=>{
