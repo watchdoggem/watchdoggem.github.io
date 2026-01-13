@@ -522,7 +522,8 @@ function showHud(el,panel){
     el.classList.add('active');
 
     hud.classList.add('active');
-    hud.querySelector('.hud-header').textContent = `${panel.id} ${panel.title}¹`;
+hud.querySelector('.hud-header').textContent = `${panel.id} ${panel.title}¹`;
+
     hud.querySelector('.hud-species').textContent = panel.species.join(" | ");
 
     const statsDiv = hud.querySelector('.hud-stats');
