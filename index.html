@@ -470,19 +470,25 @@ function renderGrid() {
 
     applyFilters();
 }
-
-// CATEGORY FILTER
-function applyFilters(){
-    document.querySelectorAll('.box').forEach((box,i)=>{
+function applyFilters() {
+    document.querySelectorAll('.box').forEach((box, i) => {
         const p = panels[i];
-        const categoryMatch = (activeCategories.size===0 || (!p.empty && p.categories.some(c=>activeCategories.has(c))));
-        if(p.empty && activeCategories.size>0){
-            box.style.display = "none";
-        } else {
-            box.style.display = categoryMatch ? "flex" : "none";
+
+        // If this is an empty filler box
+        if (p.empty) {
+            box.style.display = activeCategories.size > 0 ? "none" : "flex";
+            return;
         }
+
+        // Otherwise, real panel: show if it matches any active category
+        const categoryMatch =
+            activeCategories.size === 0 ||
+            p.categories.some(c => activeCategories.has(c));
+
+        box.style.display = categoryMatch ? "flex" : "none";
     });
 }
+
 
 // TOP CATEGORY BUTTON HANDLER
 document.querySelectorAll('.category-button').forEach(btn=>{
