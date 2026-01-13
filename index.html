@@ -104,30 +104,22 @@ header{
     font-size: clamp(1.5rem, 2vw, 3rem);
 }
 
-/* SCALER WRAPPER - remove scaling hack */
-#scaler {
-    width: 100%;          /* full width of viewport */
-    max-width: 1600px;    /* optional, caps layout */
-    margin: 0 auto;       /* center horizontally */
-    padding: clamp(.8rem, 1vw, 1.6rem);
-}
 
-/* GRID - always 3 columns */
-.grid {
+/* GRID */
+.grid{
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr); /* 3 columns for desktop & mobile */
     gap: clamp(.55rem, .57vw, 1.1rem);
-    width: 100%;
+    max-width: 100%; /* prevent overflowing */
+    margin: 0 auto;  /* center grid */
 }
 
-/* MOBILE - keep 3 columns but smaller gaps */
 @media (max-width: 600px) {
     .grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: clamp(.3rem, .5vw, .6rem);
+        grid-template-columns: repeat(3, 1fr); /* keep 3 columns on mobile too */
+        gap: clamp(.5rem, 1vw, 1rem);
     }
 }
-
 
 .box{
     aspect-ratio:1/1;
