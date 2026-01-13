@@ -107,9 +107,18 @@ header{
 
 /* GRID */
 .grid{
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:clamp(.55rem,.57vw,1.1rem);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns for desktop & mobile */
+    gap: clamp(.55rem, .57vw, 1.1rem);
+    max-width: 100%; /* prevent overflowing */
+    margin: 0 auto;  /* center grid */
+}
+
+@media (max-width: 600px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr); /* keep 3 columns on mobile too */
+        gap: clamp(.5rem, 1vw, 1rem);
+    }
 }
 
 .box{
