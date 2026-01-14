@@ -352,9 +352,7 @@ header{
 
 <div id="category-bar">
     <div class="category-button" data-category="animal">Animal Harm</div>
-    <div class="category-button" data-category="collections">Collections</div>
 </div>
-
 
 <div class="grid" id="grid">
     <!-- Panels generated here -->
@@ -382,7 +380,7 @@ header{
 // PANEL DATA
 const panels = [
   {
-    id:"1",
+    id:"104801",
     title:"PRIMATES IN RESEARCH",
     subtitle:"",
     species:["RHESUS MACAQUES","CYNOMOLGUS MACAQUES"],
@@ -399,26 +397,6 @@ const panels = [
     ],
     footer:"FDA REQUIRED • NIH FUNDED • USDA OVERSIGHT"
   },
-
-    {
-  id: "2",
-  title: "$185T",
-  subtitle: "NONADJUSTED COLLECTIONS",
-  species: ["Federal & State Revenue"],
-  categories: ["collections"],
-  stats: [
-    {text: "FEDERAL RECEIPTS: $100.25T", ref:1},
-    {text: "PROPERTY TAXES: $29.42T", ref:2},
-    {text: "GENERAL SALES TAXES: $23.84T", ref:3},
-    {text: "STATE INCOME TAXES: $16.15T", ref:4},
-    {text: 'EXCISE & "SIN" TAXES: $9.86T', ref:5},
-    {text: "FINES, FEES, & PERMITS: $3.60T", ref:6},
-    {text: "ESTATE & GIFT TAXES: $1.32T", ref:7},
-    {text: "NOMINAL TOTAL: $185T", ref:0}
-  ],
-  footer: "SOURCE: OMB, IRS, CENSUS BUREAU"
-}
-
   // 16 empty boxes
   {id:"EMPTY1", empty:true},{id:"EMPTY2", empty:true},{id:"EMPTY3", empty:true},{id:"EMPTY4", empty:true},
   {id:"EMPTY5", empty:true},{id:"EMPTY6", empty:true},{id:"EMPTY7", empty:true},{id:"EMPTY8", empty:true},
@@ -522,7 +500,7 @@ function showHud(el,panel){
     el.classList.add('active');
 
     hud.classList.add('active');
-    hud.querySelector('.hud-header').textContent = `1 ${panel.title}¹`;
+    hud.querySelector('.hud-header').textContent = `104801 ${panel.title}¹`;
     hud.querySelector('.hud-species').textContent = panel.species.join(" | ");
 
     const statsDiv = hud.querySelector('.hud-stats');
