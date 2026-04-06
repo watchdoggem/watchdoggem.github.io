@@ -51,43 +51,14 @@ body {
 a,
 button,
 .box,
-.category-button,
-.splash-category-button,
 .watermark-link {
     cursor: crosshair;
 }
 
 #scaler {
-    width: min(1520px, calc(100vw - 2.4rem));
+    width: min(1560px, calc(100vw - 2.6rem));
     margin: 0 auto;
-    padding: 1.5rem 0 2.4rem;
-}
-
-header {
-    margin-bottom: 1.35rem;
-}
-
-.title-wrap {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    max-width: 44rem;
-}
-
-.title {
-    font-family: "Orbitron", sans-serif;
-    font-size: clamp(2.2rem, 3vw, 3.4rem);
-    font-weight: 900;
-    letter-spacing: clamp(2px, 0.2vw, 4px);
-    text-shadow: 0 0 12px var(--glow);
-    line-height: 1;
-}
-
-.subtitle-line {
-    color: var(--text-muted);
-    font-size: clamp(0.95rem, 0.95vw, 1.2rem);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    padding: 1.35rem 0 2.4rem;
 }
 
 .watermark-link {
@@ -97,17 +68,20 @@ header {
     transform: translateY(-50%) rotate(180deg);
     writing-mode: vertical-rl;
     z-index: 1100;
-    padding: 0.9rem 0.5rem;
-    border-radius: 999px;
+    padding: 0.7rem 0.45rem;
+    border-radius: 18px;
     border: 1px solid var(--border-strong);
     background: rgba(11, 8, 20, 0.72);
     color: var(--text-muted);
     text-decoration: none;
     font-family: "Orbitron", sans-serif;
-    font-size: 0.8rem;
-    letter-spacing: 0.28em;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
     transition: color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -119,79 +93,39 @@ header {
     outline: none;
 }
 
-.top-bar {
+.watermark-bird {
+    font-size: 0.95rem;
+    line-height: 1;
+}
+
+.watermark-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--border-strong);
+    object-fit: cover;
+}
+
+.watermark-name {
+    font-size: 0.72rem;
+}
+
+.watermark-name strong {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-#category-bar {
-    display: flex;
-    justify-content: flex-start;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    max-width: 70%;
-}
-
-.category-button,
-.splash-category-button,
-.action-button {
-    background: linear-gradient(180deg, rgba(199, 158, 255, 0.14), rgba(199, 158, 255, 0.05));
-    border: 2px solid var(--border);
-    border-radius: 12px;
-    color: var(--accent-violet);
-    text-transform: uppercase;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-}
-
-.category-button {
-    padding: 0.48rem 0.82rem;
-    font-family: "Orbitron", sans-serif;
-    font-size: clamp(0.76rem, 0.78vw, 0.94rem);
-    letter-spacing: 0.12em;
-    color: var(--text-muted);
-}
-
-.category-button:hover,
-.category-button.active,
-.splash-category-button.active,
-.action-button:hover,
-.action-button:focus-visible {
-    border-color: var(--accent-violet);
-    box-shadow: 0 0 12px var(--glow);
-    outline: none;
-}
-
-.category-button.active,
-.splash-category-button.active {
-    color: var(--accent-violet);
-    background: linear-gradient(180deg, rgba(199, 158, 255, 0.22), rgba(199, 158, 255, 0.08));
-}
-
-.status-pill {
-    padding: 0.42rem 0.72rem;
-    border: 1px solid rgba(255, 140, 183, 0.34);
-    border-radius: 999px;
-    color: #ffd5e7;
-    font-size: clamp(0.76rem, 0.78vw, 0.94rem);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    background: rgba(255, 140, 183, 0.09);
-    white-space: nowrap;
+    flex-direction: column;
+    line-height: 1.05;
 }
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.82rem;
     max-width: 100%;
     margin: 0 auto;
 }
 
 .box {
-    aspect-ratio: 0.96 / 1;
+    aspect-ratio: 0.9 / 1;
     border: 2px solid var(--border);
     border-radius: 14px;
     background:
@@ -201,7 +135,7 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: clamp(0.9rem, 1.4vw, 1.6rem);
+    padding: clamp(0.7rem, 1vw, 1rem);
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     box-shadow: inset 0 0 20px rgba(199, 158, 255, 0.08);
     position: relative;
@@ -216,12 +150,11 @@ header {
     pointer-events: none;
 }
 
-.box:hover,
 .box.active,
 .box:focus-visible {
     border-color: var(--accent-violet);
-    box-shadow: 0 0 32px var(--glow), inset 0 0 24px rgba(199, 158, 255, 0.15);
-    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 0 24px var(--glow), inset 0 0 24px rgba(199, 158, 255, 0.15);
+    transform: translateY(-2px) scale(1.01);
     outline: none;
 }
 
@@ -251,31 +184,22 @@ header {
 }
 
 .splash-top {
-    font-size: clamp(2.3rem, 3.6vw, 4rem);
+    font-size: clamp(1.7rem, 2.4vw, 2.7rem);
     line-height: 0.95;
 }
 
 .splash-mid {
-    font-size: clamp(1.2rem, 1.45vw, 1.75rem);
+    font-size: clamp(0.96rem, 1vw, 1.22rem);
     opacity: 0.95;
     line-height: 1.08;
 }
 
 .splash-bottom {
-    font-size: clamp(0.82rem, 0.9vw, 1rem);
-    letter-spacing: 0.14em;
+    font-size: clamp(0.65rem, 0.7vw, 0.8rem);
+    letter-spacing: 0.1em;
     opacity: 0.76;
-    min-height: 2.8em;
+    min-height: 2.6em;
     color: var(--text-muted);
-}
-
-.splash-category-button {
-    position: absolute;
-    bottom: 12px;
-    right: 12px;
-    padding: 0.38rem 0.75rem;
-    font-family: "Orbitron", sans-serif;
-    font-size: clamp(0.65rem, 0.7vw, 1rem);
 }
 
 #hud {
@@ -418,25 +342,12 @@ header {
         padding: 0.9rem 0 1.4rem;
     }
 
-    .top-bar {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .status-pill {
-        align-self: flex-start;
-    }
-
     #beam-svg {
         display: none;
     }
 
-    #category-bar {
-        max-width: 100%;
-    }
-
     .grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 
@@ -445,35 +356,22 @@ header {
         overflow-x: hidden;
     }
 
-    .title {
-        font-size: 1.5rem;
-    }
-
-    .subtitle-line {
-        font-size: 0.78rem;
-        letter-spacing: 0.1em;
-    }
-
-    .category-button {
-        font-size: 0.72rem;
-    }
-
     .grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0.7rem;
+        gap: 0.62rem;
     }
 
     .splash-top {
-        font-size: 1.7rem;
+        font-size: 1.35rem;
     }
 
     .splash-mid {
-        font-size: 0.92rem;
+        font-size: 0.76rem;
     }
 
     .splash-bottom {
-        font-size: 0.68rem;
-        min-height: 2.4em;
+        font-size: 0.56rem;
+        min-height: 2.2em;
     }
 
     #hud {
@@ -513,29 +411,31 @@ header {
 
     .watermark-link {
         right: 0.25rem;
-        padding: 0.65rem 0.4rem;
-        font-size: 0.64rem;
-        letter-spacing: 0.2em;
+        padding: 0.55rem 0.32rem;
+        font-size: 0.56rem;
+        letter-spacing: 0.14em;
+        gap: 0.3rem;
+    }
+
+    .watermark-avatar {
+        width: 22px;
+        height: 22px;
+    }
+
+    .watermark-bird {
+        font-size: 0.72rem;
     }
 }
 </style>
 </head>
 
 <body>
-<a href="https://x.com/watchdoggem" target="_blank" rel="noreferrer" class="watermark-link" aria-label="watchdoggem on X">@watchdoggem</a>
+<a href="https://x.com/watchdoggem" target="_blank" rel="noreferrer" class="watermark-link" aria-label="watchdoggem on X">
+    <span class="watermark-bird" aria-hidden="true">🐦</span>
+    <img src="https://unavatar.io/x/watchdoggem" alt="" class="watermark-avatar">
+    <span class="watermark-name"><strong>watchdog</strong>gem</span>
+</a>
 <div id="scaler">
-    <header>
-        <div class="title-wrap">
-            <div class="title">WATCHDOGGEM</div>
-            <div class="subtitle-line">A living grid of documented harms, pressures, and losses</div>
-        </div>
-    </header>
-
-    <div class="top-bar">
-        <div id="category-bar"></div>
-        <div class="status-pill" id="status-pill">1 documented panel loaded</div>
-    </div>
-
     <div class="grid" id="grid" aria-live="polite"></div>
 </div>
 
@@ -698,76 +598,13 @@ const panels = [
     { id: "EMPTY11", empty: true }
 ];
 
-const categoryLabels = {
-    animal: "Animal Harm",
-    demography: "Demography",
-    fraud: "Fraud",
-    immigration: "Immigration",
-    ecology: "Ecology",
-    agriculture: "Agriculture"
-};
-
-let activeCategory = null;
 const grid = document.getElementById("grid");
-const categoryBar = document.getElementById("category-bar");
-const statusPill = document.getElementById("status-pill");
 const hud = document.getElementById("hud");
 const hudClose = document.getElementById("hud-close");
 const beamSvg = document.getElementById("beam-svg");
 const beamPoly = document.getElementById("beam-poly");
 
 let activeBox = null;
-let leaveTimeout = null;
-
-function getUniqueCategories() {
-    return [...new Set(panels.flatMap((panel) => panel.categories || []))];
-}
-
-function renderCategoryBar() {
-    categoryBar.innerHTML = "";
-
-    getUniqueCategories().forEach((category) => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "category-button";
-        button.dataset.category = category;
-        button.textContent = categoryLabels[category] || category;
-
-        if (activeCategory === category) {
-            button.classList.add("active");
-        }
-
-        button.addEventListener("click", () => {
-            activeCategory = activeCategory === category ? null : category;
-
-            renderCategoryBar();
-            renderGrid();
-        });
-
-        categoryBar.appendChild(button);
-    });
-}
-
-function createCategoryTag(category) {
-    const tag = document.createElement("button");
-    tag.type = "button";
-    tag.className = "splash-category-button";
-    tag.textContent = (categoryLabels[category] || category).toUpperCase();
-
-    if (activeCategory === category) {
-        tag.classList.add("active");
-    }
-
-    tag.addEventListener("click", (event) => {
-        event.stopPropagation();
-        activeCategory = activeCategory === category ? null : category;
-
-        renderCategoryBar();
-        renderGrid();
-    });
-
-    return tag;
-}
 
 function renderGrid() {
     grid.innerHTML = "";
@@ -798,14 +635,22 @@ function renderGrid() {
                 <div class="splash-bottom">${panel.subtitle || " "}</div>
             `;
 
-            box.addEventListener("mouseenter", () => showHud(box, panel));
-            box.addEventListener("focus", () => showHud(box, panel));
-            box.addEventListener("click", () => showHud(box, panel));
-            box.addEventListener("mouseleave", () => handleBoxLeave(box));
+            box.addEventListener("click", () => {
+                if (activeBox === box && hud.classList.contains("active")) {
+                    hideHud();
+                    return;
+                }
+
+                showHud(box, panel);
+            });
             box.addEventListener("keydown", (event) => {
                 if (event.key === "Enter" || event.key === " ") {
                     event.preventDefault();
-                    showHud(box, panel);
+                    if (activeBox === box && hud.classList.contains("active")) {
+                        hideHud();
+                    } else {
+                        showHud(box, panel);
+                    }
                 }
             });
         }
@@ -814,25 +659,6 @@ function renderGrid() {
         grid.appendChild(box);
     });
 
-    applyFilters();
-}
-
-function applyFilters() {
-    const visiblePanels = panels.filter((panel) => {
-        if (panel.empty) {
-            return activeCategory === null;
-        }
-
-        return activeCategory === null || panel.categories.includes(activeCategory);
-    });
-
-    statusPill.textContent = `${visiblePanels.filter((panel) => !panel.empty).length} documented panel${visiblePanels.filter((panel) => !panel.empty).length === 1 ? "" : "s"} loaded`;
-
-    [...grid.children].forEach((box, index) => {
-        const panel = panels[index];
-        const visible = visiblePanels.includes(panel);
-        box.style.display = visible ? "flex" : "none";
-    });
 }
 
 function updateBeam() {
@@ -860,10 +686,6 @@ function updateBeam() {
 function showHud(element, panel) {
     if (panel.empty) {
         return;
-    }
-
-    if (leaveTimeout) {
-        clearTimeout(leaveTimeout);
     }
 
     activeBox = element;
@@ -912,28 +734,6 @@ function hideHud() {
     beamSvg.style.opacity = "0";
 }
 
-function handleBoxLeave(element) {
-    if (activeBox !== element) {
-        return;
-    }
-
-    leaveTimeout = setTimeout(() => {
-        hideHud();
-    }, 120);
-}
-
-hud.addEventListener("mouseenter", () => {
-    if (leaveTimeout) {
-        clearTimeout(leaveTimeout);
-    }
-});
-
-hud.addEventListener("mouseleave", () => {
-    if (activeBox) {
-        hideHud();
-    }
-});
-
 hudClose.addEventListener("click", hideHud);
 
 document.addEventListener("keydown", (event) => {
@@ -954,7 +754,6 @@ document.addEventListener("click", (event) => {
 window.addEventListener("resize", updateBeam);
 window.addEventListener("scroll", updateBeam);
 
-renderCategoryBar();
 renderGrid();
 </script>
 </body>
