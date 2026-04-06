@@ -486,21 +486,26 @@ const panels = [
         metric: "1.04M",
         title: "Abortion In America",
         subtitle: "National demographic loss",
-        descriptor: "1,038,100 abortions in 2024 | Tax dollars aggregated across state and federal: pending",
+        descriptor: "1,038,100 abortions in 2024¹ | Tax dollars aggregated across state and federal: pending",
         categories: ["demography"],
         stats: [
-            { text: "Placeholder statistic 1", ref: null },
-            { text: "Placeholder statistic 2", ref: null },
-            { text: "Placeholder statistic 3", ref: null },
-            { text: "Placeholder statistic 4", ref: null },
-            { text: "Placeholder statistic 5", ref: null },
-            { text: "Placeholder statistic 6", ref: null },
-            { text: "Placeholder statistic 7", ref: null },
-            { text: "Placeholder statistic 8", ref: null }
+            { text: "199 abortions per 1,000 live births", ref: 2 },
+            { text: "28.3% of Millennial birth-year outcomes ended in abortion", ref: 3 },
+            { text: "22.5% of Gen Z birth-year outcomes ended in abortion", ref: 4 },
+            { text: "15.6% of Gen Alpha birth-year outcomes ended in abortion so far", ref: 5 },
+            { text: "22.2% of 2024 births plus abortions ended in abortion", ref: 6 },
+            { text: "56.5% to women in their twenties", ref: 2 },
+            { text: "1.81% of women ages 20-24 had an abortion in 2022", ref: 2 },
+            { text: "1.87% of women ages 25-29 had an abortion in 2022", ref: 2 }
         ],
-        footer: "",
+        footer: "Cohort boxes use abortions divided by abortions plus live births during each cohort's birth years. Cohorts used here: Millennial 1981-1996, Gen Z 1997-2012, Gen Alpha 2013-2024.",
         sources: [
-            "1 Guttmacher Monthly Abortion Provision Study, 2024 release"
+            "1 Guttmacher Monthly Abortion Provision Study: 1,038,100 abortions in 2024",
+            "2 CDC Abortion Surveillance 2022: ratio, twenties share, and age-specific abortion rates",
+            "3 Millennial box math: NCHS 2010 Pregnancy Rates Table 1, 1981-1996 abortions divided by abortions plus live births",
+            "4 Gen Z box math: NCHS 2010 Pregnancy Rates Table 1, 1997-2010 plus CDC abortion surveillance and NVSS births for 2011-2012",
+            "5 Gen Alpha box math so far: CDC abortion surveillance and NVSS births for 2013-2022, plus Guttmacher and NVSS births for 2023-2024",
+            "6 2024 snapshot box math: Guttmacher 2024 abortions divided by 2024 abortions plus live births"
         ]
     },
     {
