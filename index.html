@@ -251,15 +251,6 @@ header {
     gap: 0.45rem;
 }
 
-.case-badge {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    font-size: clamp(0.8rem, 0.7vw, 1rem);
-    color: var(--text-muted);
-    letter-spacing: 0.16em;
-}
-
 .splash-top {
     font-size: clamp(4.5rem, 9vw, 7rem);
     line-height: 1;
@@ -338,7 +329,7 @@ header {
     font-size: 1rem;
 }
 
-.hud-species {
+.hud-meta {
     text-align: left;
     font-size: clamp(1rem, 1vw, 1.6rem);
     color: var(--text-muted);
@@ -535,7 +526,7 @@ header {
     <header>
         <div class="title-wrap">
             <div class="title">WATCHDOGGEM</div>
-            <div class="subtitle-line">Surveillance archive for institutional animal harm</div>
+            <div class="subtitle-line">A living grid of documented harms, pressures, and losses</div>
         </div>
         <a href="https://x.com/watchdoggem" target="_blank" rel="noreferrer" class="x-link" aria-label="watchdoggem on X">
             <img src="https://unavatar.io/x/watchdoggem" alt="watchdoggem X avatar" class="x-avatar">
@@ -544,7 +535,7 @@ header {
 
     <div class="top-bar">
         <div id="category-bar"></div>
-        <div class="status-pill" id="status-pill">1 documented case loaded</div>
+        <div class="status-pill" id="status-pill">1 documented panel loaded</div>
     </div>
 
     <div class="grid" id="grid" aria-live="polite"></div>
@@ -559,24 +550,21 @@ header {
         <div class="hud-header"></div>
         <button type="button" class="action-button hud-close" id="hud-close" aria-label="Close detail panel">Close</button>
     </div>
-    <div class="hud-species"></div>
+    <div class="hud-meta"></div>
     <div class="hud-stats"></div>
     <div class="hud-footer">
         <div class="hud-footer-left"></div>
-        <div class="hud-footer-right">
-            <div><sup>1</sup> USDA APHIS 2024 REPORT</div>
-            <div><sup>2</sup> NIH FINANCIAL 2024 REPORT</div>
-        </div>
+        <div class="hud-footer-right" id="hud-sources"></div>
     </div>
 </div>
 
 <script>
 const panels = [
     {
-        id: "104801",
+        id: "PRIME",
         title: "Primates In Research",
-        subtitle: "Federal case file",
-        species: ["Rhesus macaques", "Cynomolgus macaques"],
+        subtitle: "Laboratory confinement",
+        descriptor: "Rhesus macaques | Cynomolgus macaques",
         categories: ["animal"],
         stats: [
             { text: "100% fatal anesthetic overdose", ref: 1 },
@@ -588,7 +576,110 @@ const panels = [
             { text: "$800M+ U.S. domestic research funding", ref: 2 },
             { text: "$300M+ taxpayer infrastructure support", ref: 1 }
         ],
-        footer: "FDA required. NIH funded. USDA oversight."
+        footer: "Federal research systems normalize violent primate confinement at industrial scale.",
+        sources: [
+            "1 USDA APHIS 2024 report",
+            "2 NIH financial 2024 report"
+        ]
+    },
+    {
+        id: "ABORT",
+        title: "Abortion In America",
+        subtitle: "National demographic loss",
+        descriptor: "National totals | 2024 access snapshot",
+        categories: ["demography"],
+        stats: [
+            { text: "1,038,100 clinician-provided abortions in 2024", ref: 1 },
+            { text: "155,000 crossed state lines for abortion in 2024", ref: 1 },
+            { text: "613,383 legal abortions reported to CDC for 2022", ref: 2 },
+            { text: "56.5% of 2022 abortions were to women in their twenties", ref: 2 },
+            { text: "2023 and 2024 both cleared 1M annual abortions", ref: 1 },
+            { text: "Medication access kept national totals elevated after Dobbs", ref: 1 }
+        ],
+        footer: "This panel uses current national totals. A separate Gen Z cohort estimate still needs a transparent method before it belongs on the site.",
+        sources: [
+            "1 Guttmacher Monthly Abortion Provision Study, 2024 release",
+            "2 CDC Abortion Surveillance 2022"
+        ]
+    },
+    {
+        id: "FRAUD",
+        title: "Fraud In America",
+        subtitle: "Consumer extraction",
+        descriptor: "FTC Consumer Sentinel Network | 2024",
+        categories: ["fraud"],
+        stats: [
+            { text: "$12.5B reported lost to fraud in 2024", ref: 1 },
+            { text: "2.6M consumers filed fraud reports in 2024", ref: 1 },
+            { text: "$5.7B lost to investment scams alone", ref: 1 },
+            { text: "38% of reporters said they lost money", ref: 1 },
+            { text: "$2.95B lost to imposter scams", ref: 1 },
+            { text: "$750.6M lost to business and job opportunity scams", ref: 1 }
+        ],
+        footer: "Fraud has become a parallel tax on American households, with reported losses accelerating into the tens of billions.",
+        sources: [
+            "1 FTC fraud data release, March 2025"
+        ]
+    },
+    {
+        id: "BORDER",
+        title: "Immigration Pressure",
+        subtitle: "Federal enforcement load",
+        descriptor: "CBP Fiscal Year 2024 totals",
+        categories: ["immigration"],
+        stats: [
+            { text: "2.9M total CBP enforcement encounters in FY2024", ref: 1 },
+            { text: "1.58M U.S. Border Patrol encounters in FY2024", ref: 1 },
+            { text: "1.34M Office of Field Operations encounters", ref: 1 },
+            { text: "19,242 criminal noncitizens encountered by OFO", ref: 1 },
+            { text: "12,206 NCIC arrests recorded by OFO", ref: 1 },
+            { text: "5,420 southwest border rescues in FY2024", ref: 1 }
+        ],
+        footer: "Whatever language politicians use, the federal system’s own numbers show a border apparatus under sustained pressure.",
+        sources: [
+            "1 CBP enforcement statistics FY2024"
+        ]
+    },
+    {
+        id: "TREES",
+        title: "Tree Reduction",
+        subtitle: "Urban canopy decline",
+        descriptor: "USDA Forest Service national estimate",
+        categories: ["ecology"],
+        stats: [
+            { text: "36M urban/community trees lost per year", ref: 1 },
+            { text: "175,000 acres of tree cover lost annually", ref: 1 },
+            { text: "$96M per year in lost urban tree benefits", ref: 1 },
+            { text: "23 states plus D.C. saw significant declines", ref: 1 },
+            { text: "Urban/community tree cover fell from 42.9% to 42.2%", ref: 1 },
+            { text: "Impervious cover increased as tree cover shrank", ref: 1 }
+        ],
+        footer: "Tree loss removes cooling, filtration, and livability from daily American life while pavement and heat keep expanding.",
+        sources: [
+            "1 USDA Forest Service urban tree cover study"
+        ]
+    },
+    {
+        id: "FERT",
+        title: "Fertilizer Outflow",
+        subtitle: "Domestic input pressure",
+        descriptor: "Exports, pricing, and domestic supply response",
+        categories: ["agriculture"],
+        stats: [
+            { text: "$1.03B in fertilizer, pesticide, and insecticide exports in Feb 2024", ref: 1 },
+            { text: "$2.92B exported in Q4 2024 on a BEA goods basis", ref: 2 },
+            { text: "$120M+ USDA awarded for new fertilizer projects in Oct 2024", ref: 3 },
+            { text: "$35M more announced for domestic fertilizer expansion in Aug 2024", ref: 4 },
+            { text: "USDA says the goal is more competition and lower farm costs", ref: 3 },
+            { text: "NPK-specific tonnage still needs a tighter source before publication", ref: 4 }
+        ],
+        footer: "This panel tracks fertilizer pressure broadly for now. We can tighten it to true N-P-K export tonnage once we have a cleaner commodity-level source.",
+        sources: [
+            "1 Census-basis export series surfaced via Trading Economics",
+            "2 BEA goods export series surfaced via YCharts",
+            "3 USDA fertilizer expansion announcement, Oct 30 2024",
+            "4 USDA fertilizer expansion announcement, Aug 28 2024"
+        ]
     },
     { id: "EMPTY1", empty: true },
     { id: "EMPTY2", empty: true },
@@ -600,16 +691,16 @@ const panels = [
     { id: "EMPTY8", empty: true },
     { id: "EMPTY9", empty: true },
     { id: "EMPTY10", empty: true },
-    { id: "EMPTY11", empty: true },
-    { id: "EMPTY12", empty: true },
-    { id: "EMPTY13", empty: true },
-    { id: "EMPTY14", empty: true },
-    { id: "EMPTY15", empty: true },
-    { id: "EMPTY16", empty: true }
+    { id: "EMPTY11", empty: true }
 ];
 
 const categoryLabels = {
-    animal: "Animal Harm"
+    animal: "Animal Harm",
+    demography: "Demography",
+    fraud: "Fraud",
+    immigration: "Immigration",
+    ecology: "Ecology",
+    agriculture: "Agriculture"
 };
 
 const activeCategories = new Set();
@@ -697,7 +788,7 @@ function renderGrid() {
         } else {
             box.setAttribute("role", "button");
             box.setAttribute("tabindex", "0");
-            box.setAttribute("aria-label", `Open case ${panel.id}: ${panel.title}`);
+            box.setAttribute("aria-label", `Open panel ${panel.id}: ${panel.title}`);
         }
 
         const content = document.createElement("div");
@@ -706,17 +797,11 @@ function renderGrid() {
         if (panel.empty) {
             content.textContent = "EMPTY SLOT";
         } else {
-            const caseBadge = document.createElement("div");
-            caseBadge.className = "case-badge";
-            caseBadge.textContent = `CASE ${panel.id}`;
-
             content.innerHTML = `
                 <div class="splash-top">${panel.id}</div>
                 <div class="splash-mid">${panel.title}</div>
                 <div class="splash-bottom">${panel.subtitle || " "}</div>
             `;
-
-            box.appendChild(caseBadge);
 
             (panel.categories || []).forEach((category) => {
                 content.appendChild(createCategoryTag(category));
@@ -750,7 +835,7 @@ function applyFilters() {
         return activeCategories.size === 0 || panel.categories.some((category) => activeCategories.has(category));
     });
 
-    statusPill.textContent = `${visiblePanels.filter((panel) => !panel.empty).length} documented case${visiblePanels.filter((panel) => !panel.empty).length === 1 ? "" : "s"} loaded`;
+    statusPill.textContent = `${visiblePanels.filter((panel) => !panel.empty).length} documented panel${visiblePanels.filter((panel) => !panel.empty).length === 1 ? "" : "s"} loaded`;
 
     [...grid.children].forEach((box, index) => {
         const panel = panels[index];
@@ -797,8 +882,8 @@ function showHud(element, panel) {
 
     hud.classList.add("active");
     hud.setAttribute("aria-hidden", "false");
-    hud.querySelector(".hud-header").textContent = `${panel.id} ${panel.title}`;
-    hud.querySelector(".hud-species").textContent = panel.species.join(" | ");
+    hud.querySelector(".hud-header").textContent = panel.title;
+    hud.querySelector(".hud-meta").textContent = panel.descriptor || panel.subtitle || "";
 
     const statsDiv = hud.querySelector(".hud-stats");
     statsDiv.innerHTML = "";
@@ -811,6 +896,14 @@ function showHud(element, panel) {
     });
 
     hud.querySelector(".hud-footer-left").textContent = panel.footer;
+    const sourcesNode = document.getElementById("hud-sources");
+    sourcesNode.innerHTML = "";
+
+    (panel.sources || []).forEach((source) => {
+        const sourceLine = document.createElement("div");
+        sourceLine.textContent = source;
+        sourcesNode.appendChild(sourceLine);
+    });
 
     if (window.innerWidth > 900) {
         beamSvg.style.opacity = "1";
