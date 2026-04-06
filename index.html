@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>watchdoggem</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=VT323&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --bg: #05030f;
+    --panel-base: #14111f;
+    --panel-bg: rgba(199, 158, 255, 0.09);
+    --panel-bg-strong: rgba(199, 158, 255, 0.14);
+    --accent-violet: #c79eff;
+    --accent-violet-dim: #a57eff;
+    --accent-rose: #ff8cb7;
+    --text-muted: rgba(236, 225, 255, 0.72);
+    --glow: rgba(199, 158, 255, 0.42);
+    --border: rgba(199, 158, 255, 0.32);
+    --border-strong: rgba(199, 158, 255, 0.62);
+    --shadow: 0 30px 100px rgba(0, 0, 0, 0.55);
+    --translucent: 0.9;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background:
+        radial-gradient(circle at 15% 15%, rgba(199, 158, 255, 0.12), transparent 35%),
+        radial-gradient(circle at 78% 24%, rgba(255, 140, 183, 0.08), transparent 30%),
+        radial-gradient(circle at 70% 80%, rgba(167, 126, 255, 0.08), transparent 42%),
+        linear-gradient(180deg, #070311 0%, #05030f 50%, #090514 100%);
+    color: var(--accent-violet);
+    font-family: "VT323", monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+a,
+button,
+.box,
+.watermark-link {
+    cursor: crosshair;
+}
+
+#scaler {
+    width: min(1560px, calc(100vw - 2.6rem));
+    margin: 0 auto;
+    padding: 1.35rem 0 2.4rem;
+}
+
+.watermark-link {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1100;
+    width: 64px;
+    height: 64px;
+    padding: 0;
+    border-radius: 10px;
+    border: 1px solid var(--border-strong);
+    background: rgba(11, 8, 20, 0.6);
+    text-decoration: none;
+    backdrop-filter: blur(10px);
+    display: block;
+    box-shadow: inset 0 0 10px rgba(199, 158, 255, 0.06);
+    overflow: hidden;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, transform 0.25s ease;
+}
+
+.watermark-link:hover,
+.watermark-link:focus-visible {
+    border-color: var(--accent-violet);
+    background: rgba(18, 12, 30, 0.78);
+    box-shadow: 0 0 12px var(--glow);
+    transform: translateY(-2px);
+    outline: none;
+}
+
+.watermark-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    border: 0;
+    object-fit: cover;
+}
+
+.watermark-bird {
+    display: none;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1rem;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.box {
+    aspect-ratio: 0.9 / 1;
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    background:
+        linear-gradient(180deg, rgba(199, 158, 255, 0.08), rgba(199, 158, 255, 0.04)),
+        rgba(18, 14, 28, 0.92);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: clamp(0.58rem, 0.82vw, 0.82rem);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    box-shadow: inset 0 0 20px rgba(199, 158, 255, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.box::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), transparent 50%);
+    pointer-events: none;
+}
+
+.box.active,
+.box:focus-visible {
+    border-color: var(--accent-violet);
+    box-shadow: 0 0 24px var(--glow), inset 0 0 24px rgba(199, 158, 255, 0.15);
+    transform: translateY(-2px) scale(1.01);
+    outline: none;
+}
+
+.box.empty {
+    background:
+        linear-gradient(180deg, rgba(199, 158, 255, 0.04), rgba(199, 158, 255, 0.02)),
+        rgba(11, 8, 20, 0.85);
+}
+
+.box.empty .box-content {
+    opacity: 0.14;
+}
+
+.box-content {
+    font-family: "Orbitron", sans-serif;
+    font-weight: 900;
+    text-align: center;
+    text-shadow: 0 0 14px var(--glow);
+    letter-spacing: clamp(1px, 0.1vw, 2px);
+    text-transform: uppercase;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.28rem;
+}
+
+.splash-top {
+    font-size: clamp(1.45rem, 2vw, 2.2rem);
+    line-height: 0.95;
+}
+
+.splash-mid {
+    font-size: clamp(0.82rem, 0.88vw, 1.02rem);
+    opacity: 0.95;
+    line-height: 1.08;
+}
+
+.splash-bottom {
+    font-size: clamp(0.65rem, 0.7vw, 0.8rem);
+    letter-spacing: 0.1em;
+    opacity: 0.76;
+    min-height: 0;
+    color: var(--text-muted);
+    display: none;
+}
+
+#hud {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.98);
+    width: min(1000px, 88vw);
+    max-height: 84vh;
+    overflow-y: auto;
+    background:
+        linear-gradient(180deg, rgba(17, 11, 31, 0.96), rgba(7, 5, 16, 0.96)),
+        rgba(5, 3, 15, var(--translucent));
+    border: 2px solid var(--accent-violet);
+    padding: 1.1rem 1.2rem 1.3rem;
+    box-shadow: var(--shadow);
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 1000;
+    border-radius: 12px;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+}
+
+#hud.active {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    pointer-events: auto;
+}
+
+.hud-topline {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+}
+
+.hud-header {
+    font-family: "Orbitron", sans-serif;
+    font-size: clamp(1.8rem, 2.4vw, 3.4rem);
+    text-shadow: 0 0 18px var(--glow);
+    line-height: 1;
+    width: 100%;
+}
+
+.hud-meta {
+    text-align: left;
+    font-size: clamp(1.1rem, 1.25vw, 1.7rem);
+    color: rgba(236, 225, 255, 0.88);
+    opacity: 1;
+    margin-bottom: 0.9rem;
+    border-bottom: 1px dashed var(--border);
+    padding-bottom: 0.6rem;
+    line-height: 1.15;
+}
+
+.hud-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.8rem;
+    border: 2px solid var(--border);
+    background:
+        linear-gradient(180deg, rgba(199, 158, 255, 0.12), rgba(199, 158, 255, 0.05)),
+        rgba(22, 18, 33, 0.84);
+    text-align: center;
+    min-height: 84px;
+    border-radius: 8px;
+}
+
+.stat-text {
+    font-family: "Orbitron", sans-serif;
+    font-size: clamp(0.9rem, 0.95vw, 1.45rem);
+    font-weight: 900;
+    text-shadow: 0 0 10px var(--glow);
+    text-transform: uppercase;
+    line-height: 1.2;
+    position: relative;
+    width: 100%;
+    padding: 0.4rem 1rem 0.2rem 0.2rem;
+}
+
+.stat-text sup {
+    position: absolute;
+    top: -0.15rem;
+    right: 0;
+    font-size: 0.58em;
+    opacity: 0.38;
+    text-shadow: none;
+}
+
+.hud-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    font-size: clamp(0.9rem, 0.8vw, 1.15rem);
+    color: var(--text-muted);
+    margin-top: 1rem;
+    padding-top: 0.8rem;
+    border-top: 1px dashed var(--border);
+}
+
+.hud-footer-left {
+    max-width: none;
+}
+
+.hud-footer-right {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 0.12rem;
+    font-size: 0.88em;
+    opacity: 0.86;
+}
+
+#beam-svg {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 900;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.beam {
+    fill: rgba(199, 158, 255, 0.04);
+    stroke: var(--accent-violet);
+    stroke-width: 1.5;
+    opacity: 0.4;
+    filter: drop-shadow(0 0 10px var(--glow));
+}
+
+@media (max-width: 900px) {
+    #scaler {
+        width: min(100%, calc(100vw - 1.2rem));
+        padding: 0.9rem 0 1.4rem;
+    }
+
+    #beam-svg {
+        display: none;
+    }
+
+    .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.82rem;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        overflow-x: hidden;
+    }
+
+    .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.62rem;
+    }
+
+    .splash-top {
+        font-size: 1.18rem;
+    }
+
+    .splash-mid {
+        font-size: 0.66rem;
+    }
+
+    .splash-bottom {
+        font-size: 0.56rem;
+        min-height: 2.2em;
+    }
+
+    #hud {
+        width: calc(100vw - 1rem);
+        max-height: calc(100vh - 1rem);
+        inset: 0.5rem;
+        top: auto;
+        left: auto;
+        transform: none;
+        padding: 0.9rem;
+    }
+
+    #hud.active {
+        transform: none;
+    }
+
+    .hud-topline {
+        align-items: center;
+    }
+
+    .hud-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-item {
+        min-height: 70px;
+    }
+
+    .hud-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .hud-footer-right {
+        text-align: left;
+    }
+
+    .watermark-link {
+        top: 0.55rem;
+        right: 0.55rem;
+        width: 48px;
+        height: 48px;
+    }
+
+    .watermark-avatar {
+        width: 100%;
+        height: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+<a href="https://x.com/watchdoggem" target="_blank" rel="noreferrer" class="watermark-link" aria-label="watchdoggem on X">
+    <span class="watermark-bird" aria-hidden="true">🐦</span>
+    <img src="https://unavatar.io/x/watchdoggem" alt="" class="watermark-avatar">
+</a>
+<div id="scaler">
+    <div class="grid" id="grid" aria-live="polite"></div>
+</div>
+
+<svg id="beam-svg" aria-hidden="true">
+    <polygon id="beam-poly" class="beam" points="0,0"></polygon>
+</svg>
+
+<div id="hud" aria-hidden="true">
+    <div class="hud-topline">
+        <div class="hud-header"></div>
+    </div>
+    <div class="hud-meta"></div>
+    <div class="hud-stats"></div>
+    <div class="hud-footer">
+        <div class="hud-footer-left"></div>
+        <div class="hud-footer-right" id="hud-sources"></div>
+    </div>
+</div>
+
+<script>
+const panels = [
+    {
+        id: "104801",
+        metric: "104,801",
+        title: "Primates In Research",
+        subtitle: "Laboratory confinement",
+        descriptor: "Rhesus macaques | Cynomolgus macaques",
+        categories: ["animal"],
+        stats: [
+            { text: "100% fatal anesthetic overdose", ref: 1 },
+            { text: "20% clinical self-harm", ref: 1 },
+            { text: "83% social isolation", ref: 1 },
+            { text: "89% distressed pacing", ref: 1 },
+            { text: "12% pain relief withheld", ref: 1 },
+            { text: "100% cage sequestration", ref: 1 },
+            { text: "$800M+ U.S. domestic research funding", ref: 2 },
+            { text: "$300M+ taxpayer infrastructure support", ref: 1 }
+        ],
+        footer: "Federal research systems normalize violent primate confinement at industrial scale.",
+        sources: [
+            "1 USDA APHIS 2024 report",
+            "2 NIH financial 2024 report"
+        ]
+    },
+    {
+        id: "ABORT",
+        metric: "1.04M",
+        title: "Abortions In America",
+        subtitle: "National demographic loss",
+        descriptor: "1,038,100 abortions in 2024¹ | $286.5M federal Title X funding²",
+        categories: ["demography"],
+        stats: [
+            { text: "19.9% abortion-to-live-birth ratio", ref: 6 },
+            { text: "28.3% of Millennials aborted", ref: 3 },
+            { text: "22.5% of Zoomers aborted", ref: 3 },
+            { text: "15.6% of Alphies aborted", ref: 4 },
+            { text: "26.4% of late Gen X subset aborted", ref: 8 },
+            { text: "56.5% of abortions by women in their twenties", ref: 6 },
+            { text: "$286.5M in federal Title X Family Planning Program funding", ref: 2 },
+            { text: "$792.2M in Planned Parenthood government reimbursements and grants", ref: 7 }
+        ],
+        footer: "Cohort math = abortions / (abortions + live births) during each cohort's birth years. Millennials = 1981-1996. Gen Z = 1997-2012. Gen Alpha = 2013-2024. Box 1 is the CDC ratio restated per 100 live births. Gen X here is a late-Gen-X subset using 1979-1980 only. Planned Parenthood money is self-reported, not a government publication.",
+        sources: [
+            "1 Guttmacher Monthly Abortion Provision Study: 1,038,100 abortions in 2024",
+            "2 HHS Office of Population Affairs: $286.5M Title X program funding",
+            "3 Cohort math for Millennials and Gen Z: NCHS 2010 Pregnancy Rates Table 1, plus CDC abortion surveillance and NVSS births for 2011-2012",
+            "4 Gen Alpha cohort math: CDC abortion surveillance and NVSS births for 2013-2022, plus Guttmacher and NVSS births for 2023-2024",
+            "5 2024 snapshot math: Guttmacher 2024 abortions divided by 2024 abortions plus live births",
+            "6 CDC Abortion Surveillance 2022: abortion ratio and age distribution",
+            "7 Planned Parenthood 2023-2024 annual report: $792.2M in government health services reimbursements and grants",
+            "8 Late Gen X subset math: CDC 1979-1980 Abortion Surveillance preliminary analysis plus NCHS final natality statistics for 1979 and 1980"
+        ]
+    },
+    {
+        id: "BORDER",
+        metric: "2.9M",
+        title: "Immigration Pressure",
+        subtitle: "Federal enforcement load",
+        descriptor: "CBP Fiscal Year 2024 totals",
+        categories: ["immigration"],
+        stats: [
+            { text: "2.9M total CBP enforcement encounters in FY2024", ref: 1 },
+            { text: "1.58M U.S. Border Patrol encounters in FY2024", ref: 1 },
+            { text: "1.34M Office of Field Operations encounters", ref: 1 },
+            { text: "19,242 criminal noncitizens encountered by OFO", ref: 1 },
+            { text: "12,206 NCIC arrests recorded by OFO", ref: 1 },
+            { text: "5,420 southwest border rescues in FY2024", ref: 1 }
+        ],
+        footer: "Whatever language politicians use, the federal system’s own numbers show a border apparatus under sustained pressure.",
+        sources: [
+            "1 CBP enforcement statistics FY2024"
+        ]
+    },
+    {
+        id: "TREES",
+        metric: "36M",
+        title: "Tree Reduction",
+        subtitle: "Urban canopy decline",
+        descriptor: "USDA Forest Service national estimate",
+        categories: ["ecology"],
+        stats: [
+            { text: "36M urban/community trees lost per year", ref: 1 },
+            { text: "175,000 acres of tree cover lost annually", ref: 1 },
+            { text: "$96M per year in lost urban tree benefits", ref: 1 },
+            { text: "23 states plus D.C. saw significant declines", ref: 1 },
+            { text: "Urban/community tree cover fell from 42.9% to 42.2%", ref: 1 },
+            { text: "Impervious cover increased as tree cover shrank", ref: 1 }
+        ],
+        footer: "Tree loss removes cooling, filtration, and livability from daily American life while pavement and heat keep expanding.",
+        sources: [
+            "1 USDA Forest Service urban tree cover study"
+        ]
+    },
+    {
+        id: "FERT",
+        metric: "$1.03B",
+        title: "Fertilizer Outflow",
+        subtitle: "Domestic input pressure",
+        descriptor: "Exports, pricing, and domestic supply response",
+        categories: ["agriculture"],
+        stats: [
+            { text: "$1.03B in fertilizer, pesticide, and insecticide exports in Feb 2024", ref: 1 },
+            { text: "$2.92B exported in Q4 2024 on a BEA goods basis", ref: 2 },
+            { text: "$120M+ USDA awarded for new fertilizer projects in Oct 2024", ref: 3 },
+            { text: "$35M more announced for domestic fertilizer expansion in Aug 2024", ref: 4 },
+            { text: "USDA says the goal is more competition and lower farm costs", ref: 3 },
+            { text: "NPK-specific tonnage still needs a tighter source before publication", ref: 4 }
+        ],
+        footer: "This panel tracks fertilizer pressure broadly for now. We can tighten it to true N-P-K export tonnage once we have a cleaner commodity-level source.",
+        sources: [
+            "1 Census-basis export series surfaced via Trading Economics",
+            "2 BEA goods export series surfaced via YCharts",
+            "3 USDA fertilizer expansion announcement, Oct 30 2024",
+            "4 USDA fertilizer expansion announcement, Aug 28 2024"
+        ]
+    },
+    { id: "EMPTY1", empty: true },
+    { id: "EMPTY2", empty: true },
+    { id: "EMPTY3", empty: true },
+    { id: "EMPTY4", empty: true },
+    { id: "EMPTY5", empty: true },
+    { id: "EMPTY6", empty: true },
+    { id: "EMPTY7", empty: true },
+    { id: "EMPTY8", empty: true },
+    { id: "EMPTY9", empty: true },
+    { id: "EMPTY10", empty: true },
+    { id: "EMPTY11", empty: true }
+];
+
+const grid = document.getElementById("grid");
+const hud = document.getElementById("hud");
+const beamSvg = document.getElementById("beam-svg");
+const beamPoly = document.getElementById("beam-poly");
+
+let activeBox = null;
+
+function renderGrid() {
+    grid.innerHTML = "";
+
+    const visiblePanels = panels.filter((panel, index) => index < 2 || panel.empty);
+
+    visiblePanels.forEach((panel) => {
+        const box = document.createElement("div");
+        box.classList.add("box");
+        box.dataset.hasData = String(!panel.empty);
+
+        if (panel.empty) {
+            box.classList.add("empty");
+            box.setAttribute("aria-label", "Empty slot");
+        } else {
+            box.setAttribute("role", "button");
+            box.setAttribute("tabindex", "0");
+            box.setAttribute("aria-label", `Open panel ${panel.id}: ${panel.title}`);
+        }
+
+        const content = document.createElement("div");
+        content.classList.add("box-content");
+
+        if (panel.empty) {
+            content.textContent = "EMPTY SLOT";
+        } else {
+            content.innerHTML = `
+                <div class="splash-top">${panel.metric || panel.id}</div>
+                <div class="splash-mid">${panel.title}</div>
+                <div class="splash-bottom">${panel.subtitle || " "}</div>
+            `;
+
+            box.addEventListener("click", () => {
+                if (activeBox === box && hud.classList.contains("active")) {
+                    hideHud();
+                    return;
+                }
+
+                showHud(box, panel);
+            });
+            box.addEventListener("keydown", (event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    if (activeBox === box && hud.classList.contains("active")) {
+                        hideHud();
+                    } else {
+                        showHud(box, panel);
+                    }
+                }
+            });
+        }
+
+        box.appendChild(content);
+        grid.appendChild(box);
+    });
+
+}
+
+function updateBeam() {
+    if (!activeBox || window.innerWidth <= 900) {
+        return;
+    }
+
+    const boxRect = activeBox.getBoundingClientRect();
+    const hudRect = hud.getBoundingClientRect();
+
+    const points = [
+        `${boxRect.left},${boxRect.top}`,
+        `${hudRect.left},${hudRect.top}`,
+        `${hudRect.right},${hudRect.top}`,
+        `${boxRect.right},${boxRect.top}`,
+        `${boxRect.right},${boxRect.bottom}`,
+        `${hudRect.right},${hudRect.bottom}`,
+        `${hudRect.left},${hudRect.bottom}`,
+        `${boxRect.left},${boxRect.bottom}`
+    ].join(" ");
+
+    beamPoly.setAttribute("points", points);
+}
+
+function showHud(element, panel) {
+    if (panel.empty) {
+        return;
+    }
+
+    activeBox = element;
+
+    document.querySelectorAll(".box").forEach((box) => box.classList.remove("active"));
+    element.classList.add("active");
+
+    hud.classList.add("active");
+    hud.setAttribute("aria-hidden", "false");
+    hud.querySelector(".hud-header").textContent = panel.title;
+    hud.querySelector(".hud-meta").textContent = panel.descriptor || panel.subtitle || "";
+
+    const statsDiv = hud.querySelector(".hud-stats");
+    statsDiv.innerHTML = "";
+
+    panel.stats.forEach((stat) => {
+        const statNode = document.createElement("div");
+        statNode.className = "stat-item";
+        statNode.innerHTML = `<div class="stat-text">${stat.text}${stat.ref ? `<sup>${stat.ref}</sup>` : ""}</div>`;
+        statsDiv.appendChild(statNode);
+    });
+
+    hud.querySelector(".hud-footer-left").textContent = (panel.footer || "").replaceAll("â€™", "'").replaceAll("’", "'");
+    const sourcesNode = document.getElementById("hud-sources");
+    sourcesNode.innerHTML = "";
+
+    (panel.sources || []).forEach((source) => {
+        const sourceLine = document.createElement("div");
+        sourceLine.textContent = source.replaceAll("â€™", "'").replaceAll("’", "'");
+        sourcesNode.appendChild(sourceLine);
+    });
+
+    if (window.innerWidth > 900) {
+        beamSvg.style.opacity = "1";
+        updateBeam();
+    } else {
+        beamSvg.style.opacity = "0";
+    }
+}
+
+function hideHud() {
+    activeBox = null;
+    document.querySelectorAll(".box").forEach((box) => box.classList.remove("active"));
+    hud.classList.remove("active");
+    hud.setAttribute("aria-hidden", "true");
+    beamSvg.style.opacity = "0";
+}
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        hideHud();
+    }
+});
+
+document.addEventListener("click", (event) => {
+    const clickedBox = event.target.closest(".box");
+
+    if (!clickedBox && activeBox) {
+        hideHud();
+    }
+});
+
+window.addEventListener("resize", updateBeam);
+window.addEventListener("scroll", updateBeam);
+
+renderGrid();
+</script>
+</body>
+</html>
