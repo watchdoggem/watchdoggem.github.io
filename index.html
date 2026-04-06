@@ -68,52 +68,58 @@ button,
     transform: translateY(-50%) rotate(180deg);
     writing-mode: vertical-rl;
     z-index: 1100;
-    padding: 0.7rem 0.45rem;
-    border-radius: 18px;
+    padding: 0.55rem 0.38rem;
+    border-radius: 16px;
     border: 1px solid var(--border-strong);
-    background: rgba(11, 8, 20, 0.72);
+    background: rgba(11, 8, 20, 0.6);
     color: var(--text-muted);
     text-decoration: none;
     font-family: "Orbitron", sans-serif;
-    font-size: 0.7rem;
-    letter-spacing: 0.16em;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     backdrop-filter: blur(10px);
     display: flex;
     align-items: center;
-    gap: 0.45rem;
-    transition: color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    gap: 0.32rem;
+    box-shadow: inset 0 0 10px rgba(199, 158, 255, 0.06);
+    transition: color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
 
 .watermark-link:hover,
 .watermark-link:focus-visible {
     color: var(--accent-violet);
     border-color: var(--accent-violet);
-    box-shadow: 0 0 16px var(--glow);
+    background: rgba(18, 12, 30, 0.78);
+    box-shadow: 0 0 12px var(--glow);
     outline: none;
 }
 
 .watermark-bird {
-    font-size: 0.95rem;
+    font-size: 0.78rem;
     line-height: 1;
+    opacity: 0.9;
 }
 
 .watermark-avatar {
-    width: 28px;
-    height: 28px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     border: 1px solid var(--border-strong);
     object-fit: cover;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.22);
 }
 
 .watermark-name {
-    font-size: 0.72rem;
+    font-size: 0.58rem;
+    color: rgba(236, 225, 255, 0.82);
 }
 
 .watermark-name strong {
     display: flex;
     flex-direction: column;
     line-height: 1.05;
+    font-weight: 900;
 }
 
 .grid {
@@ -406,19 +412,19 @@ button,
 
     .watermark-link {
         right: 0.25rem;
-        padding: 0.55rem 0.32rem;
-        font-size: 0.56rem;
-        letter-spacing: 0.14em;
-        gap: 0.3rem;
+        padding: 0.48rem 0.28rem;
+        font-size: 0.5rem;
+        letter-spacing: 0.1em;
+        gap: 0.22rem;
     }
 
     .watermark-avatar {
-        width: 22px;
-        height: 22px;
+        width: 18px;
+        height: 18px;
     }
 
     .watermark-bird {
-        font-size: 0.72rem;
+        font-size: 0.6rem;
     }
 }
 </style>
@@ -480,20 +486,21 @@ const panels = [
         metric: "1.04M",
         title: "Abortion In America",
         subtitle: "National demographic loss",
-        descriptor: "1,038,100 abortions in 2024 | 155,000 crossed state lines",
+        descriptor: "1,038,100 abortions in 2024 | Tax dollars aggregated across state and federal: pending",
         categories: ["demography"],
         stats: [
-            { text: "1,038,100 clinician-provided abortions in 2024", ref: 1 },
-            { text: "155,000 crossed state lines for abortion in 2024", ref: 1 },
-            { text: "613,383 legal abortions reported to CDC for 2022", ref: 2 },
-            { text: "56.5% of 2022 abortions were to women in their twenties", ref: 2 },
-            { text: "2023 and 2024 both cleared 1M annual abortions", ref: 1 },
-            { text: "Medication access kept national totals elevated after Dobbs", ref: 1 }
+            { text: "Placeholder statistic 1", ref: null },
+            { text: "Placeholder statistic 2", ref: null },
+            { text: "Placeholder statistic 3", ref: null },
+            { text: "Placeholder statistic 4", ref: null },
+            { text: "Placeholder statistic 5", ref: null },
+            { text: "Placeholder statistic 6", ref: null },
+            { text: "Placeholder statistic 7", ref: null },
+            { text: "Placeholder statistic 8", ref: null }
         ],
-        footer: "This panel uses current national totals. A separate Gen Z cohort estimate still needs a transparent method before it belongs on the site.",
+        footer: "",
         sources: [
-            "1 Guttmacher Monthly Abortion Provision Study, 2024 release",
-            "2 CDC Abortion Surveillance 2022"
+            "1 Guttmacher Monthly Abortion Provision Study, 2024 release"
         ]
     },
     {
@@ -679,7 +686,7 @@ function showHud(element, panel) {
     panel.stats.forEach((stat) => {
         const statNode = document.createElement("div");
         statNode.className = "stat-item";
-        statNode.innerHTML = `<div class="stat-text">${stat.text}<sup>${stat.ref}</sup></div>`;
+        statNode.innerHTML = `<div class="stat-text">${stat.text}${stat.ref ? `<sup>${stat.ref}</sup>` : ""}</div>`;
         statsDiv.appendChild(statNode);
     });
 
