@@ -233,9 +233,8 @@ button,
 
 .hud-topline {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: flex-start;
-    gap: 1rem;
     margin-bottom: 0.5rem;
 }
 
@@ -244,14 +243,6 @@ button,
     font-size: clamp(1.4rem, 1.8vw, 2.8rem);
     text-shadow: 0 0 18px var(--glow);
     line-height: 1.1;
-}
-
-.hud-close {
-    min-width: 44px;
-    min-height: 44px;
-    padding: 0.35rem 0.7rem;
-    font-family: "Orbitron", sans-serif;
-    font-size: 1rem;
 }
 
 .hud-meta {
@@ -446,7 +437,6 @@ button,
 <div id="hud" aria-hidden="true">
     <div class="hud-topline">
         <div class="hud-header"></div>
-        <button type="button" class="action-button hud-close" id="hud-close" aria-label="Close detail panel">Close</button>
     </div>
     <div class="hud-meta"></div>
     <div class="hud-stats"></div>
@@ -500,26 +490,6 @@ const panels = [
         sources: [
             "1 Guttmacher Monthly Abortion Provision Study, 2024 release",
             "2 CDC Abortion Surveillance 2022"
-        ]
-    },
-    {
-        id: "FRAUD",
-        metric: "$12.5B",
-        title: "Fraud In America",
-        subtitle: "Consumer extraction",
-        descriptor: "FTC Consumer Sentinel Network | 2024",
-        categories: ["fraud"],
-        stats: [
-            { text: "$12.5B reported lost to fraud in 2024", ref: 1 },
-            { text: "2.6M consumers filed fraud reports in 2024", ref: 1 },
-            { text: "$5.7B lost to investment scams alone", ref: 1 },
-            { text: "38% of reporters said they lost money", ref: 1 },
-            { text: "$2.95B lost to imposter scams", ref: 1 },
-            { text: "$750.6M lost to business and job opportunity scams", ref: 1 }
-        ],
-        footer: "Fraud has become a parallel tax on American households, with reported losses accelerating into the tens of billions.",
-        sources: [
-            "1 FTC fraud data release, March 2025"
         ]
     },
     {
@@ -600,7 +570,6 @@ const panels = [
 
 const grid = document.getElementById("grid");
 const hud = document.getElementById("hud");
-const hudClose = document.getElementById("hud-close");
 const beamSvg = document.getElementById("beam-svg");
 const beamPoly = document.getElementById("beam-poly");
 
@@ -609,7 +578,9 @@ let activeBox = null;
 function renderGrid() {
     grid.innerHTML = "";
 
-    panels.forEach((panel) => {
+    const visiblePanels = panels.filter((panel, index) => index < 2 || panel.empty);
+
+    visiblePanels.forEach((panel) => {
         const box = document.createElement("div");
         box.classList.add("box");
         box.dataset.hasData = String(!panel.empty);
@@ -733,8 +704,6 @@ function hideHud() {
     hud.setAttribute("aria-hidden", "true");
     beamSvg.style.opacity = "0";
 }
-
-hudClose.addEventListener("click", hideHud);
 
 document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
