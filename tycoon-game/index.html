@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAO Signal Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://s3.tradingview.com/tv.js"></script>
+<style>
+:root{--bg:#0b1014;--panel:rgba(17,25,31,.88);--panel-2:rgba(11,17,22,.82);--line:rgba(255,255,255,.1);--text:#f4efe6;--muted:#9ea8b0;--accent:#ffac72;--accent2:#63dec9;--good:#8ce19a;--warn:#ffd36f;--bad:#ff7b72;--shadow:0 24px 70px rgba(0,0,0,.35);--r:24px}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:"Sora",sans-serif;color:var(--text);background:radial-gradient(circle at 10% 10%,rgba(255,140,82,.18),transparent 30%),radial-gradient(circle at 85% 15%,rgba(99,222,201,.16),transparent 24%),linear-gradient(180deg,#091015,#0b1014 50%,#131b21);overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:64px 64px;mask-image:linear-gradient(180deg,rgba(255,255,255,.25),transparent 85%)}
+main{width:min(1380px,calc(100vw - 1.2rem));margin:0 auto;padding:1rem 0 2.5rem}
+.panel{background:linear-gradient(180deg,rgba(255,255,255,.03),transparent),var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);backdrop-filter:blur(14px);position:relative;overflow:hidden}
+.panel::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,172,114,.08),transparent 40%,rgba(99,222,201,.07));pointer-events:none}
+.hero,.market,.tools{display:grid;gap:1rem}
+.hero{grid-template-columns:minmax(0,1.35fr) minmax(280px,.9fr);margin-bottom:1rem}
+.intro,.summary,.chart,.technic,.levels,.risk,.notes{padding:1.15rem}
+.eyebrow,.label,.mini{font-family:"IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.16em}
+.eyebrow{margin:0 0 .75rem;font-size:.76rem;color:var(--accent2)}
+h1{margin:0;font-size:clamp(2.7rem,6vw,5.1rem);line-height:.92;letter-spacing:-.05em;max-width:10ch}
+.subtitle{max-width:60ch;margin:1rem 0 1.15rem;color:var(--muted);line-height:1.7;font-size:clamp(1rem,1.4vw,1.14rem)}
+.chips,.segmented,.stats,.metric-grid,.level-grid,.checklist{display:flex;flex-wrap:wrap;gap:.65rem}
+.chip,button,.pill,.stat,.metric,.fib-row,.check{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);border-radius:16px}
+.chip,.pill,.stat,.metric,.fib-row,.check{padding:.85rem .95rem}
+.summary h2,.head h2,.head h3{margin:.15rem 0 0}
+.summary p,.head p,.note{margin:0;color:var(--muted);line-height:1.65}
+.stats{margin-top:1rem}
+.stat{flex:1 1 120px}
+.stat span,.metric span,.pill small,.label,.mini{display:block;font-size:.72rem;color:var(--muted);margin-bottom:.32rem}
+.market{grid-template-columns:repeat(3,minmax(0,1fr));padding:1rem 1.1rem;margin-bottom:1rem;align-items:end}
+.segmented button,button{padding:.85rem 1rem;color:var(--text);font:inherit;cursor:pointer;transition:.2s ease;border-radius:999px}
+.segmented button{background:rgba(255,255,255,.05)}
+.segmented button:hover,button:hover,.segmented button:focus-visible,button:focus-visible{transform:translateY(-1px);border-color:rgba(255,172,114,.42);outline:none}
+.segmented .active{background:linear-gradient(135deg,rgba(255,136,82,.84),rgba(255,172,114,.94));color:#1b120d;border-color:rgba(255,172,114,.65)}
+.market .label{margin-bottom:.6rem}
+.stack{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,.9fr);gap:1rem;margin-bottom:1rem}
+.head{display:flex;justify-content:space-between;gap:1rem;align-items:start;margin-bottom:.9rem}
+.mount{height:620px;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:rgba(8,13,17,.9)}
+#chart-widget{height:620px}
+#tech-widget{height:430px;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:rgba(8,13,17,.76)}
+.fallback{min-height:inherit;display:grid;place-items:center;padding:2rem;color:var(--muted);text-align:center;line-height:1.7}
+.technic-list{display:grid;gap:.7rem;margin-top:.95rem}
+.technic-item{padding:.9rem;border:1px solid rgba(255,255,255,.08);border-radius:18px;background:rgba(255,255,255,.04)}
+.technic-item strong{display:block;margin-bottom:.32rem}
+.tools{grid-template-columns:repeat(3,minmax(0,1fr))}
+.head .mini{margin-top:.2rem}
+form{display:grid;gap:.75rem}
+.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+label{display:flex;flex-direction:column;gap:.38rem}
+input,select,textarea{width:100%;padding:.9rem .95rem;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:var(--text);font:inherit}
+input:focus,select:focus,textarea:focus{outline:none;border-color:rgba(255,172,114,.55);box-shadow:0 0 0 4px rgba(255,172,114,.1)}
+textarea{min-height:220px;resize:vertical;line-height:1.7}
+.preview,.fib{display:grid;gap:.7rem;margin-top:1rem}
+.preview{grid-template-columns:repeat(2,minmax(0,1fr))}
+.pill strong,.metric strong,.fib-row strong{display:block}
+.metric-grid{margin-top:1rem}
+.metric{flex:1 1 170px}
+.fib-row{display:flex;justify-content:space-between;gap:1rem;align-items:center}
+.check{display:flex;gap:.7rem;align-items:flex-start;line-height:1.55}
+.check input{width:auto;margin-top:.15rem;accent-color:var(--accent2)}
+.footer{display:flex;justify-content:space-between;gap:1rem;align-items:center;flex-wrap:wrap;margin-top:1rem;padding:0 .2rem}
+.reset{width:fit-content}
+@media (max-width:1150px){.hero,.stack,.tools{grid-template-columns:1fr}.market{grid-template-columns:1fr}.mount,#chart-widget{height:520px}#tech-widget{height:380px}}
+@media (max-width:720px){main{width:min(100vw - .8rem,100%);padding:.45rem 0 1.6rem}.intro,.summary,.chart,.technic,.levels,.risk,.notes{padding:1rem}.preview,.grid2{grid-template-columns:1fr}.mount,#chart-widget{height:440px}.segmented button,.reset{width:100%}}
+</style>
+</head>
+<body>
+<main>
+  <section class="hero">
+    <div class="panel intro">
+      <p class="eyebrow">TAO-only workspace</p>
+      <h1>TAO Signal Deck</h1>
+      <p class="subtitle">A dedicated website for technical analysis on TAO. Flip exchanges, scan timeframes, map key levels, size the trade, and keep your thesis in one place.</p>
+      <div class="chips">
+        <div class="chip">TAOUSDT focus</div>
+        <div class="chip">Live chart</div>
+        <div class="chip">Technical snapshot</div>
+        <div class="chip">Fib + levels</div>
+        <div class="chip">Risk sizing</div>
+        <div class="chip">Autosaved notes</div>
+      </div>
+    </div>
+    <aside class="panel summary">
+      <p class="eyebrow">Workflow</p>
+      <h2>Trade the structure first</h2>
+      <p>Use the chart for context, the indicator snapshot for alignment, then only take setups that survive your invalidation and size rules.</p>
+      <div class="stats">
+        <div class="stat"><span>Pair</span><strong id="heroSymbol">BINANCE:TAOUSDT</strong></div>
+        <div class="stat"><span>Frame</span><strong id="heroFrame">4H</strong></div>
+        <div class="stat"><span>Save Mode</span><strong>Browser local</strong></div>
+      </div>
+    </aside>
+  </section>
+
+  <section class="panel market">
+    <div>
+      <span class="label">Exchange</span>
+      <div class="segmented" id="exchangeControls">
+        <button type="button" data-exchange="BINANCE" class="active">Binance</button>
+        <button type="button" data-exchange="BITGET">Bitget</button>
+      </div>
+    </div>
+    <div>
+      <span class="label">Timeframe</span>
+      <div class="segmented" id="frameControls">
+        <button type="button" data-interval="15">15M</button>
+        <button type="button" data-interval="60">1H</button>
+        <button type="button" data-interval="240" class="active">4H</button>
+        <button type="button" data-interval="D">1D</button>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><span>Chart</span><strong id="activeSymbol">BINANCE:TAOUSDT</strong></div>
+      <div class="stat"><span>Snapshot</span><strong id="activeFrame">4H</strong></div>
+      <div class="stat"><span>Default Stack</span><strong>EMA, RSI, MACD</strong></div>
+    </div>
+  </section>
+
+  <section class="stack">
+    <article class="panel chart">
+      <div class="head">
+        <div>
+          <p class="eyebrow">Execution chart</p>
+          <h2>TAO price action desk</h2>
+        </div>
+        <p class="mini">Drawing tools stay enabled so you can mark structure directly on the chart.</p>
+      </div>
+      <div class="mount" id="chartMount"><div class="fallback">Loading TAO chart...</div></div>
+      <p class="note">TradingView assets load from the web. If you open this page offline, the planning tools below still work locally.</p>
+    </article>
+
+    <aside class="panel technic">
+      <div class="head">
+        <div>
+          <p class="eyebrow">Technical snapshot</p>
+          <h2>Fast read on TAO</h2>
+        </div>
+        <p class="mini">Switch timeframe and the summary follows the chart.</p>
+      </div>
+      <div id="tech-widget"><div class="fallback">Loading technical summary...</div></div>
+      <div class="technic-list">
+        <div class="technic-item"><strong>Structure first</strong><span class="note">Only chase continuation when TAO expands from a real reclaim or breakdown level.</span></div>
+        <div class="technic-item"><strong>Momentum second</strong><span class="note">RSI and MACD are confirmation filters, not reasons to ignore the chart.</span></div>
+        <div class="technic-item"><strong>Risk always</strong><span class="note">If the stop distance makes the trade too large, the market is saying "not yet."</span></div>
+      </div>
+    </aside>
+  </section>
+
+  <section class="tools">
+    <article class="panel levels">
+      <div class="head">
+        <div>
+          <p class="eyebrow">Levels + fib</p>
+          <h3>Map the zone</h3>
+        </div>
+        <p class="mini">Set the range and let the ladder populate.</p>
+      </div>
+      <form id="levelsForm" class="grid2" autocomplete="off">
+        <label><span class="label">Demand</span><input type="number" step="0.01" name="demand" placeholder="280.00"></label>
+        <label><span class="label">Pivot</span><input type="number" step="0.01" name="pivot" placeholder="298.40"></label>
+        <label><span class="label">Supply</span><input type="number" step="0.01" name="supply" placeholder="324.80"></label>
+        <label><span class="label">Invalidation</span><input type="number" step="0.01" name="invalidation" placeholder="272.50"></label>
+        <label><span class="label">Swing High</span><input type="number" step="0.01" name="swingHigh" placeholder="332.00"></label>
+        <label><span class="label">Swing Low</span><input type="number" step="0.01" name="swingLow" placeholder="255.00"></label>
+        <label><span class="label">Fib Direction</span><select name="trend"><option value="uptrend">Uptrend pullback</option><option value="downtrend">Downtrend bounce</option></select></label>
+        <label><span class="label">Reminder</span><input type="text" value="0.382 / 0.5 / 0.618 usually matter most" readonly></label>
+      </form>
+      <div class="preview" id="levelPreview"></div>
+      <div class="fib" id="fibGrid"></div>
+    </article>
+
+    <article class="panel risk">
+      <div class="head">
+        <div>
+          <p class="eyebrow">Risk engine</p>
+          <h3>Size before entry</h3>
+        </div>
+        <p class="mini">Assumes 1 contract equals 1 TAO for quick planning.</p>
+      </div>
+      <form id="riskForm" class="grid2" autocomplete="off">
+        <label><span class="label">Account Size ($)</span><input type="number" step="0.01" name="accountSize" placeholder="10000"></label>
+        <label><span class="label">Risk Per Trade (%)</span><input type="number" step="0.1" name="riskPercent" placeholder="1.0"></label>
+        <label><span class="label">Entry</span><input type="number" step="0.01" name="entry" placeholder="298.40"></label>
+        <label><span class="label">Stop</span><input type="number" step="0.01" name="stop" placeholder="284.90"></label>
+        <label><span class="label">Target</span><input type="number" step="0.01" name="target" placeholder="332.00"></label>
+        <label><span class="label">Side</span><select name="side"><option value="long">Long</option><option value="short">Short</option></select></label>
+      </form>
+      <div class="metric-grid">
+        <div class="metric"><span>Risk Capital</span><strong id="riskCapital">--</strong></div>
+        <div class="metric"><span>Position Size</span><strong id="positionSize">--</strong></div>
+        <div class="metric"><span>Position Notional</span><strong id="positionNotional">--</strong></div>
+        <div class="metric"><span>Reward / Risk</span><strong id="rewardRisk">--</strong></div>
+        <div class="metric"><span>Stop Distance</span><strong id="stopDistance">--</strong></div>
+        <div class="metric"><span>Target Distance</span><strong id="targetDistance">--</strong></div>
+      </div>
+    </article>
+
+    <article class="panel notes">
+      <div class="head">
+        <div>
+          <p class="eyebrow">Thesis board</p>
+          <h3>Keep the plan visible</h3>
+        </div>
+        <p class="mini">Everything here autosaves in your browser.</p>
+      </div>
+      <div class="checklist" id="checklist"></div>
+      <textarea id="notes" placeholder="TAO thesis, key levels, conditions for entry, invalidation, what the market would need to do to prove you wrong, what would make you stay flat."></textarea>
+    </article>
+  </section>
+
+  <div class="footer">
+    <p class="note">This is a technical analysis workspace, not financial advice. External chart data is provided by TradingView.</p>
+    <button type="button" class="reset" id="resetBtn">Reset saved workspace</button>
+  </div>
+</main>
+
+<script>
+const KEY="tao-signal-deck-v1";
+const checks=[
+  {id:"trend",label:"My trade matches higher-timeframe TAO structure."},
+  {id:"level",label:"The trigger is tied to a real level, not impulse."},
+  {id:"stop",label:"My invalidation is clear before the entry."},
+  {id:"size",label:"My size respects my max risk and I can hold the trade."}
+];
+const frames={"15":{label:"15M",tech:"15m"},"60":{label:"1H",tech:"1h"},"240":{label:"4H",tech:"4h"},"D":{label:"1D",tech:"1d"}};
+const defaults={exchange:"BINANCE",interval:"240",levels:{demand:"",pivot:"",supply:"",invalidation:"",swingHigh:"",swingLow:"",trend:"uptrend"},risk:{accountSize:"",riskPercent:"1.0",entry:"",stop:"",target:"",side:"long"},checks:{trend:false,level:false,stop:false,size:false},notes:""};
+const state=load();
+
+function clone(){return{exchange:defaults.exchange,interval:defaults.interval,levels:{...defaults.levels},risk:{...defaults.risk},checks:{...defaults.checks},notes:defaults.notes}}
+function load(){try{const raw=localStorage.getItem(KEY);if(!raw)return clone();const p=JSON.parse(raw);return{exchange:p.exchange||defaults.exchange,interval:p.interval||defaults.interval,levels:{...defaults.levels,...(p.levels||{})},risk:{...defaults.risk,...(p.risk||{})},checks:{...defaults.checks,...(p.checks||{})},notes:typeof p.notes==="string"?p.notes:defaults.notes}}catch{return clone()}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch{}}
+function money(v){return new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:2}).format(v)}
+function num(v,d=2){return new Intl.NumberFormat("en-US",{maximumFractionDigits:d}).format(v)}
+function symbol(){return state.exchange+":TAOUSDT"}
+
+function syncHeader(){
+  document.querySelectorAll("[data-exchange]").forEach(b=>b.classList.toggle("active",b.dataset.exchange===state.exchange));
+  document.querySelectorAll("[data-interval]").forEach(b=>b.classList.toggle("active",b.dataset.interval===state.interval));
+  const frame=frames[state.interval].label;
+  document.getElementById("heroSymbol").textContent=symbol();
+  document.getElementById("activeSymbol").textContent=symbol();
+  document.getElementById("heroFrame").textContent=frame;
+  document.getElementById("activeFrame").textContent=frame;
+}
+
+function renderChart(){
+  const mount=document.getElementById("chartMount");
+  if(typeof TradingView==="undefined"||typeof TradingView.widget!=="function"){
+    mount.innerHTML='<div class="fallback">TradingView did not load. Refresh once with internet access and the TAO chart should appear.</div>';
+    return;
+  }
+  mount.innerHTML='<div id="chart-widget"></div>';
+  new TradingView.widget({
+    autosize:true,symbol:symbol(),interval:state.interval,timezone:"America/New_York",theme:"dark",style:"1",locale:"en",
+    allow_symbol_change:false,enable_publishing:false,hide_legend:false,hide_side_toolbar:false,hide_top_toolbar:false,
+    withdateranges:true,details:false,calendar:false,studies:["MAExp@tv-basicstudies","RSI@tv-basicstudies","MACD@tv-basicstudies","Volume@tv-basicstudies"],
+    container_id:"chart-widget",support_host:"https://www.tradingview.com"
+  });
+}
+
+function renderTech(){
+  const host=document.getElementById("tech-widget");
+  host.innerHTML='<div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div></div>';
+  const s=document.createElement("script");
+  s.type="text/javascript";s.async=true;s.src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js";
+  s.text=JSON.stringify({interval:frames[state.interval].tech,width:"100%",height:"100%",isTransparent:true,symbol:symbol(),showIntervalTabs:true,displayMode:"single",locale:"en",colorTheme:"dark"});
+  host.firstElementChild.appendChild(s);
+}
+
+function renderLevels(){
+  const preview=document.getElementById("levelPreview");
+  const items=[["Demand",state.levels.demand],["Pivot",state.levels.pivot],["Supply",state.levels.supply],["Invalidation",state.levels.invalidation]];
+  preview.innerHTML=items.map(([label,value])=>'<div class="pill"><small>'+label+'</small><strong>'+(value?"$"+num(Number(value),2):"Not set")+"</strong></div>").join("");
+
+  const high=Number(state.levels.swingHigh),low=Number(state.levels.swingLow),grid=document.getElementById("fibGrid");
+  if(!high||!low||high<=low){grid.innerHTML='<div class="fib-row"><span>Fib ladder</span><strong>Enter a valid swing high and low</strong></div>';return}
+  const range=high-low,ratios=[.382,.5,.618,.786],rows=[["Swing high",high],["Swing low",low]];
+  ratios.forEach(r=>rows.push([r.toFixed(3)+" retrace",state.levels.trend==="uptrend"?high-range*r:low+range*r]));
+  rows.push(["1.272 extension",state.levels.trend==="uptrend"?high+range*.272:low-range*.272]);
+  rows.push(["1.618 extension",state.levels.trend==="uptrend"?high+range*.618:low-range*.618]);
+  grid.innerHTML=rows.map(([label,value])=>'<div class="fib-row"><span>'+label+'</span><strong>$'+num(value,2)+'</strong></div>').join("");
+}
+
+function renderRisk(){
+  const a=Number(state.risk.accountSize),rp=Number(state.risk.riskPercent),e=Number(state.risk.entry),s=Number(state.risk.stop),t=Number(state.risk.target);
+  const ids={riskCapital:"--",positionSize:"--",positionNotional:"--",rewardRisk:"--",stopDistance:"--",targetDistance:"--"};
+  if(a&&rp&&e&&s&&t&&e!==s){
+    const riskCapital=a*(rp/100),stopDistance=Math.abs(e-s),targetDistance=Math.abs(t-e),positionSize=riskCapital/stopDistance,positionNotional=positionSize*e,rewardRisk=targetDistance/stopDistance;
+    ids.riskCapital=money(riskCapital);ids.positionSize=num(positionSize,3)+" TAO";ids.positionNotional=money(positionNotional);ids.rewardRisk=rewardRisk.toFixed(2)+"R";ids.stopDistance="$"+num(stopDistance,2);ids.targetDistance="$"+num(targetDistance,2);
+  }
+  Object.entries(ids).forEach(([id,val])=>document.getElementById(id).textContent=val);
+}
+
+function bindForms(){
+  const levelForm=document.getElementById("levelsForm");
+  [...levelForm.elements].forEach(el=>{
+    if(!(el instanceof HTMLInputElement||el instanceof HTMLSelectElement))return;
+    if(el.name in state.levels)el.value=state.levels[el.name];
+    el.addEventListener("input",()=>{if(!(el.name in state.levels))return;state.levels[el.name]=el.value;save();renderLevels()});
+    el.addEventListener("change",()=>{if(!(el.name in state.levels))return;state.levels[el.name]=el.value;save();renderLevels()});
+  });
+
+  const riskForm=document.getElementById("riskForm");
+  [...riskForm.elements].forEach(el=>{
+    if(!(el instanceof HTMLInputElement||el instanceof HTMLSelectElement))return;
+    el.value=state.risk[el.name]||"";
+    el.addEventListener("input",()=>{state.risk[el.name]=el.value;save();renderRisk()});
+    el.addEventListener("change",()=>{state.risk[el.name]=el.value;save();renderRisk()});
+  });
+}
+
+function renderChecklist(){
+  const wrap=document.getElementById("checklist");
+  wrap.innerHTML=checks.map(item=>'<label class="check"><input type="checkbox" data-check="'+item.id+'" '+(state.checks[item.id]?"checked":"")+'><span>'+item.label+'</span></label>').join("");
+  wrap.querySelectorAll("[data-check]").forEach(box=>box.addEventListener("change",()=>{state.checks[box.dataset.check]=box.checked;save()}));
+}
+
+function bindNotes(){
+  const area=document.getElementById("notes");
+  area.value=state.notes;
+  area.addEventListener("input",()=>{state.notes=area.value;save()});
+}
+
+function bindToolbar(){
+  document.querySelectorAll("[data-exchange]").forEach(btn=>btn.addEventListener("click",()=>{if(state.exchange===btn.dataset.exchange)return;state.exchange=btn.dataset.exchange;save();syncHeader();renderChart();renderTech()}));
+  document.querySelectorAll("[data-interval]").forEach(btn=>btn.addEventListener("click",()=>{if(state.interval===btn.dataset.interval)return;state.interval=btn.dataset.interval;save();syncHeader();renderChart();renderTech()}));
+}
+
+function bindReset(){
+  document.getElementById("resetBtn").addEventListener("click",()=>{if(!window.confirm("Clear your saved TAO levels, notes, and calculator values?"))return;localStorage.removeItem(KEY);window.location.reload()});
+}
+
+window.addEventListener("load",()=>{
+  syncHeader();bindToolbar();bindForms();renderChecklist();bindNotes();bindReset();renderLevels();renderRisk();renderChart();renderTech();
+});
+</script>
+</body>
+</html>
