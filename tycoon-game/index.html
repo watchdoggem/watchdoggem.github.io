@@ -10,97 +10,43 @@
 <script src="https://s3.tradingview.com/tv.js"></script>
 <style>
 :root{--bg:#0b1014;--panel:rgba(16,25,31,.9);--line:rgba(255,255,255,.11);--text:#f3efe5;--muted:#9da8b1;--accent:#ffab72;--accent2:#62dec6;--good:#8ae29c;--warn:#ffd36e;--bad:#ff7c72;--shadow:0 28px 80px rgba(0,0,0,.35);--r:24px}
-*{box-sizing:border-box}
-body{margin:0;min-height:100vh;font-family:"Sora",sans-serif;color:var(--text);background:radial-gradient(circle at 12% 12%,rgba(255,139,82,.17),transparent 30%),radial-gradient(circle at 84% 16%,rgba(98,222,198,.16),transparent 24%),linear-gradient(180deg,#091015,#0b1014 52%,#111a20);overflow-x:hidden}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:62px 62px;mask-image:linear-gradient(180deg,rgba(255,255,255,.28),transparent 88%)}
-main{width:min(1380px,calc(100vw - 1rem));margin:0 auto;padding:1rem 0 2rem}
-.panel{background:linear-gradient(180deg,rgba(255,255,255,.03),transparent),var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);backdrop-filter:blur(14px);position:relative;overflow:hidden}
-.panel::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,171,114,.08),transparent 40%,rgba(98,222,198,.07));pointer-events:none}
-.hero,.controls,.top-grid,.desk-grid,.signal-grid,.bubble-grid,.metric-grid{display:grid;gap:1rem}
-.hero{grid-template-columns:minmax(0,1.35fr) minmax(280px,.9fr);margin-bottom:1rem}
-.controls,.chart,.snapshot,.desk,.glossary,.reset-row{padding:1.1rem}
-.eyebrow,.label,.mini,.pill span,.metric span,.tone span{font-family:"IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.16em}
-.eyebrow{margin:0 0 .7rem;font-size:.76rem;color:var(--accent2)}
-h1,h2,h3,p{margin:0}
-h1{font-size:clamp(2.8rem,6vw,5rem);line-height:.92;letter-spacing:-.05em;max-width:10ch}
-.lede{margin-top:1rem;max-width:60ch;color:var(--muted);line-height:1.72;font-size:clamp(1rem,1.35vw,1.12rem)}
-.chip-row,.segmented,.stats,.pill-row{display:flex;flex-wrap:wrap;gap:.65rem}
-.chip,.segmented button,.stats .card,.pill,.metric,.tone,.explain,.bubble,.reset-btn{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);border-radius:18px}
-.chip,.stats .card,.pill,.metric,.tone,.explain,.bubble{padding:.85rem .95rem}
-.stats{margin-top:1rem}
-.stats .card{flex:1 1 120px}
-.stats strong,.metric strong,.pill strong,.tone strong{display:block}
-.stats span,.metric span,.pill span,.mini{display:block;font-size:.72rem;color:var(--muted);margin-bottom:.35rem}
-.controls{grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:1rem;align-items:end}
-.label{font-size:.72rem;color:var(--muted);margin-bottom:.55rem}
-.segmented button,.reset-btn,.action-btn{padding:.88rem 1rem;color:var(--text);font:inherit;cursor:pointer;transition:.2s ease;border-radius:999px;background:rgba(255,255,255,.05)}
-.segmented button:hover,.reset-btn:hover,.action-btn:hover,.segmented button:focus-visible,.reset-btn:focus-visible,.action-btn:focus-visible{transform:translateY(-1px);border-color:rgba(255,171,114,.42);outline:none}
-.segmented .active,.action-btn{background:linear-gradient(135deg,rgba(255,135,82,.86),rgba(255,171,114,.95));color:#1d140e;border-color:rgba(255,171,114,.65)}
-.top-grid{grid-template-columns:minmax(0,1.45fr) minmax(320px,.9fr);margin-bottom:1rem}
-.head{display:flex;justify-content:space-between;gap:1rem;align-items:start;margin-bottom:.95rem}
-.head p,.copy,.field-copy,.bubble p,.explain p,.glossary p,.footer-note{color:var(--muted);line-height:1.65}
-.chart-mount{height:620px;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:rgba(8,13,17,.92)}
-#chart-widget{height:620px}
-#tech-widget{height:345px;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:rgba(8,13,17,.76)}
-.fallback{height:100%;display:grid;place-items:center;padding:2rem;color:var(--muted);text-align:center;line-height:1.7}
-.signal-grid{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:1rem}
-.explain strong{display:block;margin-bottom:.32rem}
-.desk-grid{grid-template-columns:minmax(320px,.95fr) minmax(0,1.25fr)}
-form{display:grid;gap:.75rem}
-.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
-label{display:flex;flex-direction:column;gap:.38rem}
-input,select,textarea{width:100%;padding:.92rem .95rem;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:var(--text);font:inherit}
-input:focus,select:focus,textarea:focus{outline:none;border-color:rgba(255,171,114,.55);box-shadow:0 0 0 4px rgba(255,171,114,.1)}
-textarea{min-height:120px;resize:vertical;line-height:1.7}
-.field-copy{font-size:.92rem}
-.action-row{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:.2rem}
-.action-btn{width:fit-content}
-.bubble-grid{margin-top:1rem}
-.bubble{background:rgba(255,255,255,.04)}
-.bubble--user{border-left:3px solid var(--accent2)}
-.bubble--desk{border-left:3px solid var(--accent)}
-.tone-row{display:flex;gap:.7rem;flex-wrap:wrap}
-.tone{min-width:160px}
-.tone[data-tone="bullish"]{border-color:rgba(138,226,156,.35);background:rgba(138,226,156,.08)}
-.tone[data-tone="balanced"]{border-color:rgba(255,211,110,.35);background:rgba(255,211,110,.08)}
-.tone[data-tone="bearish"]{border-color:rgba(255,124,114,.35);background:rgba(255,124,114,.08)}
-.metric-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-.pill-row,.metric-grid{margin-top:1rem}
-.pill{min-width:155px}
-.glossary{margin-top:1rem}
-.reset-row{display:flex;justify-content:space-between;gap:1rem;align-items:center;flex-wrap:wrap}
-.footer-note{font-size:.85rem}
-@media (max-width:1150px){.hero,.controls,.top-grid,.desk-grid,.signal-grid,.metric-grid{grid-template-columns:1fr}.chart-mount,#chart-widget{height:520px}#tech-widget{height:340px}}
-@media (max-width:720px){main{width:min(100vw - .8rem,100%);padding:.5rem 0 1.5rem}.controls,.chart,.snapshot,.desk,.glossary,.reset-row{padding:1rem}.grid2{grid-template-columns:1fr}.chart-mount,#chart-widget{height:430px}.segmented button,.action-btn,.reset-btn{width:100%}}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:"Sora",sans-serif;color:var(--text);background:radial-gradient(circle at 12% 12%,rgba(255,139,82,.17),transparent 30%),radial-gradient(circle at 84% 16%,rgba(98,222,198,.16),transparent 24%),linear-gradient(180deg,#091015,#0b1014 52%,#111a20);overflow-x:hidden}body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:62px 62px;mask-image:linear-gradient(180deg,rgba(255,255,255,.28),transparent 88%)}main{width:min(1380px,calc(100vw - 1rem));margin:0 auto;padding:1rem 0 2rem}
+.panel{background:linear-gradient(180deg,rgba(255,255,255,.03),transparent),var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);backdrop-filter:blur(14px);position:relative;overflow:hidden}.panel::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,171,114,.08),transparent 40%,rgba(98,222,198,.07));pointer-events:none}
+.hero,.controls,.top-grid,.desk-grid,.explain-grid,.metric-grid,.bubble-grid{display:grid;gap:1rem}.hero{grid-template-columns:minmax(0,1.3fr) minmax(280px,.95fr);margin-bottom:1rem}.hero-card,.explainer,.control-card,.chart,.snapshot,.autopilot,.readout,.footer-row{padding:1.1rem}.eyebrow,.label,.mini,.metric span,.stat span,.mode-btn small{font-family:"IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.16em}.eyebrow{margin:0 0 .7rem;font-size:.76rem;color:var(--accent2)}h1,h2,h3,p{margin:0}h1{font-size:clamp(2.8rem,6vw,4.9rem);line-height:.92;letter-spacing:-.05em;max-width:10ch}.lede{margin-top:1rem;max-width:60ch;color:var(--muted);line-height:1.72;font-size:clamp(1rem,1.35vw,1.12rem)}
+.chip-row,.segmented,.stat-row,.mode-row{display:flex;flex-wrap:wrap;gap:.65rem}.chip,.segmented button,.stat,.metric,.explain,.bubble,.mode-btn,.refresh-btn,.reset-btn{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);border-radius:18px}.chip,.stat,.metric,.explain,.bubble{padding:.85rem .95rem}.controls{grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:1rem;align-items:end}.label{font-size:.72rem;color:var(--muted);margin-bottom:.55rem}.segmented button,.mode-btn,.refresh-btn,.reset-btn{padding:.9rem 1rem;color:var(--text);font:inherit;cursor:pointer;transition:.2s ease;border-radius:999px;background:rgba(255,255,255,.05)}.segmented button:hover,.mode-btn:hover,.refresh-btn:hover,.reset-btn:hover,.segmented button:focus-visible,.mode-btn:focus-visible,.refresh-btn:focus-visible,.reset-btn:focus-visible{transform:translateY(-1px);border-color:rgba(255,171,114,.42);outline:none}.segmented .active,.mode-btn.active,.refresh-btn{background:linear-gradient(135deg,rgba(255,135,82,.86),rgba(255,171,114,.95));color:#1d140e;border-color:rgba(255,171,114,.65)}
+.stat-row{margin-top:1rem}.stat{flex:1 1 120px}.stat span,.metric span{display:block;font-size:.72rem;color:var(--muted);margin-bottom:.35rem}.top-grid{grid-template-columns:minmax(0,1.45fr) minmax(320px,.9fr);margin-bottom:1rem}.head{display:flex;justify-content:space-between;gap:1rem;align-items:start;margin-bottom:.95rem}.head p,.bubble p,.explain p,.footer-note,.status-line{color:var(--muted);line-height:1.65}.chart-mount{height:620px;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:rgba(8,13,17,.92)}#chart-widget{height:620px}#tech-widget{height:345px;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:rgba(8,13,17,.76)}.fallback{height:100%;display:grid;place-items:center;padding:2rem;color:var(--muted);text-align:center;line-height:1.7}
+.explain-grid{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:1rem}.explain strong{display:block;margin-bottom:.3rem}.desk-grid{grid-template-columns:minmax(320px,.95fr) minmax(0,1.2fr)}.mode-row{margin-top:.3rem}.mode-btn{display:flex;flex-direction:column;gap:.2rem;align-items:flex-start;justify-content:center;min-height:86px;flex:1 1 210px;text-align:left}.mode-btn small{font-size:.68rem;color:rgba(255,255,255,.6)}.meta-row{display:flex;justify-content:space-between;gap:1rem;align-items:center;flex-wrap:wrap;margin-top:1rem}.status-line{font-size:.92rem}.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:1rem}.metric strong{display:block}.metric.good{border-color:rgba(138,226,156,.28);background:rgba(138,226,156,.08)}.metric.warn{border-color:rgba(255,211,110,.28);background:rgba(255,211,110,.08)}.metric.bad{border-color:rgba(255,124,114,.28);background:rgba(255,124,114,.08)}.bubble-grid{margin-top:1rem}.bubble{background:rgba(255,255,255,.04)}.bubble--desk{border-left:3px solid var(--accent)}.bubble--market{border-left:3px solid var(--accent2)}
+.footer-row{display:flex;justify-content:space-between;gap:1rem;align-items:center;flex-wrap:wrap;margin-top:1rem}.footer-note{font-size:.86rem}.pill{display:inline-flex;align-items:center;gap:.45rem;padding:.28rem .55rem;border-radius:999px;font-size:.76rem;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05)}.pill.good{color:var(--good)}.pill.warn{color:var(--warn)}.pill.bad{color:var(--bad)}
+@media (max-width:1150px){.hero,.controls,.top-grid,.desk-grid,.explain-grid,.metric-grid{grid-template-columns:1fr}.chart-mount,#chart-widget{height:520px}#tech-widget{height:340px}}@media (max-width:720px){main{width:min(100vw - .8rem,100%);padding:.5rem 0 1.5rem}.hero-card,.explainer,.control-card,.chart,.snapshot,.autopilot,.readout,.footer-row{padding:1rem}.chart-mount,#chart-widget{height:430px}.segmented button,.mode-btn,.refresh-btn,.reset-btn{width:100%}}
 </style>
 </head>
 <body>
 <main>
   <section class="hero">
-    <div class="panel controls">
-      <p class="eyebrow">TAO translation layer</p>
+    <div class="panel hero-card">
+      <p class="eyebrow">TAO autopilot</p>
       <h1>TAO Desk</h1>
-      <p class="lede">This version keeps the chart and technical snapshot, but stops asking you to decode everything alone. The desk turns the signals into a plain-English read, a fib pullback zone, and a simple "what matters now" plan when you press one button.</p>
+      <p class="lede">This version does the filling for you. It pulls live TAO market data from the selected exchange, calculates trend and momentum, builds a fib zone, and gives you prefilled scenario buttons that update with current price levels.</p>
       <div class="chip-row">
-        <div class="chip">Live Binance or Bitget chart</div>
-        <div class="chip">Technical snapshot</div>
-        <div class="chip">Snapshot explained</div>
-        <div class="chip">One-button TA readout</div>
+        <div class="chip">No manual typing required</div>
+        <div class="chip">Auto-filled support and resistance</div>
+        <div class="chip">RSI, EMA, MACD inferred for you</div>
+        <div class="chip">Scenario buttons with live price zones</div>
       </div>
     </div>
-    <aside class="panel glossary">
-      <p class="eyebrow">How To Read It</p>
-      <h2>What the snapshot usually means</h2>
-      <div class="signal-grid">
-        <div class="explain"><strong>Price above EMA</strong><p>Trend has a tailwind. Favor pullbacks, not panic chasing.</p></div>
-        <div class="explain"><strong>RSI above 60</strong><p>Momentum supports continuation. Good sign, but it can still be too extended to buy immediately.</p></div>
-        <div class="explain"><strong>MACD bullish</strong><p>Momentum is accelerating. Better when it happens after reclaiming a level, not into resistance.</p></div>
-        <div class="explain"><strong>Fib 0.382 to 0.618</strong><p>That is the classic pullback zone. Strong trends often react there before continuing.</p></div>
+    <aside class="panel explainer">
+      <p class="eyebrow">What It Means</p>
+      <h2>How the desk thinks</h2>
+      <div class="explain-grid">
+        <div class="explain"><strong>EMA trend</strong><p>If price is above the fast and slow EMA stack, trend-following longs get more room to work.</p></div>
+        <div class="explain"><strong>RSI</strong><p>RSI above 60 supports continuation. RSI below 45 warns that momentum is weak.</p></div>
+        <div class="explain"><strong>MACD</strong><p>Bullish MACD suggests momentum is expanding. Bearish MACD means strength is fading or leaning lower.</p></div>
+        <div class="explain"><strong>Fib zone</strong><p>The desk uses the recent swing to mark the classic reaction zone so you do not have to place fibs manually.</p></div>
       </div>
     </aside>
   </section>
 
-  <section class="panel controls">
+  <section class="panel control-card controls">
     <div>
       <div class="label">Exchange</div>
       <div class="segmented">
@@ -117,10 +63,10 @@ textarea{min-height:120px;resize:vertical;line-height:1.7}
         <button type="button" data-interval="D">1D</button>
       </div>
     </div>
-    <div class="stats">
-      <div class="card"><span>Symbol</span><strong id="heroSymbol">BINANCE:TAOUSDT</strong></div>
-      <div class="card"><span>Timeframe</span><strong id="heroFrame">4H</strong></div>
-      <div class="card"><span>Mode</span><strong>Explain the implication</strong></div>
+    <div class="stat-row">
+      <div class="stat"><span>Symbol</span><strong id="heroSymbol">BINANCE:TAOUSDT</strong></div>
+      <div class="stat"><span>Timeframe</span><strong id="heroFrame">4H</strong></div>
+      <div class="stat"><span>Desk Mode</span><strong id="heroMode">Read TAO now</strong></div>
     </div>
   </section>
 
@@ -131,7 +77,7 @@ textarea{min-height:120px;resize:vertical;line-height:1.7}
           <p class="eyebrow">Execution Chart</p>
           <h2>TAO price action desk</h2>
         </div>
-        <p class="mini">Keep drawing tools on and use this for actual levels and structure.</p>
+        <p class="mini">Chart for structure. Snapshot for confirmation. Buttons for implication.</p>
       </div>
       <div class="chart-mount" id="chartMount"><div class="fallback">Loading TAO chart...</div></div>
     </article>
@@ -142,112 +88,131 @@ textarea{min-height:120px;resize:vertical;line-height:1.7}
           <p class="eyebrow">Technical Snapshot</p>
           <h2>Fast read on TAO</h2>
         </div>
-        <p class="mini">Use this for confirmation, not as a blind buy or sell button.</p>
+        <p class="mini">The desk uses this style of information, then translates it for you.</p>
       </div>
       <div id="tech-widget"><div class="fallback">Loading technical summary...</div></div>
-      <div class="pill-row">
-        <div class="pill"><span>What it is good for</span><strong>Quick momentum check</strong></div>
-        <div class="pill"><span>What it is bad for</span><strong>Entry without structure</strong></div>
-        <div class="pill"><span>Best use</span><strong>Align it with the chart</strong></div>
+      <div class="meta-row">
+        <span class="pill good" id="trendPill">Trend loading</span>
+        <span class="pill warn" id="momentumPill">Momentum loading</span>
+        <span class="pill bad" id="volumePill">Volume loading</span>
       </div>
     </aside>
   </section>
 
   <section class="desk-grid">
-    <article class="panel desk">
+    <article class="panel autopilot">
       <div class="head">
         <div>
-          <p class="eyebrow">Ask The Desk</p>
-          <h2>Tell it what TAO is doing</h2>
+          <p class="eyebrow">Push A Button</p>
+          <h2>The desk does the setup work</h2>
         </div>
-        <p class="mini">Then hit analyze and it will translate the setup into a practical read.</p>
+        <p class="mini">Levels and signals below are auto-filled from live TAO market data.</p>
       </div>
-
-      <form id="deskForm" autocomplete="off">
-        <div class="grid2">
-          <label><span class="label">Support</span><input type="number" step="0.01" name="support" placeholder="280.00"></label>
-          <label><span class="label">Resistance</span><input type="number" step="0.01" name="resistance" placeholder="324.80"></label>
-          <label><span class="label">Invalidation</span><input type="number" step="0.01" name="invalidation" placeholder="272.50"></label>
-          <label><span class="label">Current Price</span><input type="number" step="0.01" name="price" placeholder="298.40"></label>
-          <label><span class="label">Swing High</span><input type="number" step="0.01" name="swingHigh" placeholder="332.00"></label>
-          <label><span class="label">Swing Low</span><input type="number" step="0.01" name="swingLow" placeholder="255.00"></label>
-        </div>
-
-        <div class="grid2">
-          <label><span class="label">Structure</span><select name="structure"><option value="reclaim">Reclaiming a level</option><option value="holding">Holding support</option><option value="range">Stuck in range</option><option value="rejecting">Rejecting resistance</option><option value="breakdown">Breaking down</option></select></label>
-          <label><span class="label">Trend vs EMA</span><select name="ema"><option value="above">Above EMA</option><option value="flat">Around EMA</option><option value="below">Below EMA</option></select></label>
-          <label><span class="label">RSI read</span><select name="rsi"><option value="strong">Above 60</option><option value="neutral">45 to 60</option><option value="weak">Below 45</option><option value="hot">Above 70 and hot</option></select></label>
-          <label><span class="label">MACD read</span><select name="macd"><option value="bullish">Bullish cross</option><option value="flat">Flat or mixed</option><option value="bearish">Bearish cross</option></select></label>
-          <label><span class="label">Volume</span><select name="volume"><option value="expanding">Expanding</option><option value="normal">Normal</option><option value="weak">Weak</option></select></label>
-          <label><span class="label">Setup style</span><select name="plan"><option value="pullback">Wait for pullback</option><option value="breakout">Look for breakout</option><option value="fade">Fade extremes</option><option value="stayflat">Stay flat if unclear</option></select></label>
-        </div>
-
-        <div class="grid2">
-          <label><span class="label">Entry (optional)</span><input type="number" step="0.01" name="entry" placeholder="298.40"></label>
-          <label><span class="label">Stop (optional)</span><input type="number" step="0.01" name="stop" placeholder="284.90"></label>
-          <label><span class="label">Target (optional)</span><input type="number" step="0.01" name="target" placeholder="332.00"></label>
-          <label><span class="label">Risk Per Trade %</span><input type="number" step="0.1" name="riskPercent" placeholder="1.0"></label>
-        </div>
-
-        <label><span class="label">What are you seeing?</span><textarea name="context" placeholder="Example: TAO reclaimed 300, the snapshot looks constructive, but price is getting close to a prior rejection zone. Tell me what this implies."></textarea></label>
-        <div class="field-copy">The desk is intentionally simple: chart plus snapshot plus a translated implication. No mystery language.</div>
-        <div class="action-row">
-          <button type="button" class="action-btn" id="analyzeBtn">Analyze TAO</button>
-        </div>
-      </form>
+      <div class="mode-row" id="modeRow">
+        <button type="button" class="mode-btn active" data-mode="quick"><small>default read</small><strong>Read TAO now</strong></button>
+        <button type="button" class="mode-btn" data-mode="pullback"><small>buy the dip lens</small><strong id="pullbackLabel">If it pulls back</strong></button>
+        <button type="button" class="mode-btn" data-mode="breakout"><small>continuation lens</small><strong id="breakoutLabel">If it clears resistance</strong></button>
+        <button type="button" class="mode-btn" data-mode="risk"><small>protection lens</small><strong id="riskLabel">If it loses support</strong></button>
+      </div>
+      <div class="meta-row">
+        <div class="status-line" id="statusLine">Loading market data...</div>
+        <button type="button" class="refresh-btn" id="refreshBtn">Refresh market data</button>
+      </div>
+      <div class="metric-grid" id="metricGrid">
+        <div class="metric"><span>Current price</span><strong>--</strong></div>
+        <div class="metric"><span>24h change</span><strong>--</strong></div>
+        <div class="metric"><span>Support</span><strong>--</strong></div>
+        <div class="metric"><span>Resistance</span><strong>--</strong></div>
+        <div class="metric"><span>Fib zone</span><strong>--</strong></div>
+        <div class="metric"><span>Invalidation</span><strong>--</strong></div>
+        <div class="metric"><span>RSI</span><strong>--</strong></div>
+        <div class="metric"><span>MACD</span><strong>--</strong></div>
+      </div>
     </article>
 
-    <aside class="panel desk">
+    <aside class="panel readout">
       <div class="head">
         <div>
-          <p class="eyebrow">TAO Desk Readout</p>
-          <h2 id="analysisTitle">Press analyze</h2>
+          <p class="eyebrow">Desk Readout</p>
+          <h2 id="readoutTitle">Waiting for market data</h2>
         </div>
-        <p class="mini" id="analysisFrame">The readout will use your selected timeframe.</p>
+        <p class="mini" id="readoutMeta">The desk will translate the selected TAO setup.</p>
       </div>
-
-      <div class="tone-row" id="toneRow">
-        <div class="tone" data-tone="balanced"><span>Bias</span><strong>Balanced</strong></div>
-      </div>
-
-      <div class="bubble-grid" id="bubbleGrid">
-        <div class="bubble bubble--desk">
-          <p>Hit <strong>Analyze TAO</strong> after you set the structure, momentum, and levels. The desk will explain what that combination usually implies and what price would need to do to change the read.</p>
-        </div>
-      </div>
-
-      <div class="metric-grid" id="metricGrid">
-        <div class="metric"><span>Fib zone</span><strong>--</strong></div>
-        <div class="metric"><span>Continuation trigger</span><strong>--</strong></div>
-        <div class="metric"><span>Invalidation</span><strong>--</strong></div>
+      <div class="bubble-grid" id="bubbleGrid" aria-live="polite">
+        <div class="bubble bubble--desk"><p>Once market data loads, the desk will generate a plain-English TAO read automatically.</p></div>
       </div>
     </aside>
   </section>
 
-  <div class="panel reset-row">
-    <p class="footer-note">This page is still a TA workspace, not financial advice. The main upgrade is that it now tries to tell you what the signals imply, instead of dumping tools on you and leaving you alone with them.</p>
+  <div class="panel footer-row">
+    <p class="footer-note">The goal here is not to make you fill a form. The goal is to give you a chart, a snapshot, and a few useful questions to ask TAO with one click.</p>
     <button type="button" class="reset-btn" id="resetBtn">Reset saved desk</button>
   </div>
 </main>
 
 <script>
-const KEY="tao-desk-v2";
-const frames={"15":{label:"15M",tech:"15m"},"60":{label:"1H",tech:"1h"},"240":{label:"4H",tech:"4h"},"D":{label:"1D",tech:"1d"}};
-const defaults={exchange:"BINANCE",interval:"240",desk:{support:"",resistance:"",invalidation:"",price:"",swingHigh:"",swingLow:"",structure:"reclaim",ema:"above",rsi:"strong",macd:"bullish",volume:"expanding",plan:"pullback",entry:"",stop:"",target:"",riskPercent:"1.0",context:""}};
+const KEY="tao-desk-v3";
+const frames={
+  "15":{label:"15M",technical:"15m",binance:"15m",bitget:"15min"},
+  "60":{label:"1H",technical:"1h",binance:"1h",bitget:"1h"},
+  "240":{label:"4H",technical:"4h",binance:"4h",bitget:"4h"},
+  "D":{label:"1D",technical:"1d",binance:"1d",bitget:"1day"}
+};
+const defaults={exchange:"BINANCE",interval:"240",mode:"quick"};
 const state=loadState();
+let market=null;
 
-function cloneDefaults(){return{exchange:defaults.exchange,interval:defaults.interval,desk:{...defaults.desk}}}
-function loadState(){try{const raw=localStorage.getItem(KEY);if(!raw)return cloneDefaults();const parsed=JSON.parse(raw);return{exchange:parsed.exchange||defaults.exchange,interval:parsed.interval||defaults.interval,desk:{...defaults.desk,...(parsed.desk||{})}}}catch{return cloneDefaults()}}
-function saveState(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch{}}
-function num(value,digits=2){return new Intl.NumberFormat("en-US",{maximumFractionDigits:digits}).format(value)}
-function money(value){return "$"+num(value,2)}
-function symbol(){return state.exchange+":TAOUSDT"}
+function loadState(){
+  try{
+    const raw=localStorage.getItem(KEY);
+    if(!raw)return {...defaults};
+    const parsed=JSON.parse(raw);
+    return {
+      exchange:parsed.exchange||defaults.exchange,
+      interval:parsed.interval||defaults.interval,
+      mode:parsed.mode||defaults.mode
+    };
+  }catch{
+    return {...defaults};
+  }
+}
+
+function saveState(){
+  try{localStorage.setItem(KEY,JSON.stringify(state));}catch{}
+}
+
+function num(value,digits=2){
+  return new Intl.NumberFormat("en-US",{maximumFractionDigits:digits}).format(value);
+}
+
+function money(value){
+  return "$"+num(value,2);
+}
+
+function symbol(){
+  return state.exchange+":TAOUSDT";
+}
+
+function getModeTitle(){
+  if(state.mode==="pullback")return "Pullback map";
+  if(state.mode==="breakout")return "Breakout watch";
+  if(state.mode==="risk")return "Risk check";
+  return "Read TAO now";
+}
 
 function syncHeader(){
-  document.querySelectorAll("[data-exchange]").forEach((button)=>button.classList.toggle("active",button.dataset.exchange===state.exchange));
-  document.querySelectorAll("[data-interval]").forEach((button)=>button.classList.toggle("active",button.dataset.interval===state.interval));
+  document.querySelectorAll("[data-exchange]").forEach((button)=>{
+    button.classList.toggle("active",button.dataset.exchange===state.exchange);
+  });
+  document.querySelectorAll("[data-interval]").forEach((button)=>{
+    button.classList.toggle("active",button.dataset.interval===state.interval);
+  });
+  document.querySelectorAll("[data-mode]").forEach((button)=>{
+    button.classList.toggle("active",button.dataset.mode===state.mode);
+  });
   document.getElementById("heroSymbol").textContent=symbol();
   document.getElementById("heroFrame").textContent=frames[state.interval].label;
+  document.getElementById("heroMode").textContent=getModeTitle();
 }
 
 function renderChart(){
@@ -258,10 +223,24 @@ function renderChart(){
   }
   mount.innerHTML='<div id="chart-widget"></div>';
   new TradingView.widget({
-    autosize:true,symbol:symbol(),interval:state.interval,timezone:"America/New_York",theme:"dark",style:"1",locale:"en",
-    allow_symbol_change:false,enable_publishing:false,hide_legend:false,hide_side_toolbar:false,hide_top_toolbar:false,
-    withdateranges:true,details:false,calendar:false,studies:["MAExp@tv-basicstudies","RSI@tv-basicstudies","MACD@tv-basicstudies","Volume@tv-basicstudies"],
-    container_id:"chart-widget",support_host:"https://www.tradingview.com"
+    autosize:true,
+    symbol:symbol(),
+    interval:state.interval,
+    timezone:"America/New_York",
+    theme:"dark",
+    style:"1",
+    locale:"en",
+    allow_symbol_change:false,
+    enable_publishing:false,
+    hide_legend:false,
+    hide_side_toolbar:false,
+    hide_top_toolbar:false,
+    withdateranges:true,
+    details:false,
+    calendar:false,
+    studies:["MAExp@tv-basicstudies","RSI@tv-basicstudies","MACD@tv-basicstudies","Volume@tv-basicstudies"],
+    container_id:"chart-widget",
+    support_host:"https://www.tradingview.com"
   });
 }
 
@@ -272,235 +251,376 @@ function renderTech(){
   script.type="text/javascript";
   script.async=true;
   script.src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js";
-  script.text=JSON.stringify({interval:frames[state.interval].tech,width:"100%",height:"100%",isTransparent:true,symbol:symbol(),showIntervalTabs:true,displayMode:"single",locale:"en",colorTheme:"dark"});
+  script.text=JSON.stringify({
+    interval:frames[state.interval].technical,
+    width:"100%",
+    height:"100%",
+    isTransparent:true,
+    symbol:symbol(),
+    showIntervalTabs:true,
+    displayMode:"single",
+    locale:"en",
+    colorTheme:"dark"
+  });
   host.firstElementChild.appendChild(script);
+}
+
+async function fetchJson(url){
+  const response=await fetch(url,{cache:"no-store"});
+  if(!response.ok)throw new Error("HTTP "+response.status);
+  return response.json();
+}
+
+function setStatus(text){
+  document.getElementById("statusLine").textContent=text;
+}
+
+async function loadMarketData(){
+  setStatus("Loading TAO market data...");
+  try{
+    const exchange=state.exchange;
+    const frame=frames[state.interval];
+    let tickerData;
+    let candleData;
+
+    if(exchange==="BINANCE"){
+      [tickerData,candleData]=await Promise.all([
+        fetchJson("https://api.binance.com/api/v3/ticker/24hr?symbol=TAOUSDT"),
+        fetchJson("https://api.binance.com/api/v3/klines?symbol=TAOUSDT&interval="+frame.binance+"&limit=120")
+      ]);
+      market=buildMarketModel({
+        exchange,
+        price:Number(tickerData.lastPrice),
+        change24h:Number(tickerData.priceChangePercent),
+        candles:candleData.map((row)=>({
+          time:Number(row[0]),
+          open:Number(row[1]),
+          high:Number(row[2]),
+          low:Number(row[3]),
+          close:Number(row[4]),
+          volume:Number(row[5])
+        }))
+      });
+    }else{
+      [tickerData,candleData]=await Promise.all([
+        fetchJson("https://api.bitget.com/api/spot/v1/market/ticker?symbol=TAOUSDT_SPBL"),
+        fetchJson("https://api.bitget.com/api/spot/v1/market/candles?symbol=TAOUSDT_SPBL&period="+frame.bitget+"&limit=120")
+      ]);
+      market=buildMarketModel({
+        exchange,
+        price:Number(tickerData.data.close),
+        change24h:Number(tickerData.data.change)*100,
+        candles:(candleData.data||[]).map((row)=>({
+          time:Number(row.ts),
+          open:Number(row.open),
+          high:Number(row.high),
+          low:Number(row.low),
+          close:Number(row.close),
+          volume:Number(row.baseVol)
+        }))
+      });
+    }
+
+    market.fetchedAt=Date.now();
+    renderMarketSummary();
+    renderReadout();
+  }catch{
+    market=null;
+    setStatus("Could not load TAO market data from "+state.exchange+". Try Refresh or switch exchange.");
+    renderMarketSummary();
+    renderReadout();
+  }
+}
+
+function ema(values,period){
+  const multiplier=2/(period+1);
+  const result=[];
+  let previous=values[0]||0;
+  values.forEach((value,index)=>{
+    if(index===0)previous=value;
+    else previous=(value*multiplier)+(previous*(1-multiplier));
+    result.push(previous);
+  });
+  return result;
+}
+
+function rsi(values,period=14){
+  if(values.length<period+1)return 50;
+  let gains=0;
+  let losses=0;
+  for(let i=1;i<=period;i+=1){
+    const change=values[i]-values[i-1];
+    if(change>=0)gains+=change;
+    else losses+=Math.abs(change);
+  }
+  let avgGain=gains/period;
+  let avgLoss=losses/period;
+  for(let i=period+1;i<values.length;i+=1){
+    const change=values[i]-values[i-1];
+    const gain=Math.max(change,0);
+    const loss=Math.max(-change,0);
+    avgGain=((avgGain*(period-1))+gain)/period;
+    avgLoss=((avgLoss*(period-1))+loss)/period;
+  }
+  if(avgLoss===0)return 100;
+  const rs=avgGain/avgLoss;
+  return 100-(100/(1+rs));
+}
+
+function macd(values){
+  const ema12=ema(values,12);
+  const ema26=ema(values,26);
+  const line=values.map((_,index)=>ema12[index]-ema26[index]);
+  const signal=ema(line,9);
+  const lastIndex=line.length-1;
+  return {
+    line:line[lastIndex],
+    signal:signal[lastIndex],
+    histogram:line[lastIndex]-signal[lastIndex]
+  };
+}
+
+function atr(candles,period=14){
+  if(candles.length<2)return 0;
+  const ranges=candles.map((candle,index)=>{
+    if(index===0)return candle.high-candle.low;
+    const previousClose=candles[index-1].close;
+    return Math.max(
+      candle.high-candle.low,
+      Math.abs(candle.high-previousClose),
+      Math.abs(candle.low-previousClose)
+    );
+  });
+  return ema(ranges,period).at(-1)||0;
+}
+
+function buildMarketModel(input){
+  const candles=[...input.candles].sort((a,b)=>a.time-b.time);
+  const closes=candles.map((c)=>c.close);
+  const volumes=candles.map((c)=>c.volume);
+  const price=input.price||closes.at(-1)||0;
+  const ema20=ema(closes,20).at(-1)||price;
+  const ema50=ema(closes,50).at(-1)||price;
+  const rsi14=rsi(closes,14);
+  const macdData=macd(closes);
+  const atr14=atr(candles,14);
+  const recentRangeCandles=candles.slice(-24);
+  const swingCandles=candles.slice(-72);
+  const support=Math.min(...recentRangeCandles.map((c)=>c.low));
+  const resistance=Math.max(...recentRangeCandles.map((c)=>c.high));
+  const swingLow=Math.min(...swingCandles.map((c)=>c.low));
+  const swingHigh=Math.max(...swingCandles.map((c)=>c.high));
+  const range=Math.max(resistance-support,0.0000001);
+  const volumeAvg=volumes.slice(-20).reduce((sum,value)=>sum+value,0)/Math.max(1,volumes.slice(-20).length);
+  const volumeRatio=(volumes.at(-1)||0)/(volumeAvg||1);
+  let score=0;
+  if(price>ema20)score+=1;else score-=1;
+  if(ema20>ema50)score+=1;else score-=1;
+  if(rsi14>=60)score+=1;else if(rsi14<=45)score-=1;
+  if(macdData.histogram>=0)score+=1;else score-=1;
+  if(input.change24h>0)score+=0.5;else if(input.change24h<0)score-=0.5;
+  if(volumeRatio>1.15)score+=0.5;else if(volumeRatio<0.85)score-=0.5;
+  let bias="Balanced";
+  if(score>=3)bias="Bullish";
+  else if(score<=-3)bias="Bearish";
+  const position=(price-support)/range;
+  let structure="Range negotiation";
+  if(bias==="Bullish"&&position>=0.82)structure="Pressing resistance";
+  else if(bias==="Bullish"&&position<=0.45)structure="Pulling back in trend";
+  else if(bias==="Bearish"&&position<=0.18)structure="Pressing support lower";
+  else if(bias==="Bearish"&&position>=0.55)structure="Bouncing into supply";
+  const swingRange=Math.max(swingHigh-swingLow,0.0000001);
+  const fibTrend=bias==="Bearish"?"down":"up";
+  const fibZone=fibTrend==="down"
+    ? {low:swingLow+(swingRange*0.382),high:swingLow+(swingRange*0.618),label:"bounce zone"}
+    : {low:swingHigh-(swingRange*0.618),high:swingHigh-(swingRange*0.382),label:"pullback zone"};
+  const invalidation=bias==="Bearish"?resistance+(atr14*0.35):support-(atr14*0.35);
+  const trendLabel=price>ema20&&ema20>ema50?"Bullish EMA stack":price<ema20&&ema20<ema50?"Bearish EMA stack":"Mixed EMA stack";
+  const momentumLabel=rsi14>=70?"Hot momentum":rsi14>=60?"Constructive momentum":rsi14<=45?"Weak momentum":"Neutral momentum";
+  const volumeLabel=volumeRatio>1.15?"Expanding volume":volumeRatio<0.85?"Weak volume":"Normal volume";
+  const macdLabel=macdData.histogram>=0?"Bullish MACD":"Bearish MACD";
+  return {exchange:input.exchange,price,change24h:input.change24h,ema20,ema50,rsi14,macd:macdData,atr14,support,resistance,fibZone,invalidation,bias,structure,trendLabel,momentumLabel,volumeLabel,macdLabel,volumeRatio};
+}
+
+function pickClass(type){
+  if(type==="good")return "metric good";
+  if(type==="bad")return "metric bad";
+  return "metric warn";
+}
+
+function marketMetric(label,value,type="warn"){
+  return '<div class="'+pickClass(type)+'"><span>'+label+'</span><strong>'+value+'</strong></div>';
+}
+
+function renderMarketSummary(){
+  const trendPill=document.getElementById("trendPill");
+  const momentumPill=document.getElementById("momentumPill");
+  const volumePill=document.getElementById("volumePill");
+  const metricGrid=document.getElementById("metricGrid");
+  if(!market){
+    trendPill.textContent="Trend unavailable";
+    trendPill.className="pill warn";
+    momentumPill.textContent="Momentum unavailable";
+    momentumPill.className="pill warn";
+    volumePill.textContent="Volume unavailable";
+    volumePill.className="pill warn";
+    metricGrid.innerHTML=
+      marketMetric("Current price","--")+
+      marketMetric("24h change","--")+
+      marketMetric("Support","--")+
+      marketMetric("Resistance","--")+
+      marketMetric("Fib zone","--")+
+      marketMetric("Invalidation","--")+
+      marketMetric("RSI","--")+
+      marketMetric("MACD","--");
+    document.getElementById("pullbackLabel").textContent="If it pulls back";
+    document.getElementById("breakoutLabel").textContent="If it clears resistance";
+    document.getElementById("riskLabel").textContent="If it loses support";
+    document.getElementById("heroMode").textContent=getModeTitle();
+    return;
+  }
+  trendPill.textContent=market.trendLabel;
+  trendPill.className="pill "+(market.bias==="Bullish"?"good":market.bias==="Bearish"?"bad":"warn");
+  momentumPill.textContent=market.momentumLabel+" / "+market.macdLabel;
+  momentumPill.className="pill "+(market.bias==="Bullish"?"good":market.bias==="Bearish"?"bad":"warn");
+  volumePill.textContent=market.volumeLabel;
+  volumePill.className="pill "+(market.volumeRatio>1.15?"good":market.volumeRatio<0.85?"bad":"warn");
+  metricGrid.innerHTML=
+    marketMetric("Current price",money(market.price),market.bias==="Bullish"?"good":market.bias==="Bearish"?"bad":"warn")+
+    marketMetric("24h change",num(market.change24h,2)+"%",market.change24h>=0?"good":"bad")+
+    marketMetric("Support",money(market.support),"warn")+
+    marketMetric("Resistance",money(market.resistance),"warn")+
+    marketMetric("Fib zone",money(market.fibZone.low)+" to "+money(market.fibZone.high),"warn")+
+    marketMetric("Invalidation",money(market.invalidation),"bad")+
+    marketMetric("RSI",num(market.rsi14,1),market.rsi14>=60?"good":market.rsi14<=45?"bad":"warn")+
+    marketMetric("MACD",market.macd.histogram>=0?"Bullish":"Bearish",market.macd.histogram>=0?"good":"bad");
+  document.getElementById("pullbackLabel").textContent="If it dips to "+money(market.fibZone.low)+" - "+money(market.fibZone.high);
+  document.getElementById("breakoutLabel").textContent="If it clears "+money(market.resistance);
+  document.getElementById("riskLabel").textContent="If it loses "+money(market.support);
+  document.getElementById("heroMode").textContent=getModeTitle();
+  const time=new Date(market.fetchedAt).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
+  setStatus("Auto-filled from "+market.exchange+" TAO candles and ticker on the "+frames[state.interval].label+" chart. Updated at "+time+".");
+}
+
+function renderReadout(){
+  const title=document.getElementById("readoutTitle");
+  const meta=document.getElementById("readoutMeta");
+  const bubbleGrid=document.getElementById("bubbleGrid");
+  if(!market){
+    title.textContent="Waiting for market data";
+    meta.textContent="The desk will translate the selected TAO setup once data is available.";
+    bubbleGrid.innerHTML='<div class="bubble bubble--desk"><p>Market data is not available yet, so the desk cannot auto-fill the setup. Try Refresh or switch exchange.</p></div>';
+    return;
+  }
+  const frame=frames[state.interval].label;
+  const fibText=money(market.fibZone.low)+" to "+money(market.fibZone.high);
+  const priceText=money(market.price);
+  let summary="";
+  let implication="";
+  let caution="";
+  let titleText="";
+  if(state.mode==="pullback"){
+    titleText="Pullback map for "+frame;
+    if(market.bias==="Bullish"){
+      summary="TAO still looks constructive, so the higher-quality idea is usually to wait for a dip into the fib "+market.fibZone.label+" instead of chasing strength at "+priceText+".";
+      implication="If buyers respond between "+fibText+" and hold above "+money(market.support)+", that is the zone where continuation has room to rebuild. The desk wants acceptance away from that area, not just a random wick.";
+      caution="If price loses "+money(market.invalidation)+", the pullback is no longer just a dip. At that point the trend read is damaged.";
+    }else{
+      summary="This is not the cleanest dip-buy environment right now. TAO does not have enough trend support for the desk to love blind pullback longs.";
+      implication="If you still want a bullish attempt, it needs to stabilize in the zone around "+fibText+" and reclaim control quickly. Otherwise the better posture is patience.";
+      caution="Weak or mixed momentum means a pullback can keep falling instead of bouncing cleanly.";
+    }
+  }else if(state.mode==="breakout"){
+    titleText="Breakout watch for "+frame;
+    if(market.bias==="Bullish"){
+      summary="TAO is close enough to a continuation look that a breakout can matter, but the desk still wants proof.";
+      implication="The real trigger is acceptance above "+money(market.resistance)+", not just a brief poke through it. If that happens with healthy volume, continuation has a much better chance to stick.";
+      caution="If volume stays weak or price instantly falls back under resistance, treat it as a likely fakeout.";
+    }else{
+      summary="A bullish breakout is not the base case right now, so TAO needs to do more work than usual to earn trust.";
+      implication="A real reclaim above "+money(market.resistance)+" would be one of the first signs the weaker read is changing.";
+      caution="Until that happens, upside spikes are more likely to be sold into than respected.";
+    }
+  }else if(state.mode==="risk"){
+    titleText="Risk check for "+frame;
+    summary="The desk uses "+money(market.support)+" and "+money(market.invalidation)+" as the key damage points for the current setup.";
+    implication="If TAO loses support cleanly, the current read weakens. If it loses "+money(market.invalidation)+", the desk treats that as the level where the working thesis is probably wrong, not just uncomfortable.";
+    caution="This is the button to use when you want to know where the idea stops being interesting and starts being expensive.";
+  }else{
+    titleText="TAO read now on "+frame;
+    if(market.bias==="Bullish"){
+      summary="Right now TAO leans bullish. Trend and momentum are aligned enough that the desk prefers pullbacks or clean reclaim continuation, not emotional chasing.";
+      implication="As long as TAO keeps defending "+money(market.support)+" and ideally reacts inside "+fibText+", the path of least resistance still leans up. The next important upside test is "+money(market.resistance)+".";
+      caution="Strength can still get too extended. If TAO goes vertical without basing, the move may still be good, but the entry gets worse.";
+    }else if(market.bias==="Bearish"){
+      summary="Right now TAO leans bearish. Trend and momentum do not support an easy long, so the desk is more interested in failed bounces, downside continuation, or staying patient.";
+      implication="Unless TAO can reclaim and hold above "+money(market.resistance)+", rallies are more suspect than trustworthy. The desk assumes sellers still matter until proven otherwise.";
+      caution="Do not confuse a relief bounce with a real regime change until price can actually accept back above key resistance.";
+    }else{
+      summary="Right now TAO is balanced. The market is not giving a clean directional gift, which usually means smaller size, more patience, and less confidence in the middle of the range.";
+      implication="The useful levels are still "+money(market.support)+" below and "+money(market.resistance)+" above. The desk wants one side to win decisively before it gets aggressive.";
+      caution="Mixed trend and momentum usually means the best trade is often waiting for better information.";
+    }
+  }
+  title.textContent=titleText;
+  meta.textContent="Using "+symbol()+" with auto-filled support, resistance, fibs, RSI, EMA, MACD, and volume context.";
+  bubbleGrid.innerHTML=
+    '<div class="bubble bubble--market"><p><strong>Auto-filled read:</strong> '+summary+'</p></div>'+
+    '<div class="bubble bubble--desk"><p><strong>What this implies:</strong> '+implication+'</p></div>'+
+    '<div class="bubble bubble--desk"><p><strong>Structure now:</strong> '+market.structure+'. The desk sees '+market.trendLabel.toLowerCase()+', '+market.momentumLabel.toLowerCase()+', and '+market.macdLabel.toLowerCase()+'.</p></div>'+
+    '<div class="bubble bubble--desk"><p><strong>What changes the read:</strong> '+caution+'</p></div>';
 }
 
 function bindToolbar(){
   document.querySelectorAll("[data-exchange]").forEach((button)=>{
-    button.addEventListener("click",()=>{
+    button.addEventListener("click",async ()=>{
       if(state.exchange===button.dataset.exchange)return;
       state.exchange=button.dataset.exchange;
       saveState();
       syncHeader();
       renderChart();
       renderTech();
-      renderAnalysis();
+      await loadMarketData();
     });
   });
   document.querySelectorAll("[data-interval]").forEach((button)=>{
-    button.addEventListener("click",()=>{
+    button.addEventListener("click",async ()=>{
       if(state.interval===button.dataset.interval)return;
       state.interval=button.dataset.interval;
       saveState();
       syncHeader();
       renderChart();
       renderTech();
-      renderAnalysis();
+      await loadMarketData();
+    });
+  });
+  document.querySelectorAll("[data-mode]").forEach((button)=>{
+    button.addEventListener("click",()=>{
+      state.mode=button.dataset.mode;
+      saveState();
+      syncHeader();
+      renderMarketSummary();
+      renderReadout();
     });
   });
 }
 
-function bindDeskForm(){
-  const form=document.getElementById("deskForm");
-  [...form.elements].forEach((element)=>{
-    if(!(element instanceof HTMLInputElement||element instanceof HTMLSelectElement||element instanceof HTMLTextAreaElement))return;
-    if(element.name in state.desk)element.value=state.desk[element.name];
-    const update=()=>{
-      if(!(element.name in state.desk))return;
-      state.desk[element.name]=element.value;
-      saveState();
-    };
-    element.addEventListener("input",update);
-    element.addEventListener("change",update);
-  });
-}
-
-function inferTrend(){
-  if(state.desk.ema==="above"||state.desk.structure==="reclaim"||state.desk.structure==="holding")return "up";
-  if(state.desk.ema==="below"||state.desk.structure==="rejecting"||state.desk.structure==="breakdown")return "down";
-  return "sideways";
-}
-
-function fibData(){
-  const high=Number(state.desk.swingHigh);
-  const low=Number(state.desk.swingLow);
-  if(!high||!low||high<=low)return null;
-  const range=high-low;
-  const trend=inferTrend();
-  if(trend==="down"){
-    return {
-      zoneLow:low+(range*0.382),
-      zoneHigh:low+(range*0.618),
-      extension:low-(range*0.272),
-      label:"bounce zone"
-    };
-  }
-  return {
-    zoneLow:high-(range*0.618),
-    zoneHigh:high-(range*0.382),
-    extension:high+(range*0.272),
-    label:"pullback zone"
-  };
-}
-
-function scoreSetup(){
-  let score=0;
-  const reasons=[];
-  const cautions=[];
-
-  const structureMap={
-    reclaim:{score:2,text:"TAO is reclaiming a level, which usually favors continuation if it holds."},
-    holding:{score:2,text:"TAO is holding support, so buyers still have a defense line."},
-    range:{score:0,text:"TAO is in range, so edge usually lives at the edges, not in the middle."},
-    rejecting:{score:-2,text:"TAO is rejecting resistance, so upside is being sold into."},
-    breakdown:{score:-3,text:"TAO is breaking down, which is a risk-off condition for fresh longs."}
-  };
-  const emaMap={
-    above:{score:2,text:"Price is above EMA, which gives trend-following setups a tailwind."},
-    flat:{score:0,text:"Price is around EMA, so trend control is not clean."},
-    below:{score:-2,text:"Price is below EMA, so trend pressure is leaning lower."}
-  };
-  const rsiMap={
-    strong:{score:2,text:"RSI is above 60, which supports momentum continuation."},
-    neutral:{score:0,text:"RSI is in the middle, so momentum is not decisive."},
-    weak:{score:-2,text:"RSI is below 45, which points to weak momentum."},
-    hot:{score:1,text:"RSI is hot, which means strength is real but chasing gets riskier."}
-  };
-  const macdMap={
-    bullish:{score:2,text:"MACD is bullish, so momentum is trying to expand upward."},
-    flat:{score:0,text:"MACD is mixed, so momentum confirmation is not strong."},
-    bearish:{score:-2,text:"MACD is bearish, so momentum is fading or leaning down."}
-  };
-  const volumeMap={
-    expanding:{score:1,text:"Volume is expanding, which makes the move more believable."},
-    normal:{score:0,text:"Volume is normal, so let price structure do most of the talking."},
-    weak:{score:-1,text:"Volume is weak, so breakouts have a higher chance to fail."}
-  };
-
-  [structureMap[state.desk.structure],emaMap[state.desk.ema],rsiMap[state.desk.rsi],macdMap[state.desk.macd],volumeMap[state.desk.volume]].forEach((item)=>{
-    score+=item.score;
-    reasons.push(item.text);
-  });
-
-  if(state.desk.rsi==="hot")cautions.push("Momentum is strong, but buying after a vertical candle can still be a trap.");
-  if(state.desk.plan==="fade")cautions.push("A fade plan works better in a range than in a clean trend.");
-  if(state.desk.plan==="breakout"&&state.desk.volume==="weak")cautions.push("Weak volume makes breakout confirmation less trustworthy.");
-
-  let bias="Balanced";
-  if(score>=5)bias="Bullish";
-  else if(score<=-4)bias="Bearish";
-
-  return {score,bias,reasons,cautions};
-}
-
-function tradeMath(){
-  const entry=Number(state.desk.entry);
-  const stop=Number(state.desk.stop);
-  const target=Number(state.desk.target);
-  const riskPercent=Number(state.desk.riskPercent);
-  if(!entry||!stop||!target||entry===stop||!riskPercent)return null;
-  const stopDistance=Math.abs(entry-stop);
-  const targetDistance=Math.abs(target-entry);
-  return {stopDistance,targetDistance,rr:targetDistance/stopDistance};
-}
-
-function metricCard(label,value){
-  return '<div class="metric"><span>'+label+'</span><strong>'+value+'</strong></div>';
-}
-
-function renderAnalysis(){
-  const score=scoreSetup();
-  const fib=fibData();
-  const math=tradeMath();
-  const support=state.desk.support?money(Number(state.desk.support)):"your support";
-  const resistance=state.desk.resistance?money(Number(state.desk.resistance)):"your resistance";
-  const invalidation=state.desk.invalidation?money(Number(state.desk.invalidation)):"your invalidation level";
-  const price=state.desk.price?money(Number(state.desk.price)):"current price";
-  const timeframe=frames[state.interval].label;
-
-  let translation="";
-  let trigger="";
-  let flip="";
-  let deskPlan="";
-
-  if(score.bias==="Bullish"){
-    translation="The current mix leans bullish. TAO has enough trend and momentum support that the better idea is usually to buy strength that proves itself or buy pullbacks into support, not panic-buy random green candles.";
-    trigger='Hold above '+support+' or reclaim through '+resistance+' with follow-through.';
-    flip='If TAO loses '+invalidation+', the bullish read is damaged and continuation is no longer the base case.';
-    deskPlan=fib?('Best tactical area: wait for a reaction in the fib '+fib.label+' between '+money(fib.zoneLow)+' and '+money(fib.zoneHigh)+'. If buyers respond there, continuation can aim toward '+money(fib.extension)+'.'):('Best tactical area: wait for price to prove support or reclaim resistance before assuming continuation.');
-  }else if(score.bias==="Bearish"){
-    translation="The current mix leans bearish. TAO is not giving a clean trend-following long look right now, so the smarter posture is usually patience, failed-bounce shorts, or staying flat until structure improves.";
-    trigger='Any bounce that stalls under '+resistance+' is suspect unless buyers can reclaim and hold it.';
-    flip='If TAO can reclaim above '+resistance+' and hold, the bearish read weakens fast.';
-    deskPlan=fib?('If TAO bounces, the likely reaction area is the fib '+fib.label+' between '+money(fib.zoneLow)+' and '+money(fib.zoneHigh)+'. That is where failed strength often tells the real story.'):('Without a clean swing range, assume rallies need proof before they deserve trust.');
-  }else{
-    translation="The current mix is balanced, which usually means chop, rotation, or disagreement between structure and momentum. That is a market to trade smaller, wait longer, and avoid the middle of the range.";
-    trigger='The next clean clue is usually either a hold of '+support+' or a convincing reclaim of '+resistance+'.';
-    flip='If TAO starts accepting above '+resistance+' or breaks through '+invalidation+', the balanced read should turn directional.';
-    deskPlan=fib?('If you trade this anyway, the fib zone between '+money(fib.zoneLow)+' and '+money(fib.zoneHigh)+' is the area most worth watching for a real reaction.'):('Right now the edge is likely in patience until TAO shows which side actually has control.');
-  }
-
-  const reasonText=score.reasons.slice(0,3).join(" ");
-  const userContext=state.desk.context.trim();
-  const bubbleGrid=document.getElementById("bubbleGrid");
-  const toneRow=document.getElementById("toneRow");
-  const metricGrid=document.getElementById("metricGrid");
-
-  document.getElementById("analysisTitle").textContent=score.bias+" read on "+timeframe;
-  document.getElementById("analysisFrame").textContent='Using '+symbol()+' on the '+timeframe+' chart.';
-
-  toneRow.innerHTML=
-    '<div class="tone" data-tone="'+score.bias.toLowerCase()+'"><span>Bias</span><strong>'+score.bias+'</strong></div>'+
-    '<div class="tone"><span>What matters now</span><strong>'+trigger+'</strong></div>'+
-    '<div class="tone"><span>Current focus</span><strong>'+price+'</strong></div>';
-
-  let bubbles="";
-  if(userContext){
-    bubbles+='<div class="bubble bubble--user"><p><strong>Your note:</strong> '+escapeHtml(userContext)+'</p></div>';
-  }
-  bubbles+='<div class="bubble bubble--desk"><p><strong>Plain-English read:</strong> '+translation+'</p><p><strong>Why:</strong> '+reasonText+'</p></div>';
-  bubbles+='<div class="bubble bubble--desk"><p><strong>Implication:</strong> '+deskPlan+'</p><p><strong>What changes my mind:</strong> '+flip+'</p></div>';
-  if(score.cautions.length){
-    bubbles+='<div class="bubble bubble--desk"><p><strong>Caution:</strong> '+score.cautions.join(" ")+'</p></div>';
-  }
-  if(math){
-    bubbles+='<div class="bubble bubble--desk"><p><strong>Trade framing:</strong> With entry '+money(Number(state.desk.entry))+', stop '+money(Number(state.desk.stop))+', and target '+money(Number(state.desk.target))+', the setup offers about '+num(math.rr,2)+'R. That does not make it good by itself, but it tells you whether the idea pays enough if it works.</p></div>';
-  }
-  bubbleGrid.innerHTML=bubbles;
-
-  metricGrid.innerHTML=
-    metricCard("Fib zone",fib?(money(fib.zoneLow)+" to "+money(fib.zoneHigh)):"Set swing high and low")+
-    metricCard("Continuation trigger",trigger)+
-    metricCard("Invalidation",invalidation);
-}
-
-function escapeHtml(value){
-  return value
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#39;");
-}
-
-function bindActions(){
-  document.getElementById("analyzeBtn").addEventListener("click",renderAnalysis);
+function bindButtons(){
+  document.getElementById("refreshBtn").addEventListener("click",loadMarketData);
   document.getElementById("resetBtn").addEventListener("click",()=>{
-    if(!window.confirm("Clear the saved TAO desk values?"))return;
+    if(!window.confirm("Clear the saved TAO desk preferences?"))return;
     localStorage.removeItem(KEY);
     window.location.reload();
   });
 }
 
-window.addEventListener("load",()=>{
+window.addEventListener("load",async ()=>{
   syncHeader();
   bindToolbar();
-  bindDeskForm();
-  bindActions();
+  bindButtons();
   renderChart();
   renderTech();
-  renderAnalysis();
+  await loadMarketData();
 });
 </script>
 </body>
