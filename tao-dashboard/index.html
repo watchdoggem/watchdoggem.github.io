@@ -291,58 +291,88 @@ function setStatus(text){
   document.getElementById("statusLine").textContent=text;
 }
 
+function getAnalyticsConfig(){
+  if(state.interval==="15")return {days:1,bucketMs:15*60*1000};
+  if(state.interval==="60")return {days:7,bucketMs:60*60*1000};
+  if(state.interval==="D")return {days:120,bucketMs:24*60*60*1000};
+  return {days:14,bucketMs:4*60*60*1000};
+}
+
+function buildCandlesFromSeries(series,bucketMs){
+  const buckets=new Map();
+  series.forEach((point)=>{
+    const bucketTime=Math.floor(point.time/bucketMs)*bucketMs;
+    const bucket=buckets.get(bucketTime);
+    if(!bucket){
+      buckets.set(bucketTime,{
+        time:bucketTime,
+        open:point.price,
+        high:point.price,
+        low:point.price,
+        close:point.price,
+        volumeTotal:point.volume,
+        volumePoints:1
+      });
+      return;
+    }
+    bucket.high=Math.max(bucket.high,point.price);
+    bucket.low=Math.min(bucket.low,point.price);
+    bucket.close=point.price;
+    bucket.volumeTotal+=point.volume;
+    bucket.volumePoints+=1;
+  });
+  return [...buckets.values()]
+    .sort((a,b)=>a.time-b.time)
+    .map((bucket)=>({
+      time:bucket.time,
+      open:bucket.open,
+      high:bucket.high,
+      low:bucket.low,
+      close:bucket.close,
+      volume:bucket.volumePoints?bucket.volumeTotal/bucket.volumePoints:0
+    }));
+}
+
+function calc24hChange(series){
+  if(series.length<2)return 0;
+  const latest=series.at(-1);
+  const targetTime=latest.time-(24*60*60*1000);
+  let prior=series[0];
+  for(const point of series){
+    if(point.time<=targetTime)prior=point;
+    if(point.time>targetTime)break;
+  }
+  if(!prior||!Number.isFinite(prior.price)||prior.price===0)return 0;
+  return ((latest.price-prior.price)/prior.price)*100;
+}
+
 async function loadMarketData(){
   setStatus("Loading TAO market data...");
   try{
-    const exchange=state.exchange;
-    const frame=frames[state.interval];
-    let tickerData;
-    let candleData;
-
-    if(exchange==="BINANCE"){
-      [tickerData,candleData]=await Promise.all([
-        fetchJson("https://api.binance.com/api/v3/ticker/24hr?symbol=TAOUSDT"),
-        fetchJson("https://api.binance.com/api/v3/klines?symbol=TAOUSDT&interval="+frame.binance+"&limit=120")
-      ]);
-      market=buildMarketModel({
-        exchange,
-        price:Number(tickerData.lastPrice),
-        change24h:Number(tickerData.priceChangePercent),
-        candles:candleData.map((row)=>({
-          time:Number(row[0]),
-          open:Number(row[1]),
-          high:Number(row[2]),
-          low:Number(row[3]),
-          close:Number(row[4]),
-          volume:Number(row[5])
-        }))
-      });
-    }else{
-      [tickerData,candleData]=await Promise.all([
-        fetchJson("https://api.bitget.com/api/spot/v1/market/ticker?symbol=TAOUSDT_SPBL"),
-        fetchJson("https://api.bitget.com/api/spot/v1/market/candles?symbol=TAOUSDT_SPBL&period="+frame.bitget+"&limit=120")
-      ]);
-      market=buildMarketModel({
-        exchange,
-        price:Number(tickerData.data.close),
-        change24h:Number(tickerData.data.change)*100,
-        candles:(candleData.data||[]).map((row)=>({
-          time:Number(row.ts),
-          open:Number(row.open),
-          high:Number(row.high),
-          low:Number(row.low),
-          close:Number(row.close),
-          volume:Number(row.baseVol)
-        }))
-      });
-    }
+    const analytics=getAnalyticsConfig();
+    const chartData=await fetchJson("https://api.coingecko.com/api/v3/coins/bittensor/market_chart?vs_currency=usd&days="+analytics.days);
+    const priceSeries=(chartData.prices||[])
+      .map((row,index)=>({
+        time:Number(row[0]),
+        price:Number(row[1]),
+        volume:Number((chartData.total_volumes?.[index]||[])[1]||0)
+      }))
+      .filter((point)=>Number.isFinite(point.time)&&Number.isFinite(point.price));
+    const candles=buildCandlesFromSeries(priceSeries,analytics.bucketMs);
+    if(!candles.length)throw new Error("No TAO candles returned");
+    market=buildMarketModel({
+      exchange:"COINGECKO",
+      price:priceSeries.at(-1)?.price||candles.at(-1)?.close||0,
+      change24h:calc24hChange(priceSeries),
+      candles
+    });
 
     market.fetchedAt=Date.now();
     renderMarketSummary();
     renderReadout();
   }catch{
     market=null;
-    setStatus("Could not load TAO market data from "+state.exchange+". Try Refresh or switch exchange.");
+    setStatus("Could not load TAO market data. Try Refresh in a moment.");
     renderMarketSummary();
     renderReadout();
   }
@@ -723,7 +753,7 @@ function renderMarketSummary(){
   renderHeroFacts();
   renderSignalStack();
   const time=new Date(market.fetchedAt).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
-  setStatus("Auto-filled from "+market.exchange+" TAO candles and ticker on the "+frames[state.interval].label+" chart. Updated at "+time+".");
+  setStatus("Auto-filled from CoinGecko TAO spot on the "+frames[state.interval].label+" model. TradingView widgets still follow "+state.exchange+". Updated at "+time+".");
 }
 
 function renderReadout(){
