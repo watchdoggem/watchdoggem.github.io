@@ -168,6 +168,29 @@ button,
     gap: 0.28rem;
 }
 
+.box-content.splash-cannabis {
+    font-family: "VT323", monospace;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0.02em;
+    text-align: left;
+    align-items: flex-start;
+    gap: 0.42rem;
+    padding-inline: 0.12rem;
+}
+
+.box-content.splash-cannabis .splash-top,
+.box-content.splash-cannabis .splash-mid {
+    width: 100%;
+    font-size: clamp(0.98rem, 1.1vw, 1.26rem);
+    line-height: 0.98;
+    text-shadow: 0 0 10px rgba(199, 158, 255, 0.3);
+}
+
+.box-content.splash-cannabis .splash-bottom {
+    display: none;
+}
+
 .splash-top {
     font-size: clamp(1.45rem, 2vw, 2.2rem);
     line-height: 0.95;
@@ -449,7 +472,7 @@ const panels = [
         metric: "104,801",
         splashTop: "104,801",
         splashMid: "Macaque Primates In Research",
-        title: "Primates: The Unheard Fall",
+        title: "Primate Animal Testing",
         subtitle: "",
         descriptor: "",
         categories: ["animal"],
@@ -504,9 +527,10 @@ const panels = [
     {
         id: "CANNABIS",
         metric: "SEDATIVE",
-        splashTop: "Cannabis Has Physiological Effects",
-        splashMid: "Including Sedation",
-        splashBottom: "A Fatal Overdose Caused Solely By Cannabis Is Unlikely.",
+        splashTop: "Cannabis has physiological effects including sedation.",
+        splashMid: "A fatal overdose caused solely by cannabis is unlikely.",
+        splashBottom: "",
+        splashClass: "splash-cannabis",
         title: "Cannabis: The Lost Sedation",
         subtitle: "",
         descriptor: "",
@@ -639,6 +663,9 @@ function renderGrid() {
 
         const content = document.createElement("div");
         content.classList.add("box-content");
+        if (panel.splashClass) {
+            content.classList.add(panel.splashClass);
+        }
 
         if (panel.empty) {
             content.textContent = "EMPTY SLOT";
