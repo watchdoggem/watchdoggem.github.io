@@ -447,9 +447,11 @@ const panels = [
     {
         id: "104801",
         metric: "104,801",
-        title: "Primates: The Tree That Fell Without a Noise Because No Body Heard It",
+        splashTop: "104,801",
+        splashMid: "Macaque Primates In Research",
+        title: "Primates: The Unheard Fall",
         subtitle: "",
-        descriptor: "104,801 macaque primates in research",
+        descriptor: "",
         categories: ["animal"],
         stats: [
             { text: "100% fatal anesthetic overdose", ref: 1 },
@@ -636,10 +638,14 @@ function renderGrid() {
         if (panel.empty) {
             content.textContent = "EMPTY SLOT";
         } else {
+            const splashTop = panel.splashTop || panel.metric || panel.id;
+            const splashMid = panel.splashMid || panel.title;
+            const splashBottom = panel.splashBottom || panel.subtitle || " ";
+
             content.innerHTML = `
-                <div class="splash-top">${panel.metric || panel.id}</div>
-                <div class="splash-mid">${panel.title}</div>
-                <div class="splash-bottom">${panel.subtitle || " "}</div>
+                <div class="splash-top">${splashTop}</div>
+                <div class="splash-mid">${splashMid}</div>
+                <div class="splash-bottom">${splashBottom}</div>
             `;
 
             box.addEventListener("click", () => {
