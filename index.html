@@ -497,6 +497,37 @@ const panels = [
         ]
     },
     {
+        id: "CANNABIS",
+        metric: "0 deaths",
+        title: "Cannabis Relief Ban",
+        subtitle: "Sedation, punishment, and taboo",
+        descriptor: "NIH: cannabis has physiological effects including sedation. | CDC: a fatal overdose caused solely by cannabis is unlikely.",
+        categories: ["medicine"],
+        stats: [
+            { text: "0 deaths observed in a 2023 rat acute oral cannabis toxicity study", ref: 1 },
+            { text: "From 1850 to 1941 cannabis was included in the United States Pharmacopoeia as a recognized medicinal", ref: 2 },
+            { text: "AMA in 1937: the bill would impose so many restrictions on medicinal use as to prevent such use altogether", ref: 3 },
+            { text: "Congress in 2022 codified that doctor-patient discussion of marijuana's harms and benefits is not a CSA violation", ref: 4 },
+            { text: "Under federal law, marijuana users cannot lawfully possess firearms or ammunition", ref: 5 },
+            { text: "A single cannabis plant can bring up to 5 years in federal prison and up to $250,000 in fines", ref: 6 },
+            { text: "Federal law requires a controlled substance-free workplace policy, a blunt rule that in practice falls hardest on marijuana", ref: 7 },
+            { text: "Marijuana DUI enforcement leans on chemical presence as if it were proof of impairment", ref: 8 }
+        ],
+        footer: "The panel stays narrow on purpose. Federal sources themselves describe cannabis as sedating, historically medicinal, and unlikely by itself to cause fatal overdose, while the state still surrounds it with exceptional speech, firearm, workplace, prison, and DUI penalties. Box 7's asymmetry is in testing practice; box 8's is in DUI regimes that can treat residual THC as legally meaningful even when current impairment is unclear.",
+        sources: [
+            "1 2023 acute oral toxicity study in rats (PMC10223347): no mortality observed in the tested oral range",
+            "2 CRS: cannabis was included in the United States Pharmacopoeia from 1850 to 1941",
+            "3 CRS quoting AMA 1937 testimony against the Marihuana Tax Act",
+            "4 Public Law 117-215, Sec. 301: doctor-patient discussion of marijuana's harms and benefits is not a CSA violation",
+            "5 ATF prohibited persons guidance plus ATF open letter on marijuana for medicinal purposes",
+            "6 CRS: federal penalties for simple possession and cultivation, including one plant",
+            "7 SAMHSA contractor and grantee laws plus federal workplace drug-testing guidance",
+            "8 NCSL marijuana-impaired driving overview: zero-tolerance and per se laws, residual THC, and unclear impairment mapping",
+            "9 NIH LiverTox: cannabis has physiological effects including sedation",
+            "10 CDC cannabis FAQ: a fatal overdose caused solely by cannabis is unlikely"
+        ]
+    },
+    {
         id: "BORDER",
         metric: "2.9M",
         title: "Immigration Pressure",
@@ -582,7 +613,7 @@ let activeBox = null;
 function renderGrid() {
     grid.innerHTML = "";
 
-    const visiblePanels = panels.filter((panel, index) => index < 2 || panel.empty);
+    const visiblePanels = panels.filter((panel, index) => index < 3 || panel.empty);
 
     visiblePanels.forEach((panel) => {
         const box = document.createElement("div");
