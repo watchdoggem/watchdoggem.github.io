@@ -12,21 +12,23 @@
 :root{--bg:#0b1014;--panel:rgba(16,25,31,.9);--line:rgba(255,255,255,.11);--text:#f3efe5;--muted:#9da8b1;--accent:#ffab72;--accent2:#62dec6;--good:#8ae29c;--warn:#ffd36e;--bad:#ff7c72;--shadow:0 28px 80px rgba(0,0,0,.35);--r:24px}
 *{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:"Sora",sans-serif;color:var(--text);background:radial-gradient(circle at 12% 12%,rgba(255,139,82,.17),transparent 30%),radial-gradient(circle at 84% 16%,rgba(98,222,198,.16),transparent 24%),linear-gradient(180deg,#091015,#0b1014 52%,#111a20);overflow-x:hidden}body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:62px 62px;mask-image:linear-gradient(180deg,rgba(255,255,255,.28),transparent 88%)}main{width:min(1380px,calc(100vw - 1rem));margin:0 auto;padding:1rem 0 2rem}
 .panel{background:linear-gradient(180deg,rgba(255,255,255,.03),transparent),var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);backdrop-filter:blur(14px);position:relative;overflow:hidden}.panel::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,171,114,.08),transparent 40%,rgba(98,222,198,.07));pointer-events:none}
-.hero,.controls,.top-grid,.desk-grid,.explain-grid,.metric-grid,.bubble-grid{display:grid;gap:1rem}.hero{grid-template-columns:minmax(0,1.3fr) minmax(280px,.95fr);margin-bottom:1rem}.hero-card,.explainer,.control-card,.chart,.snapshot,.autopilot,.readout,.footer-row{padding:1.1rem}.eyebrow,.label,.mini,.metric span,.stat span,.mode-btn small{font-family:"IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.16em}.eyebrow{margin:0 0 .7rem;font-size:.76rem;color:var(--accent2)}h1,h2,h3,p{margin:0}h1{font-size:clamp(2.8rem,6vw,4.9rem);line-height:.92;letter-spacing:-.05em;max-width:10ch}.lede{margin-top:1rem;max-width:60ch;color:var(--muted);line-height:1.72;font-size:clamp(1rem,1.35vw,1.12rem)}
-.chip-row,.segmented,.stat-row,.mode-row{display:flex;flex-wrap:wrap;gap:.65rem}.chip,.segmented button,.stat,.metric,.explain,.bubble,.mode-btn,.refresh-btn,.reset-btn{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);border-radius:18px}.chip,.stat,.metric,.explain,.bubble{padding:.85rem .95rem}.controls{grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:1rem;align-items:end}.label{font-size:.72rem;color:var(--muted);margin-bottom:.55rem}.segmented button,.mode-btn,.refresh-btn,.reset-btn{padding:.9rem 1rem;color:var(--text);font:inherit;cursor:pointer;transition:.2s ease;border-radius:999px;background:rgba(255,255,255,.05)}.segmented button:hover,.mode-btn:hover,.refresh-btn:hover,.reset-btn:hover,.segmented button:focus-visible,.mode-btn:focus-visible,.refresh-btn:focus-visible,.reset-btn:focus-visible{transform:translateY(-1px);border-color:rgba(255,171,114,.42);outline:none}.segmented .active,.mode-btn.active,.refresh-btn{background:linear-gradient(135deg,rgba(255,135,82,.86),rgba(255,171,114,.95));color:#1d140e;border-color:rgba(255,171,114,.65)}
-.stat-row{margin-top:1rem}.stat{flex:1 1 120px}.stat span,.metric span{display:block;font-size:.72rem;color:var(--muted);margin-bottom:.35rem}.top-grid{grid-template-columns:minmax(0,1.45fr) minmax(320px,.9fr);margin-bottom:1rem}.head{display:flex;justify-content:space-between;gap:1rem;align-items:start;margin-bottom:.95rem}.head p,.bubble p,.explain p,.footer-note,.status-line{color:var(--muted);line-height:1.65}.chart-mount{height:620px;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:rgba(8,13,17,.92)}#chart-widget{height:620px}#tech-widget{height:345px;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:rgba(8,13,17,.76)}.fallback{height:100%;display:grid;place-items:center;padding:2rem;color:var(--muted);text-align:center;line-height:1.7}
+.hero,.controls,.top-grid,.desk-grid,.explain-grid,.metric-grid,.bubble-grid,.command-grid,.core-grid,.support-grid{display:grid;gap:1rem}.hero-card,.explainer,.control-card,.chart,.snapshot,.autopilot,.readout,.footer-row,.command-panel,.metrics-panel{padding:1.1rem}.eyebrow,.label,.mini,.metric span,.stat span,.mode-btn small{font-family:"IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.16em}.eyebrow{margin:0 0 .7rem;font-size:.76rem;color:var(--accent2)}h1,h2,h3,p{margin:0}h1{font-size:clamp(2.6rem,5vw,4.6rem);line-height:.92;letter-spacing:-.05em;max-width:12ch}.lede{margin-top:.7rem;max-width:58ch;color:var(--muted);line-height:1.68;font-size:clamp(.98rem,1.2vw,1.08rem)}
+.command-grid{grid-template-columns:minmax(0,1.1fr) minmax(520px,1.3fr);margin-bottom:1rem;align-items:start}.command-title{display:grid;gap:.9rem}.control-stack{display:grid;gap:.9rem}.chip-row,.segmented,.stat-row,.mode-row{display:flex;flex-wrap:wrap;gap:.65rem}.chip,.segmented button,.stat,.metric,.explain,.bubble,.mode-btn,.refresh-btn,.reset-btn{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);border-radius:18px}.chip,.stat,.metric,.explain,.bubble{padding:.85rem .95rem}.controls{grid-template-columns:repeat(3,minmax(0,1fr));align-items:end}.label{font-size:.72rem;color:var(--muted);margin-bottom:.55rem}.segmented button,.mode-btn,.refresh-btn,.reset-btn{padding:.9rem 1rem;color:var(--text);font:inherit;cursor:pointer;transition:.2s ease;border-radius:999px;background:rgba(255,255,255,.05)}.segmented button:hover,.mode-btn:hover,.refresh-btn:hover,.reset-btn:hover,.segmented button:focus-visible,.mode-btn:focus-visible,.refresh-btn:focus-visible,.reset-btn:focus-visible{transform:translateY(-1px);border-color:rgba(255,171,114,.42);outline:none}.segmented .active,.mode-btn.active,.refresh-btn{background:linear-gradient(135deg,rgba(255,135,82,.86),rgba(255,171,114,.95));color:#1d140e;border-color:rgba(255,171,114,.65)}
+.stat-row{margin-top:0}.stat{flex:1 1 120px}.stat span,.metric span{display:block;font-size:.72rem;color:var(--muted);margin-bottom:.35rem}.core-grid{grid-template-columns:minmax(360px,.95fr) minmax(0,1.4fr);margin-bottom:1rem}.support-grid{grid-template-columns:minmax(320px,.95fr) minmax(0,1.2fr);margin-bottom:1rem}.head{display:flex;justify-content:space-between;gap:1rem;align-items:start;margin-bottom:.95rem}.head p,.bubble p,.explain p,.footer-note,.status-line{color:var(--muted);line-height:1.65}.chart-mount{height:620px;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:rgba(8,13,17,.92)}#chart-widget{height:620px}#tech-widget{height:390px;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:rgba(8,13,17,.76)}.fallback{height:100%;display:grid;place-items:center;padding:2rem;color:var(--muted);text-align:center;line-height:1.7}
 .explain-grid{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:1rem}.explain strong{display:block;margin-bottom:.3rem}.desk-grid{grid-template-columns:minmax(320px,.95fr) minmax(0,1.2fr)}.mode-row{margin-top:.3rem}.mode-btn{display:flex;flex-direction:column;gap:.2rem;align-items:flex-start;justify-content:center;min-height:86px;flex:1 1 210px;text-align:left}.mode-btn small{font-size:.68rem;color:rgba(255,255,255,.6)}.meta-row{display:flex;justify-content:space-between;gap:1rem;align-items:center;flex-wrap:wrap;margin-top:1rem}.status-line{font-size:.92rem}.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:1rem}.metric strong{display:block}.metric.good{border-color:rgba(138,226,156,.28);background:rgba(138,226,156,.08)}.metric.warn{border-color:rgba(255,211,110,.28);background:rgba(255,211,110,.08)}.metric.bad{border-color:rgba(255,124,114,.28);background:rgba(255,124,114,.08)}.bubble-grid{margin-top:1rem}.bubble{background:rgba(255,255,255,.04)}.bubble--desk{border-left:3px solid var(--accent)}.bubble--market{border-left:3px solid var(--accent2)}.signal-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem;margin-top:1rem}.signal-card{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);border-radius:18px;padding:.9rem}.signal-card.good{border-color:rgba(138,226,156,.26);background:rgba(138,226,156,.08)}.signal-card.warn{border-color:rgba(255,211,110,.24);background:rgba(255,211,110,.08)}.signal-card.bad{border-color:rgba(255,124,114,.24);background:rgba(255,124,114,.08)}.signal-card__top{display:flex;justify-content:space-between;gap:.75rem;align-items:flex-start}.signal-card__label,.signal-card__impact,.tool-card__eyebrow,.tool-level span,.tool-card__tag{font-family:"IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.14em}.signal-card__label{font-size:.66rem;color:var(--muted);margin-bottom:.35rem}.signal-card__value{font-size:1rem;line-height:1.25}.signal-card__impact{font-size:.7rem;padding:.35rem .5rem;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(8,13,17,.34);white-space:nowrap}.signal-summary{margin-top:1rem;padding:.95rem 1rem;border-radius:18px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04)}.signal-summary.good{border-color:rgba(138,226,156,.26);background:rgba(138,226,156,.08)}.signal-summary.warn{border-color:rgba(255,211,110,.24);background:rgba(255,211,110,.08)}.signal-summary.bad{border-color:rgba(255,124,114,.24);background:rgba(255,124,114,.08)}.signal-summary__top{display:flex;justify-content:space-between;gap:.8rem;align-items:flex-start;margin-bottom:.55rem}.signal-summary__score{font-family:"IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.14em;font-size:.72rem;color:var(--muted)}.signal-summary p{color:var(--muted);line-height:1.55}.tool-grid{display:grid;gap:1rem;margin-top:1rem}.tool-grid--triple{grid-template-columns:repeat(3,minmax(0,1fr))}.tool-grid--double{grid-template-columns:repeat(2,minmax(0,1fr))}.tool-card{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);border-radius:18px;padding:1rem}.tool-card.good{border-color:rgba(138,226,156,.26);background:rgba(138,226,156,.08)}.tool-card.warn{border-color:rgba(255,211,110,.24);background:rgba(255,211,110,.08)}.tool-card.bad{border-color:rgba(255,124,114,.24);background:rgba(255,124,114,.08)}.tool-card__head{display:flex;justify-content:space-between;gap:.8rem;align-items:flex-start;margin-bottom:.85rem}.tool-card__eyebrow{font-size:.68rem;color:var(--muted);margin-bottom:.28rem}.tool-card__title{font-size:1rem;line-height:1.2}.tool-card__tag{font-size:.68rem;color:var(--text);padding:.35rem .55rem;border:1px solid rgba(255,255,255,.1);border-radius:999px;background:rgba(255,255,255,.05)}.tool-card__rows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem}.tool-level{padding:.75rem .8rem;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(8,13,17,.34)}.tool-level span{display:block;font-size:.66rem;color:var(--muted);margin-bottom:.3rem}.tool-level strong{display:block;font-size:.95rem;line-height:1.25}.tool-note{margin-top:.85rem;color:var(--muted);line-height:1.6;font-size:.92rem}
 .footer-row{display:flex;justify-content:space-between;gap:1rem;align-items:center;flex-wrap:wrap;margin-top:1rem}.footer-note{font-size:.86rem}.pill{display:inline-flex;align-items:center;gap:.45rem;padding:.28rem .55rem;border-radius:999px;font-size:.76rem;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05)}.pill.good{color:var(--good)}.pill.warn{color:var(--warn)}.pill.bad{color:var(--bad)}
-@media (max-width:1150px){.hero,.controls,.top-grid,.desk-grid,.explain-grid,.metric-grid,.signal-grid,.tool-grid--triple,.tool-grid--double{grid-template-columns:1fr}.chart-mount,#chart-widget{height:520px}#tech-widget{height:340px}}@media (max-width:720px){main{width:min(100vw - .8rem,100%);padding:.5rem 0 1.5rem}.hero-card,.explainer,.control-card,.chart,.snapshot,.autopilot,.readout,.footer-row{padding:1rem}.chart-mount,#chart-widget{height:430px}.segmented button,.mode-btn,.refresh-btn,.reset-btn{width:100%}.tool-card__rows{grid-template-columns:1fr}}
+@media (max-width:1150px){.command-grid,.controls,.core-grid,.support-grid,.explain-grid,.metric-grid,.signal-grid,.tool-grid--triple,.tool-grid--double{grid-template-columns:1fr}.chart-mount,#chart-widget{height:520px}#tech-widget{height:340px}}@media (max-width:720px){main{width:min(100vw - .8rem,100%);padding:.5rem 0 1.5rem}.hero-card,.explainer,.control-card,.chart,.snapshot,.autopilot,.readout,.footer-row,.command-panel,.metrics-panel{padding:1rem}.chart-mount,#chart-widget{height:430px}.segmented button,.mode-btn,.refresh-btn,.reset-btn{width:100%}.tool-card__rows{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <main>
-  <section class="hero">
-    <div class="panel hero-card">
-      <p class="eyebrow">TAO dashboard</p>
-      <h1>TAO Dashboard</h1>
-      <p class="lede">Live TAO charting, technical snapshot, signal scoring, and setup cards built from exchange data without manual level marking.</p>
+  <section class="command-grid">
+    <div class="panel command-panel command-title">
+      <div>
+        <p class="eyebrow">TAO dashboard</p>
+        <h1>TAO Dashboard</h1>
+        <p class="lede">Keep the one widget that works, then wrap real tools around it: live snapshot, chart, signal stack, and setup maps.</p>
+      </div>
       <div class="chip-row">
         <div class="chip" id="heroChipBias">Bias loading</div>
         <div class="chip" id="heroChipRange">Range loading</div>
@@ -34,6 +36,71 @@
         <div class="chip" id="heroChipVolume">Volume loading</div>
       </div>
     </div>
+
+    <div class="panel control-card control-stack">
+      <div class="controls">
+        <div>
+          <div class="label">Exchange</div>
+          <div class="segmented">
+            <button type="button" data-exchange="BINANCE" class="active">Binance</button>
+            <button type="button" data-exchange="BITGET">Bitget</button>
+          </div>
+        </div>
+        <div>
+          <div class="label">Timeframe</div>
+          <div class="segmented">
+            <button type="button" data-interval="15">15M</button>
+            <button type="button" data-interval="60">1H</button>
+            <button type="button" data-interval="240" class="active">4H</button>
+            <button type="button" data-interval="D">1D</button>
+          </div>
+        </div>
+        <div class="stat-row">
+          <div class="stat"><span>Symbol</span><strong id="heroSymbol">BINANCE:TAOUSDT</strong></div>
+          <div class="stat"><span>Timeframe</span><strong id="heroFrame">4H</strong></div>
+          <div class="stat"><span>Mode</span><strong id="heroMode">Read TAO now</strong></div>
+        </div>
+      </div>
+      <div class="meta-row">
+        <div class="status-line" id="statusLine">Loading market data...</div>
+        <div>
+          <button type="button" class="refresh-btn" id="refreshBtn">Refresh market data</button>
+          <button type="button" class="reset-btn" id="resetBtn">Reset saved desk</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="core-grid">
+    <aside class="panel snapshot">
+      <div class="head">
+        <div>
+          <p class="eyebrow">Technical Snapshot</p>
+          <h2>Fast read on TAO</h2>
+        </div>
+        <p class="mini">The anchor widget.</p>
+      </div>
+      <div id="tech-widget"><div class="fallback">Loading technical summary...</div></div>
+      <div class="meta-row">
+        <span class="pill good" id="trendPill">Trend loading</span>
+        <span class="pill warn" id="momentumPill">Momentum loading</span>
+        <span class="pill bad" id="volumePill">Volume loading</span>
+      </div>
+    </aside>
+
+    <article class="panel chart">
+      <div class="head">
+        <div>
+          <p class="eyebrow">Execution Chart</p>
+          <h2>TAO price structure</h2>
+        </div>
+        <p class="mini">Chart for context, not explanation.</p>
+      </div>
+      <div class="chart-mount" id="chartMount"><div class="fallback">Loading TAO chart...</div></div>
+    </article>
+  </section>
+
+  <section class="support-grid">
     <aside class="panel explainer">
       <p class="eyebrow">Signal Stack</p>
       <h2 id="signalTitle">Waiting for TAO signal stack</h2>
@@ -57,93 +124,8 @@
         <p>Once live market data loads, this panel will show exactly which components are pushing TAO bullish, bearish, or balanced.</p>
       </div>
     </aside>
-  </section>
 
-  <section class="panel control-card controls">
-    <div>
-      <div class="label">Exchange</div>
-      <div class="segmented">
-        <button type="button" data-exchange="BINANCE" class="active">Binance</button>
-        <button type="button" data-exchange="BITGET">Bitget</button>
-      </div>
-    </div>
-    <div>
-      <div class="label">Timeframe</div>
-      <div class="segmented">
-        <button type="button" data-interval="15">15M</button>
-        <button type="button" data-interval="60">1H</button>
-        <button type="button" data-interval="240" class="active">4H</button>
-        <button type="button" data-interval="D">1D</button>
-      </div>
-    </div>
-    <div class="stat-row">
-      <div class="stat"><span>Symbol</span><strong id="heroSymbol">BINANCE:TAOUSDT</strong></div>
-      <div class="stat"><span>Timeframe</span><strong id="heroFrame">4H</strong></div>
-      <div class="stat"><span>Desk Mode</span><strong id="heroMode">Read TAO now</strong></div>
-    </div>
-  </section>
-
-  <section class="top-grid">
-    <article class="panel chart">
-      <div class="head">
-        <div>
-          <p class="eyebrow">Execution Chart</p>
-          <h2>TAO price action desk</h2>
-        </div>
-        <p class="mini">Chart for structure. Snapshot for confirmation. Buttons for implication.</p>
-      </div>
-      <div class="chart-mount" id="chartMount"><div class="fallback">Loading TAO chart...</div></div>
-    </article>
-
-    <aside class="panel snapshot">
-      <div class="head">
-        <div>
-          <p class="eyebrow">Technical Snapshot</p>
-          <h2>Fast read on TAO</h2>
-        </div>
-        <p class="mini">The desk uses this style of information, then translates it for you.</p>
-      </div>
-      <div id="tech-widget"><div class="fallback">Loading technical summary...</div></div>
-      <div class="meta-row">
-        <span class="pill good" id="trendPill">Trend loading</span>
-        <span class="pill warn" id="momentumPill">Momentum loading</span>
-        <span class="pill bad" id="volumePill">Volume loading</span>
-      </div>
-    </aside>
-  </section>
-
-  <section class="desk-grid">
-    <article class="panel autopilot">
-      <div class="head">
-        <div>
-          <p class="eyebrow">Push A Button</p>
-          <h2>The desk does the setup work</h2>
-        </div>
-        <p class="mini">Levels and signals below are auto-filled from live TAO market data.</p>
-      </div>
-      <div class="mode-row" id="modeRow">
-        <button type="button" class="mode-btn active" data-mode="quick"><small>default read</small><strong>Read TAO now</strong></button>
-        <button type="button" class="mode-btn" data-mode="pullback"><small>buy the dip lens</small><strong id="pullbackLabel">If it pulls back</strong></button>
-        <button type="button" class="mode-btn" data-mode="breakout"><small>continuation lens</small><strong id="breakoutLabel">If it clears resistance</strong></button>
-        <button type="button" class="mode-btn" data-mode="risk"><small>protection lens</small><strong id="riskLabel">If it loses support</strong></button>
-      </div>
-      <div class="meta-row">
-        <div class="status-line" id="statusLine">Loading market data...</div>
-        <button type="button" class="refresh-btn" id="refreshBtn">Refresh market data</button>
-      </div>
-      <div class="metric-grid" id="metricGrid">
-        <div class="metric"><span>Current price</span><strong>--</strong></div>
-        <div class="metric"><span>24h change</span><strong>--</strong></div>
-        <div class="metric"><span>Support</span><strong>--</strong></div>
-        <div class="metric"><span>Resistance</span><strong>--</strong></div>
-        <div class="metric"><span>Fib zone</span><strong>--</strong></div>
-        <div class="metric"><span>Invalidation</span><strong>--</strong></div>
-        <div class="metric"><span>RSI</span><strong>--</strong></div>
-        <div class="metric"><span>MACD</span><strong>--</strong></div>
-      </div>
-    </article>
-
-    <aside class="panel readout">
+    <article class="panel readout">
       <div class="head">
         <div>
           <p class="eyebrow">Setup Engine</p>
@@ -151,16 +133,37 @@
         </div>
         <p class="mini" id="readoutMeta">Numeric setup cards will populate from live TAO structure.</p>
       </div>
+      <div class="mode-row" id="modeRow">
+        <button type="button" class="mode-btn active" data-mode="quick"><small>default read</small><strong>Read TAO now</strong></button>
+        <button type="button" class="mode-btn" data-mode="pullback"><small>buy the dip lens</small><strong id="pullbackLabel">If it pulls back</strong></button>
+        <button type="button" class="mode-btn" data-mode="breakout"><small>continuation lens</small><strong id="breakoutLabel">If it clears resistance</strong></button>
+        <button type="button" class="mode-btn" data-mode="risk"><small>protection lens</small><strong id="riskLabel">If it loses support</strong></button>
+      </div>
       <div class="bubble-grid" id="bubbleGrid" aria-live="polite">
         <div class="bubble bubble--desk"><p>Waiting for live TAO data before calculating numeric setup cards.</p></div>
       </div>
-    </aside>
+    </article>
   </section>
 
-  <div class="panel footer-row">
-    <p class="footer-note">The goal here is not to make you fill a form. The goal is to give you a chart, a snapshot, and a few useful questions to ask TAO with one click.</p>
-    <button type="button" class="reset-btn" id="resetBtn">Reset saved desk</button>
-  </div>
+  <section class="panel metrics-panel">
+    <div class="head">
+      <div>
+        <p class="eyebrow">Live Levels</p>
+        <h2>Price, structure, and invalidation</h2>
+      </div>
+      <p class="mini">Compact level strip fed directly by the current market model.</p>
+    </div>
+    <div class="metric-grid" id="metricGrid">
+      <div class="metric"><span>Current price</span><strong>--</strong></div>
+      <div class="metric"><span>24h change</span><strong>--</strong></div>
+      <div class="metric"><span>Support</span><strong>--</strong></div>
+      <div class="metric"><span>Resistance</span><strong>--</strong></div>
+      <div class="metric"><span>Fib zone</span><strong>--</strong></div>
+      <div class="metric"><span>Invalidation</span><strong>--</strong></div>
+      <div class="metric"><span>RSI</span><strong>--</strong></div>
+      <div class="metric"><span>MACD</span><strong>--</strong></div>
+    </div>
+  </section>
 </main>
 
 <script>
